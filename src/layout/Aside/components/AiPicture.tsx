@@ -1,6 +1,7 @@
-import React from "react"
 import styled from "styled-components"
 import XRay from "@/assets/XRays/xray_default.jpg?url"
+
+import type { FC, DragEvent } from "react"
 
 const ScDiv = styled.div`
     display: flex;
@@ -36,11 +37,15 @@ interface IProps {
     }
 }
 
-const AiPicture: React.FC<IProps> = ({ src = XRay, desc }) => {
+const AiPicture: FC<IProps> = ({ src = XRay, desc }) => {
+    function handleDragStart(e: DragEvent) {
+        e.dataTransfer?.setData("text/plain", src)
+    }
+
     return (
         <ScDiv>
             <p>Ai点介绍</p>
-            <img src={src}/>
+            <img onDragStart={handleDragStart} src={src} draggable/>
             <div className="desc">
                 <p>{desc?.name ?? "软组织鼻根点(N') "}</p>
                 <p> {desc?.text ?? "软组织侧面上相应之鼻根点软组织侧面上相应之鼻根点软组织侧面上相应之鼻根点软组织侧面上相应之鼻根点"} </p>

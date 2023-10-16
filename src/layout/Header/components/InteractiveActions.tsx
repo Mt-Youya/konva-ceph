@@ -1,4 +1,4 @@
-import { memo, useState } from "react"
+import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { message, Popconfirm, Progress } from "antd"
 import { angleIcon, distanceIcon, resetIcon } from "@/assets/headers"
@@ -6,24 +6,25 @@ import { changeAngle, changeDistance, changeImgUrl } from "@/stores/home/useMeas
 import { changePointList } from "@/stores/home/useDataPoints"
 import { setRulerScaling, setTableData } from "@/stores/home/getTableData"
 import { getTableData } from "@/apis/getList"
+import { urlToFile } from "@/utils/url2File"
 import { ImageFileTypes } from "@/types"
 import { actionKeys } from "../data"
 import {
+    AntdScDivider,
+    AntdScMask,
+    AntdScModal,
     ScHeaderAction,
     ScHeaderNormalButton,
     ScHeaderResetButton,
     ScHeaderWrapper,
-    AntdScDivider,
-    AntdScMask,
-    AntdScModal,
 } from "./styled"
 
-import type { ActionType } from "../data"
-import type { RootState } from "@/stores"
+import type { DragEvent } from "react"
 import type { ImageExcAll } from "@/types"
+import type { RootState } from "@/stores"
+import type { ActionType } from "../data"
 
 function InteractiveActions() {
-
     const [open, setOpen] = useState(false)
     const [loading, setLoading] = useState(false)
     const [rate, setRate] = useState(1)
@@ -37,16 +38,23 @@ function InteractiveActions() {
     function handleAction(action: TInteractiveActionType) {
         switch (action) {
             case actionKeys.ANGLE:
-                dispatch(changeAngle(!angle))
-                break
+                return dispatch(changeAngle(!angle))
             case actionKeys.DISTANCE:
-                dispatch(changeDistance(!distance))
-                break
+                return dispatch(changeDistance(!distance))
             case actionKeys.RESET:
-                resetData()
-                break
+                return resetData()
             default:
                 break
+        }
+    }
+
+    async function handleDrop(e: DragEvent) {
+        const src = e.dataTransfer?.getData("text/plain")!
+        try {
+            const file = await urlToFile(src, "image.jpg")
+            fetchFileData(file)
+        } catch (err: any) {
+            messageApi.error(err)
         }
     }
 
@@ -70,40 +78,41 @@ function InteractiveActions() {
 
             const imgUrl = URL.createObjectURL(file)
             dispatch(changeImgUrl(imgUrl))
+            input.removeEventListener("input", handleUpload)
         }
+    }
 
-        function fetchFileData(file: File) {
-            const fileData = new FormData()
-            fileData.append("file", file)
+    function fetchFileData(file: File) {
+        const fileData = new FormData()
+        fileData.append("file", file)
 
-            setLoading(true)
-            const intervalId = setInterval(() => {
-                setRate(prev => prev < 99 ? prev + 1 : prev)
-            }, 40)
-            getTableData(fileData).then(({ code, data, msg }) => {
-                if (code !== 0) return Promise.reject(`code: ${code} , msg: ${msg}`)
-                const { point: points, "measure-items": tableData, "ruler-scaling": rulerScaling } = data
+        setLoading(true)
+        const intervalId = setInterval(() => {
+            setRate(prev => prev < 99 ? prev + 1 : prev)
+        }, 40)
+        getTableData(fileData).then(({ code, data, msg }) => {
+            if (code !== 0) return Promise.reject({ code, msg })
+            const { point: points, "measure-items": tableData, "ruler-scaling": rulerScaling } = data
 
-                dispatch(changePointList(points))
-                dispatch(setTableData(tableData))
-                dispatch(setRulerScaling(rulerScaling))
+            dispatch(changePointList(points))
+            dispatch(setTableData(tableData))
+            dispatch(setRulerScaling(rulerScaling))
 
-                sessionStorage.setItem("points", JSON.stringify(points))
-                sessionStorage.setItem("tableData", JSON.stringify(tableData))
-                sessionStorage.setItem("rulerScaling", JSON.stringify(rulerScaling))
-                const timer = setTimeout(() => {
-                    setLoading(false)
-                    clearTimeout(timer)
-                    setRate(0)
-                }, 500)
-                clearInterval(intervalId)
-                setRate(100)
-            }).catch(err => {
-                messageApi.error(err.message)
-                setRate(99)
+            sessionStorage.setItem("points", JSON.stringify(points))
+            sessionStorage.setItem("tableData", JSON.stringify(tableData))
+            sessionStorage.setItem("rulerScaling", JSON.stringify(rulerScaling))
+            const timer = setTimeout(() => {
+                clearTimeout(timer)
                 setLoading(false)
-            })
-        }
+                setRate(0)
+            }, 500)
+            clearInterval(intervalId)
+            setRate(100)
+        }).catch(err => {
+            messageApi.error(err.message)
+            setRate(99)
+            setLoading(false)
+        })
     }
 
     function resetData() {
@@ -140,7 +149,7 @@ function InteractiveActions() {
                         <span> 重置 </span>
                     </ScHeaderResetButton>
                 </Popconfirm>
-                <ScHeaderNormalButton className="upload" onClick={onUpload}>
+                <ScHeaderNormalButton className="upload" onClick={onUpload} onDrop={handleDrop}>
                     <span> 上传图片 </span>
                 </ScHeaderNormalButton>
                 <ScHeaderNormalButton onClick={() => setOpen(true)}>
@@ -170,4 +179,4 @@ function InteractiveActions() {
     )
 }
 
-export default memo(InteractiveActions)
+export default InteractiveActions
