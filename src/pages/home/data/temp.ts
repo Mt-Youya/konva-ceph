@@ -1,0 +1,388 @@
+import type { IGpsPointItem, ITableData } from "@/apis/getList"
+
+export const mock_points: IGpsPointItem[] = [
+    { "name": "A", "gps": [611, 435] },
+    { "name": "ANS", "gps": [623, 421] },
+    { "name": "Aprime", "gps": [653, 449] },
+    { "name": "Ar", "gps": [383, 398] },
+    { "name": "B", "gps": [608, 550] },
+    { "name": "Ba", "gps": [355, 424] },
+    { "name": "Bo", "gps": [297, 433] },
+    { "name": "Bri", "gps": [642, 334] },
+    { "name": "C", "gps": [509, 650] },
+    { "name": "Cm", "gps": [667, 414] },
+    { "name": "Co", "gps": [396, 367] },
+    { "name": "D", "gps": [593, 572] },
+    { "name": "FA", "gps": [639, 486] },
+    { "name": "G", "gps": [637, 227] },
+    { "name": "Gn", "gps": [605, 604] },
+    { "name": "Gnprime", "gps": [621, 609] },
+    { "name": "Go", "gps": [400, 531] },
+    { "name": "Go1", "gps": [417, 543] },
+    { "name": "Go2", "gps": [388, 501] },
+    { "name": "Id", "gps": [621, 523] },
+    { "name": "L1", "gps": [629, 490] },
+    { "name": "L1A", "gps": [596, 549] },
+    { "name": "L6", "gps": [550, 493] },
+    { "name": "L6A", "gps": [528, 516] },
+    { "name": "L6d", "gps": [525, 493] },
+    { "name": "L6m", "gps": [552, 501] },
+    { "name": "LLprime", "gps": [663, 518] },
+    { "name": "Li", "gps": [665, 513] },
+    { "name": "Ls", "gps": [665, 465] },
+    { "name": "Me", "gps": [589, 609] },
+    { "name": "Meprime", "gps": [596, 622] },
+    { "name": "N", "gps": [614, 274] },
+    { "name": "Nprime", "gps": [630, 291] },
+    { "name": "Or", "gps": [582, 352] },
+    { "name": "PNS", "gps": [488, 421] },
+    { "name": "Pcd", "gps": [382, 382] },
+    { "name": "Po", "gps": [360, 358] },
+    { "name": "Pog", "gps": [609, 592] },
+    { "name": "Pogprime", "gps": [636, 588] },
+    { "name": "Prn", "gps": [678, 400] },
+    { "name": "Pt", "gps": [469, 356] },
+    { "name": "Ptm", "gps": [484, 406] },
+    { "name": "S", "gps": [420, 303] },
+    { "name": "Si", "gps": [639, 541] },
+    { "name": "Sn", "gps": [644, 432] },
+    { "name": "Spr", "gps": [634, 463] },
+    { "name": "Stmi", "gps": [651, 492] },
+    { "name": "Stms", "gps": [651, 487] },
+    { "name": "U1", "gps": [638, 500] },
+    { "name": "U1A", "gps": [606, 438] },
+    { "name": "U6", "gps": [544, 489] },
+    { "name": "U6A", "gps": [540, 462] },
+    { "name": "U6d", "gps": [525, 486] },
+    { "name": "U6m", "gps": [552, 487] },
+    { "name": "ULprime", "gps": [664, 461] },
+    { "name": "Xi", "gps": [439, 464] },
+    { "name": "ruler1", "gps": [693, 221] },
+    { "name": "ruler2", "gps": [693, 188] }]
+
+export const mock_table: ITableData[] = [
+    {
+        "name": "SNA&deg",
+        "measure_name": "SNA",
+        "measure_value": 80.43,
+        "standard_value": 83,
+        "standard_deviation": 4,
+        "result_desc": "上颌骨相对前颅底平面的位置正常",
+        "flag": 0
+    },
+    {
+        "name": "SNB&deg",
+        "measure_name": "SNB",
+        "measure_value": 80.25,
+        "standard_value": 80,
+        "standard_deviation": 3,
+        "result_desc": "下颌骨相对前颅底平面的位置正常",
+        "flag": 0
+    },
+    {
+        "name": "ANB&deg",
+        "measure_name": "ANB",
+        "measure_value": 0.18,
+        "standard_value": 3,
+        "standard_deviation": 2,
+        "result_desc": "骨性III类趋势",
+        "flag": -1
+    },
+    {
+        "name": "Ptm-A&mm",
+        "measure_name": "Ptm-A(上颌长mm)",
+        "measure_value": 38.23,
+        "standard_value": 45,
+        "standard_deviation": 3,
+        "result_desc": "上颌骨长度过短",
+        "flag": -1
+    },
+    {
+        "name": "PP-FH&deg",
+        "measure_name": "PP-FH(上颌平面角)",
+        "measure_value": 1.55,
+        "standard_value": 4,
+        "standard_deviation": 3,
+        "result_desc": "腭平面陡度正常，上颌骨无异常旋转",
+        "flag": 0
+    },
+    {
+        "name": "PP-GoGn&deg",
+        "measure_name": "PP-GoGn",
+        "measure_value": 19.6,
+        "standard_value": 21,
+        "standard_deviation": 4,
+        "result_desc": "上下颌骨相对位置正常",
+        "flag": 0
+    },
+    {
+        "name": "OP-SN&deg",
+        "measure_name": "OP-SN",
+        "measure_value": 11.15,
+        "standard_value": 19,
+        "standard_deviation": 4,
+        "result_desc": "牙合平面倾斜度偏小",
+        "flag": -1
+    },
+    {
+        "name": "Go-Pog&mm",
+        "measure_name": "Go-Pog(mm)",
+        "measure_value": 65.75,
+        "standard_value": 73,
+        "standard_deviation": 4,
+        "result_desc": "下颌体长度偏小",
+        "flag": -1
+    },
+    {
+        "name": "Go-Co&mm",
+        "measure_name": "Go-Co(mm)",
+        "measure_value": 49.69,
+        "standard_value": 56,
+        "standard_deviation": 4,
+        "result_desc": "下颌升支偏短",
+        "flag": -1
+    },
+    {
+        "name": "MP-SN&deg",
+        "measure_name": "MP-SN",
+        "measure_value": 29.49,
+        "standard_value": 33,
+        "standard_deviation": 4,
+        "result_desc": "下颌体陡度正常",
+        "flag": 0
+    },
+    {
+        "name": "FH-MP&deg",
+        "measure_name": "FH-MP(下颌平面角)",
+        "measure_value": 22.54,
+        "standard_value": 28,
+        "standard_deviation": 4,
+        "result_desc": "水平生长型，下颌体平",
+        "flag": -1
+    },
+    {
+        "name": "SGn-FH&deg",
+        "measure_name": "SGn-FH(Y轴角)",
+        "measure_value": 59.97,
+        "standard_value": 64,
+        "standard_deviation": 3,
+        "result_desc": "颏部前突",
+        "flag": -1
+    },
+    {
+        "name": "NBa-PtGn&deg",
+        "measure_name": "NBa-PtGn(面轴角)",
+        "measure_value": 88.66,
+        "standard_value": 88,
+        "standard_deviation": 3,
+        "result_desc": "下颌生长正常",
+        "flag": 0
+    },
+    {
+        "name": "N-ANS&mm",
+        "measure_name": "N-ANS(上面高mm)",
+        "measure_value": 44.6,
+        "standard_value": 53,
+        "standard_deviation": 3,
+        "result_desc": "上面高度偏小",
+        "flag": -1
+    },
+    {
+        "name": "S-Go&mm",
+        "measure_name": "S-Go(后面高mm)",
+        "measure_value": 68.9,
+        "standard_value": 75,
+        "standard_deviation": 5,
+        "result_desc": "后面高度偏小",
+        "flag": -1
+    },
+    {
+        "name": "S-Go/N-Me&rate",
+        "measure_name": "S-Go/N-Me(后前面高比%)",
+        "measure_value": 68.04,
+        "standard_value": 66,
+        "standard_deviation": 4,
+        "result_desc": "平均生长型",
+        "flag": 0
+    },
+    {
+        "name": "ANS-Me/N-Me&rate",
+        "measure_name": "ANS-Me/N-Me(下前面高比%)",
+        "measure_value": 55.95,
+        "standard_value": 53,
+        "standard_deviation": 2,
+        "result_desc": "下面高偏长",
+        "flag": 1
+    },
+    {
+        "name": "U1-L1&deg",
+        "measure_name": "U1-L1(上下中切牙角)",
+        "measure_value": 123.48,
+        "standard_value": 127,
+        "standard_deviation": 9,
+        "result_desc": "上下中切牙的相对突度正常",
+        "flag": 0
+    },
+    {
+        "name": "U1-SN&deg",
+        "measure_name": "U1-SN",
+        "measure_value": 108.8,
+        "standard_value": 105,
+        "standard_deviation": 6,
+        "result_desc": "上下中切牙的相对突度正常",
+        "flag": 0
+    },
+    {
+        "name": "U1-NA&mm",
+        "measure_name": "U1-NA(mm)",
+        "measure_value": 8.55,
+        "standard_value": 4,
+        "standard_deviation": 2,
+        "result_desc": "上中切牙突度大",
+        "flag": 1
+    },
+    {
+        "name": "U1-NA&deg",
+        "measure_name": "U1-NA",
+        "measure_value": 28.37,
+        "standard_value": 21,
+        "standard_deviation": 6,
+        "result_desc": "上中切牙唇倾",
+        "flag": 1
+    },
+    {
+        "name": "L1-NB&mm",
+        "measure_name": "L1-NB(mm)",
+        "measure_value": 5.97,
+        "standard_value": 6,
+        "standard_deviation": 2,
+        "result_desc": "下中切牙突度正常",
+        "flag": 0
+    },
+    {
+        "name": "L1-NB&deg",
+        "measure_name": "L1-NB",
+        "measure_value": 27.97,
+        "standard_value": 28,
+        "standard_deviation": 6,
+        "result_desc": "下中切牙突度正常",
+        "flag": 0
+    },
+    {
+        "name": "L1-FH&deg",
+        "measure_name": "L1-FH(FMIA)",
+        "measure_value": 59.23,
+        "standard_value": 57,
+        "standard_deviation": 7,
+        "result_desc": "下中切牙倾斜度、突度正常",
+        "flag": 0
+    },
+    {
+        "name": "U1-Apo&mm",
+        "measure_name": "U1-Apo(mm)",
+        "measure_value": 8.43,
+        "standard_value": 7,
+        "standard_deviation": 2,
+        "result_desc": "上中切牙突度正常",
+        "flag": 0
+    },
+    {
+        "name": "L1-Apo&mm",
+        "measure_name": "L1-Apo(mm)",
+        "measure_value": 5.67,
+        "standard_value": 3,
+        "standard_deviation": 2,
+        "result_desc": "下中切牙突度过大",
+        "flag": 1
+    },
+    {
+        "name": "U1-PP&mm",
+        "measure_name": "U1-PP(mm)",
+        "measure_value": 23.94,
+        "standard_value": 28,
+        "standard_deviation": 2,
+        "result_desc": "上前牙槽高度偏小",
+        "flag": -1
+    },
+    {
+        "name": "U6-PP&mm",
+        "measure_name": "U6-PP(mm)",
+        "measure_value": 20.6,
+        "standard_value": 22,
+        "standard_deviation": 2,
+        "result_desc": "上后牙槽高度正常",
+        "flag": 0
+    },
+    {
+        "name": "L1-MP&mm",
+        "measure_name": "L1-MP(mm)",
+        "measure_value": 38.01,
+        "standard_value": 40,
+        "standard_deviation": 2,
+        "result_desc": "下前牙槽高度正常",
+        "flag": 0
+    },
+    {
+        "name": "L6-MP&mm",
+        "measure_name": "L6-MP(mm)",
+        "measure_value": 28.58,
+        "standard_value": 33,
+        "standard_deviation": 2,
+        "result_desc": "下后牙槽高度偏小",
+        "flag": -1
+    },
+    {
+        "name": "Ptm-U6&mm",
+        "measure_name": "Ptm-U6(mm)",
+        "measure_value": 17.49,
+        "standard_value": 16,
+        "standard_deviation": 3,
+        "result_desc": "上颌第一磨牙位置正常",
+        "flag": 0
+    },
+    {
+        "name": "UL-EP&mm",
+        "measure_name": "UL-EP(上唇位置mm)",
+        "measure_value": 0.11,
+        "standard_value": 2,
+        "standard_deviation": 2,
+        "result_desc": "上唇位置正常",
+        "flag": 0
+    },
+    {
+        "name": "LL-EP&mm",
+        "measure_name": "LL-EP(下唇位置mm)",
+        "measure_value": 3.36,
+        "standard_value": 3,
+        "standard_deviation": 2,
+        "result_desc": "下唇位置正常",
+        "flag": 0
+    },
+    {
+        "name": "Z-Angle&deg",
+        "measure_name": "Z-Angle",
+        "measure_value": 76.02,
+        "standard_value": 71,
+        "standard_deviation": 5,
+        "result_desc": "下颌前突，唇部后缩",
+        "flag": 1
+    },
+    {
+        "name": "FH-N'Pog'&deg",
+        "measure_name": "FH-N'Pog'(软组织面角)",
+        "measure_value": 89.61,
+        "standard_value": 89,
+        "standard_deviation": 3,
+        "result_desc": "软组织颏部位置正常",
+        "flag": 0
+    },
+    {
+        "name": "N'-Sn-Pog'&deg",
+        "measure_name": "N'-Sn-Pog'(软组织面突角)",
+        "measure_value": 171.39,
+        "standard_value": 167,
+        "standard_deviation": 4,
+        "result_desc": "III类骨面型趋势",
+        "flag": 1
+    }
+]

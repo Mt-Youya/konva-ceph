@@ -1,0 +1,24 @@
+#root {
+    --color-layout-bgColor: #1f2327;
+    --color-aside-bgColor: #292e33;
+    --color-bxShadow: -10px -10px 15px rgba(252, 252, 252, 0.8), 10px 10px 15px #d9dbe9;
+    --color-primary: #1c6ba4;
+    --color-secondary: #e09f1f;
+    --color-quaternary: #b2bbbe;
+    --color-tertiary: #eff0f7;
+    --color-quinary: #1c6ba4;
+    --color-senary: #004265;
+    /*--color-centenary: #fff;*/
+    /*--color-coronary: #009dc7;*/
+    /*--color-notary: #fff;*/
+    /*--color-binary: #fff;*/
+    /*--color-undeniably: #fff;*/
+
+    /* third-part styles */
+    /* example: el-button */
+
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    font-family: "Open Sans", sans-serif;
+}

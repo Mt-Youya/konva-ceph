@@ -1,0 +1,33 @@
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    list-style: none;
+    box-sizing: border-box;
+    text-decoration: none;
+}
+
+html,
+body,
+#root {
+    height: 100%;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul, ol, li {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+img {
+    object-fit: cover;
+    vertical-align: bottom;
+}
