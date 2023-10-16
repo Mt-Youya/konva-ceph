@@ -33,7 +33,7 @@ export default defineConfig({
                     entryFileNames: "assets/js/[name].[hash].js",
                     compact: true,
                     manualChunks: {
-                        react: ["react", "react-router", "react-router-dom", "react-use"],
+                        react: ["react", "react-router", "react-router-dom"],
                         redux: ["react-redux", "@reduxjs/toolkit"],
                         konva: ["konva", "react-konva"],
                         antd: ["antd", "@ant-design/icons"],
