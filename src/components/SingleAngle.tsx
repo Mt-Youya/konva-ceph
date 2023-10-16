@@ -32,17 +32,21 @@ function SingleAngle({ points, movePoint: { x: Mx, y: My }, closeAngle }: IProps
         e.cancelBubble = true
         const x = +e.target.attrs.x, y = +e.target.attrs.y
         const point = { x, y }
-        if (order === FIRST) {
-            setP1(point)
-        } else if (order === SECOND) {
-            setP2(point)
-        } else {
-            setP3(point)
+        switch (order) {
+            case FIRST:
+                return setP1(point)
+            case SECOND:
+                return setP2(point)
+            case END:
+                return setP3(point)
+            default:
+                return
         }
     }
 
     function useCircleStyle() {
         const [circleLabelStyle, setCircleLabelStyle] = useState<ReturnType<typeof createLabelStyle> | null>(null)
+
         useEffect(() => {
             if (circle3Ref.current) {
                 const circle2Pos = circle2Ref.current!.getAbsolutePosition()!
@@ -50,6 +54,7 @@ function SingleAngle({ points, movePoint: { x: Mx, y: My }, closeAngle }: IProps
                 setCircleLabelStyle(labelStyle)
             }
         }, [points, p1, p2, p3])
+
         return circleLabelStyle
     }
 
@@ -57,9 +62,10 @@ function SingleAngle({ points, movePoint: { x: Mx, y: My }, closeAngle }: IProps
 
     return (
         <Group draggable>
-            <SingleCircle stroke="#FFE400"
-                          ref={circle1Ref} point={p1}
-                          onCircleMove={(e) => handleCircleMove(e, FIRST)}
+            <SingleCircle
+                stroke="#FFE400"
+                ref={circle1Ref} point={p1}
+                onCircleMove={(e) => handleCircleMove(e, FIRST)}
             />
             <Line points={p2 ? [p1.x, p1.y, p2.x, p2.y] : [p1.x, p1.y, Mx, My]} stroke="#ffe40080"/>
             {p2 && (

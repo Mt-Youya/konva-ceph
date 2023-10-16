@@ -12,12 +12,12 @@ const ScHeader = styled.header`
     gap: 10%;
     margin: 0 100px;
     @media screen  and (max-width: 1440px) {
-        gap: 7%;
-        margin: 0 70px;
+        gap: 6%;
+        margin: 0 60px;
     }
     @media screen  and (max-width: 900px) {
-        gap: 4%;
-        margin: 0 40px;
+        gap: 3%;
+        margin: 0 30px;
     }
 `
 

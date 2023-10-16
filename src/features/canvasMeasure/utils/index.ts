@@ -9,7 +9,8 @@ export function createLabelStyle(leftX: number, topY: number, color = "#83ECCB",
         borderRadius: "2px",
         padding: "6px",
         border: "1px solid #414141",
-        transform:"none"
+        transform: "none",
+        pointerEvents: "none" as "none",
     }
 }
 
@@ -50,7 +51,6 @@ export function point2LineDistance(P: IPoint, Pa: IPoint, Pb: IPoint) {
 
     const numerator = Math.abs((y2 - y1) * x0 - (x2 - x1) * y0 + x2 * y1 - y2 * x1)
     const denominator = Math.sqrt((y2 - y1) ** 2 + (x2 - x1) ** 2)
-
     return numerator / denominator
 }
 

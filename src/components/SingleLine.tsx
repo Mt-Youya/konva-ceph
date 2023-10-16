@@ -36,15 +36,19 @@ function SingleLine({ points = [{ x: 0, y: 0 }, { x: 0, y: 0 }], movePoint: { x:
         e.cancelBubble = true
         const x = +e.target.attrs.x, y = +e.target.attrs.y
         const point = { x, y }
-        if (order === START) {
-            setP1(point)
-        } else if (order === END) {
-            setP2(point)
+        switch (order) {
+            case START:
+                return setP1(point)
+            case END:
+                return setP2(point)
+            default:
+                return
         }
     }
 
     function useCircleStyle() {
         const [circleLabelStyle, setCircleLabelStyle] = useState<ReturnType<typeof createLabelStyle> | null>(null)
+
         useEffect(() => {
             if (circle2Ref.current) {
                 const circle1Pos = circle1Ref.current!.getAbsolutePosition()!
@@ -55,6 +59,7 @@ function SingleLine({ points = [{ x: 0, y: 0 }, { x: 0, y: 0 }], movePoint: { x:
                 setCircleLabelStyle(labelStyle)
             }
         }, [points, p1, p2])
+
         return circleLabelStyle
     }
 
@@ -75,7 +80,7 @@ function SingleLine({ points = [{ x: 0, y: 0 }, { x: 0, y: 0 }], movePoint: { x:
                     {/*    />*/}
                     {/*    <Text padding={10} fill="#fff" text=" X" x={60} onClick={() => closeDistance()}/>*/}
                     {/*</Label>*/}
-                    <Html divProps={{ style, onWheel: e => e.preventDefault() }}>
+                    <Html divProps={{ style }}>
                         {getDistance([p1, p2])}&nbsp;
                         <span style={{ color: "#fff" }}>
                                             mm &nbsp;
