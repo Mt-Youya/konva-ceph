@@ -1,13 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit"
 
-export const counterSlice = createSlice({
+import type { Slice } from "@reduxjs/toolkit"
+
+export interface ShowState {
+    named: boolean
+    major: boolean
+    support: boolean
+    outline: boolean
+    lateral: boolean
+}
+
+export const showPointSlice: Slice<ShowState> = createSlice({
     name: "showPoint",
     initialState: {
-        named: true,
-        major: true,
-        support: true,
-        outline: true,
-        lateral: true,
+        named: true as boolean,
+        major: true as boolean,
+        support: true as boolean,
+        outline: true as boolean,
+        lateral: true as boolean,
     },
     reducers: {
         changeLateral(state, action) {
@@ -29,6 +39,6 @@ export const counterSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { changeNamed, changeOutline, changeSupport, changeMajor, changeLateral } = counterSlice.actions
+export const { changeNamed, changeOutline, changeSupport, changeMajor, changeLateral } = showPointSlice.actions
 
-export default counterSlice.reducer
+export default showPointSlice.reducer

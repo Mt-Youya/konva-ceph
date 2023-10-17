@@ -15,16 +15,16 @@ function Icon({ value, standardValue, deviation }: IIconProps) {
     if (value > (standardValue + deviation)) {
         return (
             <>
-                <ScSpace>{value} <ArrowUpOutlined style={{ color: "red" }}/></ScSpace>
-                <ScSpace> <InfoSvg/> </ScSpace>
+                <ScSpace>{value} <ArrowUpOutlined style={{ color: "red" }} /></ScSpace>
+                <ScSpace> <InfoSvg /> </ScSpace>
             </>
         )
     }
     if (value < (standardValue - deviation)) {
         return (
             <>
-                <ScSpace> {value} <ArrowDownOutlined style={{ color: "green" }}/> </ScSpace>
-                <ScSpace> <InfoSvg/> </ScSpace>
+                <ScSpace> {value} <ArrowDownOutlined style={{ color: "green" }} /> </ScSpace>
+                <ScSpace> <InfoSvg /> </ScSpace>
             </>
         )
     }
@@ -38,9 +38,9 @@ function AsideTable() {
     const standard = "standard_value"
 
     const columns = [
-        { title: "测量项目", dataIndex: measureName, key: measureName, },
-        { title: "标准值", dataIndex: standard, key: standard, },
-        { title: "测量值", dataIndex: measureValue, key: measureValue, },
+        { title: "测量项目", dataIndex: measureName, key: measureName },
+        { title: "标准值", dataIndex: standard, key: standard },
+        { title: "测量值", dataIndex: measureValue, key: measureValue },
     ]
 
     return (
@@ -79,7 +79,7 @@ function AsideTable() {
                     </ScTbody>
                 </ScTable>
                 :
-                <AntdScEmpty description="暂无数据,请上传图片"/>
+                <AntdScEmpty description="暂无数据,请上传图片" />
             }
         </ScContainer>
     )

@@ -24,9 +24,9 @@ const ScHeader = styled.header`
 function Header() {
     return (
         <ScHeader>
-            <ImageActions/>
-            <BezierLineActions/>
-            <InteractiveActions/>
+            <ImageActions />
+            <BezierLineActions />
+            <InteractiveActions />
         </ScHeader>
     )
 }

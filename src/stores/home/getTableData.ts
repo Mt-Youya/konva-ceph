@@ -3,16 +3,16 @@ import { createSlice } from "@reduxjs/toolkit"
 import type { Slice } from "@reduxjs/toolkit"
 import type { ITableData } from "@/apis/getList"
 
-interface CounterState {
+export interface TableState {
     rulerScaling: number
     tableData: ITableData[]
 }
 
-export const counterSlice: Slice<CounterState> = createSlice({
+export const tableSlice: Slice<TableState> = createSlice({
     name: "tableData",
     initialState: {
         rulerScaling: 1,
-        tableData: [] as ITableData[]
+        tableData: [] as ITableData[],
     },
     reducers: {
         setTableData(state, action) {
@@ -20,11 +20,11 @@ export const counterSlice: Slice<CounterState> = createSlice({
         },
         setRulerScaling(state, action) {
             state.rulerScaling = action.payload
-        }
+        },
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { setTableData, setRulerScaling } = counterSlice.actions
+export const { setTableData, setRulerScaling } = tableSlice.actions
 
-export default counterSlice.reducer
+export default tableSlice.reducer

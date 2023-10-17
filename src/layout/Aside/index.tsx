@@ -3,7 +3,6 @@ import styled from "styled-components"
 import AsideTable from "@/layout/Aside/components/AsideTable.tsx"
 import AiPicture from "@/layout/Aside/components/AiPicture.tsx"
 
-
 const ScAside = styled.aside`
     width: 500px;
     height: 100%;
@@ -46,8 +45,8 @@ function Aside() {
                     <span>{menuList[0].label}</span>
                 </Dropdown>
             </ScH2>
-            <AsideTable/>
-            <AiPicture/>
+            <AsideTable />
+            <AiPicture />
         </ScAside>
     )
 }

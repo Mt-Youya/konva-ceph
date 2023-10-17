@@ -67,11 +67,11 @@ function SingleLine({ points = [{ x: 0, y: 0 }, { x: 0, y: 0 }], movePoint: { x:
 
     return (
         <Group>
-            <SingleCircle ref={circle1Ref} point={p1} onCircleMove={(e) => handleCircleMove(e, START)}/>
-            <Line points={p2 ? [p1.x, p1.y, p2.x, p2.y] : [p1.x, p1.y, Mx, My]} stroke="#83ECCB"/>
+            <SingleCircle ref={circle1Ref} point={p1} onCircleMove={(e) => handleCircleMove(e, START)} />
+            <Line points={p2 ? [p1.x, p1.y, p2.x, p2.y] : [p1.x, p1.y, Mx, My]} stroke="#83ECCB" />
             {p2 && (
                 <>
-                    <SingleCircle ref={circle2Ref} point={p2} onCircleMove={(e) => handleCircleMove(e, END)}/>
+                    <SingleCircle ref={circle2Ref} point={p2} onCircleMove={(e) => handleCircleMove(e, END)} />
                     {/*<Label  {...p2} >*/}
                     {/*    <Tag fill="#414141" cornerRadius={4}>*/}
                     {/*    </Tag>*/}
@@ -84,7 +84,7 @@ function SingleLine({ points = [{ x: 0, y: 0 }, { x: 0, y: 0 }], movePoint: { x:
                         {getDistance([p1, p2])}&nbsp;
                         <span style={{ color: "#fff" }}>
                                             mm &nbsp;
-                            <CloseOutlined onClick={() => closeDistance()} style={{ cursor: "pointer" }}/>
+                            <CloseOutlined onClick={() => closeDistance()} style={{ cursor: "pointer" }} />
                         </span>
                     </Html>
                 </>

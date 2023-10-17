@@ -1,16 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit"
 
+import type { Slice } from "@reduxjs/toolkit"
+
 export interface IPointItem {
-    gps: [number,number]
+    gps: [number, number]
     name: string
 }
 
+export interface DataState {
+    pointList: IPointItem[]
+    lineList: number[][]
+}
 
-export const counterSlice = createSlice({
+export const dataSlice: Slice<DataState> = createSlice({
     name: "dataPoints",
     initialState: {
         pointList: [] as IPointItem[],
-        lineList: [] as number[][]
+        lineList: [] as number[][],
     },
     reducers: {
         changePointList(state, action) {
@@ -18,11 +24,11 @@ export const counterSlice = createSlice({
         },
         changeLineList(state, action) {
             state.lineList = action.payload
-        }
+        },
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { changePointList, changeLineList } = counterSlice.actions
+export const { changePointList, changeLineList } = dataSlice.actions
 
-export default counterSlice.reducer
+export default dataSlice.reducer

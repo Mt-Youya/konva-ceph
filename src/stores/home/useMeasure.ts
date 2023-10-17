@@ -1,11 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit"
 
-export const counterSlice = createSlice({
+import type { Slice } from "@reduxjs/toolkit"
+
+export interface MeasureState {
+    distance: boolean
+    angle: boolean
+    imgUrl: string
+}
+
+export const measureSlice: Slice<MeasureState> = createSlice({
     name: "measure",
     initialState: {
-        distance: false,
-        angle: false,
-        imgUrl: ""
+        distance: false as boolean,
+        angle: false as boolean,
+        imgUrl: "" as string,
     },
     reducers: {
         changeDistance(state, action) {
@@ -21,6 +29,6 @@ export const counterSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { changeDistance, changeAngle, changeImgUrl } = counterSlice.actions
+export const { changeDistance, changeAngle, changeImgUrl } = measureSlice.actions
 
-export default counterSlice.reducer
+export default measureSlice.reducer

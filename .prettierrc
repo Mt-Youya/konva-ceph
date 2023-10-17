@@ -2,7 +2,7 @@
   "printWidth": 120,
   "semi": false,
   "singleQuote": false,
-  "trailingComma": "none",
+  "trailingComma": "all",
   "proseWrap": "never",
   "htmlWhitespaceSensitivity": "strict",
   "endOfLine": "auto",

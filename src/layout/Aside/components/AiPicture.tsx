@@ -45,7 +45,7 @@ const AiPicture: FC<IProps> = ({ src = XRay, desc }) => {
     return (
         <ScDiv>
             <p>Ai点介绍</p>
-            <img onDragStart={handleDragStart} src={src} draggable/>
+            <img onDragStart={handleDragStart} src={src} draggable />
             <div className="desc">
                 <p>{desc?.name ?? "软组织鼻根点(N') "}</p>
                 <p> {desc?.text ?? "软组织侧面上相应之鼻根点软组织侧面上相应之鼻根点软组织侧面上相应之鼻根点软组织侧面上相应之鼻根点"} </p>

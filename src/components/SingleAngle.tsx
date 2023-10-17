@@ -67,7 +67,7 @@ function SingleAngle({ points, movePoint: { x: Mx, y: My }, closeAngle }: IProps
                 ref={circle1Ref} point={p1}
                 onCircleMove={(e) => handleCircleMove(e, FIRST)}
             />
-            <Line points={p2 ? [p1.x, p1.y, p2.x, p2.y] : [p1.x, p1.y, Mx, My]} stroke="#ffe40080"/>
+            <Line points={p2 ? [p1.x, p1.y, p2.x, p2.y] : [p1.x, p1.y, Mx, My]} stroke="#ffe40080" />
             {p2 && (
                 <>
                     <SingleCircle
@@ -90,7 +90,7 @@ function SingleAngle({ points, movePoint: { x: Mx, y: My }, closeAngle }: IProps
                     />
                     <Html divProps={{ style }}>
                         {Math.round(measureAngle(p2, p1, p2, p3))} °&nbsp;
-                        <CloseOutlined style={{ color: "#fff", cursor: "pointer" }} onClick={() => closeAngle()}/>
+                        <CloseOutlined style={{ color: "#fff", cursor: "pointer" }} onClick={() => closeAngle()} />
                     </Html>
                     {/*<Arc {...p2} innerRadius={10} outerRadius={12} angle={ measureAngle(p2, p1, p2, p3)}*/}
                     {/*    fill="#f0f"/>*/}

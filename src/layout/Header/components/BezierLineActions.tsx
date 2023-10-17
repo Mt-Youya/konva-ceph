@@ -49,23 +49,23 @@ function BezierLineActions() {
     return (
         <ScHeaderWrapper>
             <ScHeaderAction onClick={() => handleAction("lateral")}>
-                <img src={lateral ? lateralActiveIcon : lateralIcon}/>
+                <img src={lateral ? lateralActiveIcon : lateralIcon} />
                 <span> 侧位片 </span>
             </ScHeaderAction>
             <ScHeaderAction onClick={() => handleAction("named")}>
-                <img src={named ? nameActiveIcon : nameIcon}/>
+                <img src={named ? nameActiveIcon : nameIcon} />
                 <span> 名称 </span>
             </ScHeaderAction>
             <ScHeaderAction onClick={() => handleAction("major")}>
-                <img src={major ? majorActiveIcon : majorIcon}/>
+                <img src={major ? majorActiveIcon : majorIcon} />
                 <span> 主点 </span>
             </ScHeaderAction>
             <ScHeaderAction onClick={() => handleAction("support")}>
-                <img src={support ? supportActiveIcon : supportIcon}/>
+                <img src={support ? supportActiveIcon : supportIcon} />
                 <span> 辅助点 </span>
             </ScHeaderAction>
             <ScHeaderAction onClick={() => handleAction("outline")}>
-                <img src={outline ? outlineActiveIcon : outlineIcon}/>
+                <img src={outline ? outlineActiveIcon : outlineIcon} />
                 <span> 轮廓 </span>
             </ScHeaderAction>
         </ScHeaderWrapper>

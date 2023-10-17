@@ -65,5 +65,5 @@ export {
     ScTbody,
     ScContainer,
     ScThead,
-    AntdScEmpty
+    AntdScEmpty,
 }

@@ -1,6 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit"
 
-export const counterSlice = createSlice({
+import type { Slice } from "@reduxjs/toolkit"
+
+export interface TransformState {
+    contrast: number,
+    brightness: number,
+    scaleX: number,
+    rotate: number,
+}
+
+export const transformSlice: Slice<TransformState> = createSlice({
     name: "transform",
     initialState: {
         contrast: 0,
@@ -25,6 +34,6 @@ export const counterSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { changeContrast, changeRotate, changeScaleX, changeBrightness } = counterSlice.actions
+export const { changeContrast, changeRotate, changeScaleX, changeBrightness } = transformSlice.actions
 
-export default counterSlice.reducer
+export default transformSlice.reducer
