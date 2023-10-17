@@ -55,15 +55,15 @@ function ImageActions() {
         <ScHeaderWrapper>
             <Link to="/native">Native</Link>
             <ScHeaderAction>
-                <img src={mirrorIcon} onClick={() => handleAction("mirror")}/>
+                <img src={mirrorIcon} onClick={() => handleAction("mirror")} />
                 <span> 镜像 </span>
             </ScHeaderAction>
             <ScHeaderAction onClick={() => handleAction("rotate")}>
-                <img src={rotateIcon}/>
+                <img src={rotateIcon} />
                 <span> 旋转 </span>
             </ScHeaderAction>
             <ScHeaderAction onClick={() => sliderClick("brightnessActive")}>
-                <img src={brightnessIcon}/>
+                <img src={brightnessIcon} />
                 <span> 亮度 </span>
                 {sliderMap.brightnessActive && (
                     <AntdScSlider
@@ -75,7 +75,7 @@ function ImageActions() {
                 )}
             </ScHeaderAction>
             <ScHeaderAction onClick={() => sliderClick("contrastActive")}>
-                <img src={contrastRatioIcon}/>
+                <img src={contrastRatioIcon} />
                 <span> 对比度 </span>
                 {sliderMap.contrastActive && (
                     <AntdScSlider

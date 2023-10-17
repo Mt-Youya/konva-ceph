@@ -16,8 +16,8 @@ import {
     pointInVectorSymbol,
 } from "@/features/canvasMeasure"
 import { changePointList } from "@/stores/home/useDataPoints"
-import { setTableData, } from "@/stores/home/getTableData"
-import { getPurePoints, getRelativePointsGroup, shouldJudgeAngles, shouldJudgePositions, } from "@/pages/home/data"
+import { setTableData } from "@/stores/home/getTableData"
+import { getPurePoints, getRelativePointsGroup, shouldJudgeAngles, shouldJudgePositions } from "@/pages/home/data"
 import styled from "styled-components"
 
 import type { KonvaEventObject } from "konva/lib/Node"
@@ -34,10 +34,10 @@ const AntdScDropdown = styled(Dropdown)`
 `
 
 const items = [
-    { key: 5, label: "5mm", },
-    { key: 10, label: "10mm", },
-    { key: 15, label: "15mm", },
-    { key: 20, label: "20mm", },
+    { key: 5, label: "5mm" },
+    { key: 10, label: "10mm" },
+    { key: 15, label: "15mm" },
+    { key: 20, label: "20mm" },
 ]
 
 const BezierLine = () => {
@@ -281,7 +281,7 @@ const BezierLine = () => {
     function getAllPointInfoFn() {
         const points = pointList.map(item => ({
             name: item.name,
-            coordinate: item.gps.join(",")
+            coordinate: item.gps.join(","),
         }))
         console.table(points)
     }
@@ -362,7 +362,7 @@ const BezierLine = () => {
                 return (
                     <Fragment key={"line_" + index}>
                         {outline && (
-                            <Line points={item} stroke="rgb(0,182,255)" strokeWidth={2} tension={.5} bezier={true}/>
+                            <Line points={item} stroke="rgb(0,182,255)" strokeWidth={2} tension={.5} bezier={true} />
                         )}
                     </Fragment>
                 )
@@ -402,7 +402,7 @@ const BezierLine = () => {
                             />
                         )}
                         {named && (
-                            <Text x={x + 5} y={y} fill="#f00" text={name} rotation={-rotate} scaleX={scaleX}/>
+                            <Text x={x + 5} y={y} fill="#f00" text={name} rotation={-rotate} scaleX={scaleX} />
                         )}
                     </Fragment>
                 )
@@ -415,8 +415,8 @@ const BezierLine = () => {
                             style: {
                                 left: rulerPoint.ruler1[0] + 40 + "px",
                                 top: Math.ceil((rulerPoint.ruler1[1] + rulerPoint.ruler2[1]) / 2) - 10 + "px",
-                                borderColor: "#32393F"
-                            }
+                                borderColor: "#32393F",
+                            },
                         }}
                     >
                         <AntdScDropdown
@@ -424,16 +424,16 @@ const BezierLine = () => {
                                 items,
                                 selectable: true,
                                 defaultSelectedKeys: ["2"],
-                                onClick: onMenuClick
+                                onClick: onMenuClick,
                             }}
                         >
                         <span>
                             {menuLabel}
-                            <DownOutlined/>
+                            <DownOutlined />
                         </span>
                         </AntdScDropdown>
                     </Html>
-                    <Line points={[...rulerPoint.ruler1, ...rulerPoint.ruler2]} stroke="#FF005C"/>
+                    <Line points={[...rulerPoint.ruler1, ...rulerPoint.ruler2]} stroke="#FF005C" />
                 </>
             )}
         </Group>

@@ -62,5 +62,4 @@ export const ImageFileTypes: ImageExcAll[] = [
     "image/raw",
 ]
 
-
 export type TFormData<T extends FormData = FormData> = T

@@ -58,7 +58,6 @@ const MeasureAngle = ({ layerWidth = 1200, layerHeight = 1100 }) => {
         }
     }, [clickCount])
 
-
     return (
         <>
             <Group ref={angleGroupRef}>
@@ -75,12 +74,12 @@ const MeasureAngle = ({ layerWidth = 1200, layerHeight = 1100 }) => {
                 {angle && (
                     <>
                         <Label {...move}>
-                            {clickCount % 3 !== 1 && <Tag fill="#32393F" cornerRadius={3}/>}
+                            {clickCount % 3 !== 1 && <Tag fill="#32393F" cornerRadius={3} />}
                             {clickCount % 3 === 0 && (
-                                <Text text="单击确定角度起点" fontSize={16} padding={5} fill="#fff"/>
+                                <Text text="单击确定角度起点" fontSize={16} padding={5} fill="#fff" />
                             )}
                             {clickCount % 3 === 2 && (
-                                <Text text="单击确定夹角位置" fontSize={16} padding={5} fill="#fff"/>
+                                <Text text="单击确定夹角位置" fontSize={16} padding={5} fill="#fff" />
                             )}
                         </Label>
                         <Rect

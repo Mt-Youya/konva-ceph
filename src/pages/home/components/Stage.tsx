@@ -93,11 +93,11 @@ const StageContainer = () => {
                                 brightness={brightness}
                             />
                         )}
-                        <BezierLine/>
+                        <BezierLine />
                     </Group>
                     <Group>
-                        <MeasureDistance layerWidth={width} layerHeight={height}/>
-                        <MeasureAngle layerWidth={width} layerHeight={height}/>
+                        <MeasureDistance layerWidth={width} layerHeight={height} />
+                        <MeasureAngle layerWidth={width} layerHeight={height} />
                     </Group>
                 </Layer>
             </ScStage>

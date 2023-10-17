@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Group, Label, Rect, Tag, Text } from "react-konva"
 import { changeDistance } from "@/stores/home/useMeasure"
@@ -70,8 +70,8 @@ const MeasureDistance = ({ layerWidth = 1200, layerHeight = 1100 }) => {
                     <>
                         {clickCount % 2 === 0 && (
                             <Label x={move.x + 5} y={move.y + 5}>
-                                <Tag fill="#32393F" cornerRadius={3}/>
-                                <Text text="单击确定测距起点" fontSize={16} padding={5} fill="#fff"/>
+                                <Tag fill="#32393F" cornerRadius={3} />
+                                <Text text="单击确定测距起点" fontSize={16} padding={5} fill="#fff" />
                             </Label>
                         )}
                         <Rect

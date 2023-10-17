@@ -10,14 +10,14 @@ const ScHeader = styled.header`
     display: grid;
     grid-template-columns: .6fr .8fr 1fr;
     gap: 10%;
-    margin: 0 100px;
-    @media screen  and (max-width: 1440px) {
-        gap: 6%;
-        margin: 0 60px;
+    padding: 0 100px;
+    @media screen  and (width: 1440px) {
+        gap: 7%;
+        padding: 0 70px;
     }
-    @media screen  and (max-width: 900px) {
-        gap: 3%;
-        margin: 0 30px;
+    @media screen  and (width: 900px) {
+        gap: 4%;
+        padding: 0 40px;
     }
 `
 

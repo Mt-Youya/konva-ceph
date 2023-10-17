@@ -16,6 +16,7 @@ const ScDiv = styled.div`
 const ScMain = styled.main`
     flex: 1;
     background-color: #1a1a1a;
+    overflow: hidden;
 `
 
 function Home() {
@@ -23,12 +24,12 @@ function Home() {
     return (
         <Provider store={store}>
             <ScDiv>
-                <UserInfo/>
+                <UserInfo />
                 <ScMain>
-                    <Header/>
-                    <Stage/>
+                    <Header />
+                    <Stage />
                 </ScMain>
-                <Aside/>
+                <Aside />
             </ScDiv>
         </Provider>
     )

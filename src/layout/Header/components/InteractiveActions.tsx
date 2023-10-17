@@ -128,11 +128,11 @@ function InteractiveActions() {
         <>
             <ScHeaderWrapper>
                 <ScHeaderAction onClick={() => handleAction("distance")}>
-                    <img src={distanceIcon}/>
+                    <img src={distanceIcon} />
                     <span> 测距 </span>
                 </ScHeaderAction>
                 <ScHeaderAction onClick={() => handleAction("angle")}>
-                    <img src={angleIcon}/>
+                    <img src={angleIcon} />
                     <span> 测角度 </span>
                 </ScHeaderAction>
 
@@ -145,7 +145,7 @@ function InteractiveActions() {
                     cancelText="取消"
                 >
                     <ScHeaderResetButton>
-                        <img src={resetIcon}/>
+                        <img src={resetIcon} />
                         <span> 重置 </span>
                     </ScHeaderResetButton>
                 </Popconfirm>
@@ -165,7 +165,7 @@ function InteractiveActions() {
                 footer={[<button key="closeBtn" onClick={() => setOpen(false)}> 我知道了</button>]}
             >
                 <p>头测分析结果已保存，您可以关闭页面并回到方案设计页面</p>
-                <AntdScDivider/>
+                <AntdScDivider />
             </AntdScModal>
 
             <AntdScMask
@@ -173,7 +173,7 @@ function InteractiveActions() {
                 maskStyle={{ backgroundColor: "#00000080", backdropFilter: "saturate(180%) blur(20px)" }}
             >
                 <p> 正在为您生成头影测量 ... </p>
-                <Progress type="circle" percent={rate} size={80} strokeColor={["#fff"]} trailColor="#363636"/>
+                <Progress type="circle" percent={rate} size={80} strokeColor={["#fff"]} trailColor="#363636" />
             </AntdScMask>
         </>
     )

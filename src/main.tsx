@@ -8,8 +8,8 @@ import "./mock/index.ts"
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
-        <App/>
-    </React.StrictMode>
+        <App />
+    </React.StrictMode>,
 )
 
 // reportWebVitals(console.log)

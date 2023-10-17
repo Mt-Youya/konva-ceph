@@ -36,7 +36,7 @@ interface IProps {
 const UserInfo: React.FC<IProps> = ({ src, username, age, sex }) => {
     return (
         <ScAside>
-            <Avatar size={80} src={src} icon={!src && <UserOutlined/>}/>
+            <Avatar size={80} src={src} icon={!src && <UserOutlined />} />
             <ScUserInfo>
                 <p className="username"> {username ?? "用户名"} </p>
                 <p className="info"> {sex ?? "性别"} , {age ?? "18"} 岁 </p>

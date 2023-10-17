@@ -18,7 +18,7 @@ service.interceptors.request.use((config) => {
     },
     (error) => {
         return Promise.reject(error)
-    }
+    },
 )
 
 export interface IAxiosResponse<T extends any = any> {
@@ -37,7 +37,7 @@ service.interceptors.response.use((response) => {
     },
     (error) => {
         return Promise.reject(error)
-    }
+    },
 )
 
 export const FileHeader = { "Content-Type": "multipart/form-data" }

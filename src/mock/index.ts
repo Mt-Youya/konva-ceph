@@ -15,7 +15,7 @@ Mock.mock("/ceph/measure", (): IAxiosResponse<MockTableRes> => {
         data: {
             "measure-items": mock_table,
             "point": mock_points,
-            "ruler-scaling": .2 + Math.random() * (.3 - .2)
-        }
+            "ruler-scaling": .2 + Math.random() * (.3 - .2),
+        },
     }
 })
