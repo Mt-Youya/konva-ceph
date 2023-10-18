@@ -25,6 +25,7 @@ function SingleLine({ points = [{ x: 0, y: 0 }, { x: 0, y: 0 }], movePoint: { x:
     const { rulerScaling } = useSelector((state: RootState) => state.tableData)
     const circle1Ref = useRef<Konva.Circle>(null)
     const circle2Ref = useRef<Konva.Circle>(null)
+    const labelRef = useRef(null)
 
     function getDistance(points: [IPoint, IPoint], unit = rulerScaling) {
         const [{ x: x1, y: y1 }, { x: x2, y: y2 }] = points
@@ -65,6 +66,15 @@ function SingleLine({ points = [{ x: 0, y: 0 }, { x: 0, y: 0 }], movePoint: { x:
 
     const style = useCircleStyle()!
 
+    const labelId = `line-${p1.x + p1.y}`
+    useEffect(() => {
+        if (p2) {
+            const label = document.querySelector(`#${labelId}`)
+            console.log(label)
+            label.removeEventListener("wheel", () => void 0, { passive: false })
+        }
+
+    }, [])
     return (
         <Group>
             <SingleCircle ref={circle1Ref} point={p1} onCircleMove={(e) => handleCircleMove(e, START)} />
@@ -80,7 +90,7 @@ function SingleLine({ points = [{ x: 0, y: 0 }, { x: 0, y: 0 }], movePoint: { x:
                     {/*    />*/}
                     {/*    <Text padding={10} fill="#fff" text=" X" x={60} onClick={() => closeDistance()}/>*/}
                     {/*</Label>*/}
-                    <Html divProps={{ style }}>
+                    <Html divProps={{ style, id: labelId }}>
                         {getDistance([p1, p2])}&nbsp;
                         <span style={{ color: "#fff" }}>
                                             mm &nbsp;

@@ -10,7 +10,6 @@ export function createLabelStyle(leftX: number, topY: number, color = "#83ECCB",
         padding: "6px",
         border: "1px solid #414141",
         transform: "none",
-        pointerEvents: "none" as "none",
     }
 }
 

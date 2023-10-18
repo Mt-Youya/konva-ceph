@@ -10,6 +10,9 @@ const ScAside = styled.aside`
     color: #fff;
     padding: 40px 0 0;
     min-width: 120px;
+    box-shadow: 0 0 4px #363636;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
 `
 
 const ScUserInfo = styled.div`

@@ -8,6 +8,7 @@ const ScNotFound = styled.div`
     align-items: center;
     flex-direction: column;
     gap: 30px;
+    background-color: #fff;
 `
 
 const ScLink = styled(Link)`

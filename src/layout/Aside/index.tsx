@@ -6,13 +6,16 @@ import AiPicture from "@/layout/Aside/components/AiPicture.tsx"
 const ScAside = styled.aside`
     width: 500px;
     height: 100%;
+    color: #fff;
     background-color: var(--color-aside-bgColor);
     padding: 30px;
     min-width: 300px;
+    box-shadow: 0 0 5px #363636;
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
 `
 
 const ScH2 = styled.h2`
-    color: #fff;
     display: flex;
     font-size: 20px;
     line-height: 20px;

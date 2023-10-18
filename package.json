@@ -1,8 +1,19 @@
 {
-  "name": "ceph",
-  "private": false,
+  "name": "@react-konva/ceph",
+  "public": true,
   "version": "0.1.0",
   "type": "module",
+  "keywords": [
+    "react",
+    "canvas",
+    "react-konva",
+    "konva",
+    "medicine",
+    "stomatology",
+    "cephalometric measurement",
+    "OHIF",
+    "head"
+  ],
   "scripts": {
     "dev": "vite --host",
     "build": "tsc && vite build",
@@ -13,7 +24,6 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.2.5",
-    "@react-spring/web": "^9.7.3",
     "@reduxjs/toolkit": "^1.9.5",
     "antd": "^5.8.2",
     "axios": "^1.4.0",

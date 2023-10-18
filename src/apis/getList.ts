@@ -31,7 +31,7 @@ export function getTableData(data: TFormData) {
             method: METHOD.POST,
             data,
             headers: FileHeader,
-            timeout: 20000
-        }
+            timeout: 20000,
+        },
     )
 }

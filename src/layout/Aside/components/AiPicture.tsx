@@ -7,7 +7,6 @@ const ScDiv = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    color: #fff;
     margin-top: 30px;
 
     & > p {
@@ -45,9 +44,9 @@ const AiPicture: FC<IProps> = ({ src = XRay, desc }) => {
     return (
         <ScDiv>
             <p>Ai点介绍</p>
-            <img onDragStart={handleDragStart} src={src} draggable={true} />
+            <img onDragStart={handleDragStart} src={src} draggable={true} alt={desc?.name || "软组织鼻根点(N')"} />
             <div className="desc">
-                <p>{desc?.name ?? "软组织鼻根点(N') "}</p>
+                <p>{desc?.name ?? "软组织鼻根点(N')"}</p>
                 <p> {desc?.text ?? "软组织侧面上相应之鼻根点软组织侧面上相应之鼻根点软组织侧面上相应之鼻根点软组织侧面上相应之鼻根点"} </p>
             </div>
         </ScDiv>

@@ -53,7 +53,7 @@ function SingleAngle({ points, movePoint: { x: Mx, y: My }, closeAngle }: IProps
                 const labelStyle = createLabelStyle(circle2Pos.x, circle2Pos.y, color, bgColor)
                 setCircleLabelStyle(labelStyle)
             }
-        }, [points, p1, p2, p3])
+        }, [p1, p2, p3])
 
         return circleLabelStyle
     }

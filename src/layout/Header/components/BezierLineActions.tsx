@@ -48,24 +48,24 @@ function BezierLineActions() {
 
     return (
         <ScHeaderWrapper>
-            <ScHeaderAction onClick={() => handleAction("lateral")}>
-                <img src={lateral ? lateralActiveIcon : lateralIcon} />
+            <ScHeaderAction className={!lateral ? "active" : ""} onClick={() => handleAction("lateral")}>
+                <img src={lateral ? lateralActiveIcon : lateralIcon} alt="lateral" />
                 <span> 侧位片 </span>
             </ScHeaderAction>
-            <ScHeaderAction onClick={() => handleAction("named")}>
-                <img src={named ? nameActiveIcon : nameIcon} />
+            <ScHeaderAction className={!named ? "active" : ""} onClick={() => handleAction("named")}>
+                <img src={named ? nameActiveIcon : nameIcon} alt="named" />
                 <span> 名称 </span>
             </ScHeaderAction>
-            <ScHeaderAction onClick={() => handleAction("major")}>
-                <img src={major ? majorActiveIcon : majorIcon} />
+            <ScHeaderAction className={!major ? "active" : ""} onClick={() => handleAction("major")}>
+                <img src={major ? majorActiveIcon : majorIcon} alt="major" />
                 <span> 主点 </span>
             </ScHeaderAction>
-            <ScHeaderAction onClick={() => handleAction("support")}>
-                <img src={support ? supportActiveIcon : supportIcon} />
+            <ScHeaderAction className={!support ? "active" : ""} onClick={() => handleAction("support")}>
+                <img src={support ? supportActiveIcon : supportIcon} alt="support" />
                 <span> 辅助点 </span>
             </ScHeaderAction>
-            <ScHeaderAction onClick={() => handleAction("outline")}>
-                <img src={outline ? outlineActiveIcon : outlineIcon} />
+            <ScHeaderAction className={!outline ? "active" : ""} onClick={() => handleAction("outline")}>
+                <img src={outline ? outlineActiveIcon : outlineIcon} alt="outline" />
                 <span> 轮廓 </span>
             </ScHeaderAction>
         </ScHeaderWrapper>

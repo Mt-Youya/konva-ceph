@@ -14,8 +14,7 @@ import type { ActionType } from "../data.ts"
 const AntdScSlider = styled(Slider)`
     width: 200px;
     position: absolute;
-    top: 120%;
-    left: -75px;
+    bottom: -30%;
     z-index: 999;
 `
 
@@ -54,16 +53,19 @@ function ImageActions() {
     return (
         <ScHeaderWrapper>
             <Link to="/native">Native</Link>
-            <ScHeaderAction>
-                <img src={mirrorIcon} onClick={() => handleAction("mirror")} />
+            <ScHeaderAction className={scaleX === -1 ? "active" : ""} onClick={() => handleAction("mirror")}>
+                <img src={mirrorIcon} alt="mirror" />
                 <span> 镜像 </span>
             </ScHeaderAction>
-            <ScHeaderAction onClick={() => handleAction("rotate")}>
-                <img src={rotateIcon} />
+            <ScHeaderAction className={(rotate / 90) % 4 !== 0 ? "active" : ""} onClick={() => handleAction("rotate")}>
+                <img src={rotateIcon} alt="rotate" />
                 <span> 旋转 </span>
             </ScHeaderAction>
-            <ScHeaderAction onClick={() => sliderClick("brightnessActive")}>
-                <img src={brightnessIcon} />
+            <ScHeaderAction
+                className={sliderMap.brightnessActive ? "active" : ""}
+                onClick={() => sliderClick("brightnessActive")}
+            >
+                <img src={brightnessIcon} alt="brightness" />
                 <span> 亮度 </span>
                 {sliderMap.brightnessActive && (
                     <AntdScSlider
@@ -74,8 +76,9 @@ function ImageActions() {
                     />
                 )}
             </ScHeaderAction>
-            <ScHeaderAction onClick={() => sliderClick("contrastActive")}>
-                <img src={contrastRatioIcon} />
+            <ScHeaderAction className={sliderMap.contrastActive ? "active" : ""}
+                            onClick={() => sliderClick("contrastActive")}>
+                <img src={contrastRatioIcon} alt="contrastRatio" />
                 <span> 对比度 </span>
                 {sliderMap.contrastActive && (
                     <AntdScSlider

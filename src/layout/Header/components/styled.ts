@@ -19,33 +19,48 @@ const ScHeaderAction = styled.div`
 
     &::after {
         z-index: 2;
+        background-color: #2E436EFF;
+        scale: 0;
+        transition: scale ease-in-out .3s;
+    }
+
+    &::before {
+        z-index: 3;
+        background-color: #417270;
+        opacity: 0;
+        transition: opacity ease-in-out .3s;
+    }
+
+    &::before, &::after {
         top: 0;
         border-radius: 10px;
         display: block;
         content: "";
         position: absolute;
         width: 100%;
-        height: 100%;
-        background-color: #2E436EFF;
-        scale: 0;
-        transition: scale ease-in-out .2s;
+        height: 100%;;
+    }
+
+    &.active {
+        &::before {
+            opacity: 1;
+        }
     }
 
     &:hover {
-
         &::after {
             scale: 1;
         }
     }
 
     img {
-        z-index: 3;
+        z-index: 4;
         width: 30px;
         aspect-ratio: 1;
     }
 
     span {
-        z-index: 3;
+        z-index: 4;
         font-size: 12px;
         line-height: 14px;
         display: flex;

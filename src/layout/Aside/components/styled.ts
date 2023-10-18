@@ -7,7 +7,6 @@ const ScContainer = styled.div`
 
 `
 const ScTable = styled.div`
-    color: #fff;
     width: 100%;
     height: 520px;
 `

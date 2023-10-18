@@ -11,6 +11,12 @@ const ScHeader = styled.header`
     grid-template-columns: .6fr .8fr 1fr;
     gap: 10%;
     padding: 0 100px;
+    background-color: #1f2327;
+    backdrop-filter: saturate(180%) blur(20px);
+    box-shadow: 0 0 4px #292e33;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    
     @media screen  and (width: 1440px) {
         gap: 7%;
         padding: 0 70px;

@@ -18,16 +18,11 @@ import {
     ScHeaderResetButton,
     ScHeaderWrapper,
 } from "./styled"
-import styled from "styled-components"
 
 import type { DragEvent } from "react"
 import type { ImageExcAll } from "@/types"
 import type { RootState } from "@/stores"
 import type { ActionType } from "../data"
-
-const ScUploadBtn = styled.div`
-
-`
 
 function InteractiveActions() {
     const [open, setOpen] = useState(false)
@@ -136,11 +131,11 @@ function InteractiveActions() {
     return (
         <>
             <ScHeaderWrapper>
-                <ScHeaderAction onClick={() => handleAction("distance")}>
+                <ScHeaderAction onClick={() => handleAction("distance")} className={distance ? "active" : ""}>
                     <img src={distanceIcon} />
                     <span> 测距 </span>
                 </ScHeaderAction>
-                <ScHeaderAction onClick={() => handleAction("angle")}>
+                <ScHeaderAction onClick={() => handleAction("angle")} className={angle ? "active" : ""}>
                     <img src={angleIcon} />
                     <span> 测角度 </span>
                 </ScHeaderAction>
@@ -158,11 +153,11 @@ function InteractiveActions() {
                         <span> 重置 </span>
                     </ScHeaderResetButton>
                 </Popconfirm>
-                <ScUploadBtn onClick={onUpload} onDrop={handleDrop} onDragOver={e => e.preventDefault()}>
+                <div onClick={onUpload} onDrop={handleDrop} onDragOver={e => e.preventDefault()}>
                     <ScHeaderNormalButton className="upload">
                         <span> 上传图片 </span>
                     </ScHeaderNormalButton>
-                </ScUploadBtn>
+                </div>
                 <ScHeaderNormalButton onClick={() => setOpen(true)}>
                     <span> 完成头测分析 </span>
                 </ScHeaderNormalButton>
