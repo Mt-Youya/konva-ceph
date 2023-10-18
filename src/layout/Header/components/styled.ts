@@ -15,13 +15,37 @@ const ScHeaderAction = styled.div`
     gap: 10px;
     cursor: pointer;
     position: relative;
+    padding: 10px;
+
+    &::after {
+        z-index: 2;
+        top: 0;
+        border-radius: 10px;
+        display: block;
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: #2E436EFF;
+        scale: 0;
+        transition: scale ease-in-out .2s;
+    }
+
+    &:hover {
+
+        &::after {
+            scale: 1;
+        }
+    }
 
     img {
+        z-index: 3;
         width: 30px;
         aspect-ratio: 1;
     }
 
     span {
+        z-index: 3;
         font-size: 12px;
         line-height: 14px;
         display: flex;

@@ -58,7 +58,8 @@ export const mock_points: IGpsPointItem[] = [
     { "name": "ULprime", "gps": [664, 461] },
     { "name": "Xi", "gps": [439, 464] },
     { "name": "ruler1", "gps": [693, 221] },
-    { "name": "ruler2", "gps": [693, 188] }]
+    { "name": "ruler2", "gps": [693, 188] },
+]
 
 export const mock_table: ITableData[] = [
     {
@@ -68,7 +69,7 @@ export const mock_table: ITableData[] = [
         "standard_value": 83,
         "standard_deviation": 4,
         "result_desc": "上颌骨相对前颅底平面的位置正常",
-        "flag": 0
+        "flag": 0,
     },
     {
         "name": "SNB&deg",
@@ -77,7 +78,7 @@ export const mock_table: ITableData[] = [
         "standard_value": 80,
         "standard_deviation": 3,
         "result_desc": "下颌骨相对前颅底平面的位置正常",
-        "flag": 0
+        "flag": 0,
     },
     {
         "name": "ANB&deg",
@@ -86,7 +87,7 @@ export const mock_table: ITableData[] = [
         "standard_value": 3,
         "standard_deviation": 2,
         "result_desc": "骨性III类趋势",
-        "flag": -1
+        "flag": -1,
     },
     {
         "name": "Ptm-A&mm",
@@ -95,7 +96,7 @@ export const mock_table: ITableData[] = [
         "standard_value": 45,
         "standard_deviation": 3,
         "result_desc": "上颌骨长度过短",
-        "flag": -1
+        "flag": -1,
     },
     {
         "name": "PP-FH&deg",
@@ -104,7 +105,7 @@ export const mock_table: ITableData[] = [
         "standard_value": 4,
         "standard_deviation": 3,
         "result_desc": "腭平面陡度正常，上颌骨无异常旋转",
-        "flag": 0
+        "flag": 0,
     },
     {
         "name": "PP-GoGn&deg",
@@ -113,7 +114,7 @@ export const mock_table: ITableData[] = [
         "standard_value": 21,
         "standard_deviation": 4,
         "result_desc": "上下颌骨相对位置正常",
-        "flag": 0
+        "flag": 0,
     },
     {
         "name": "OP-SN&deg",
@@ -122,7 +123,7 @@ export const mock_table: ITableData[] = [
         "standard_value": 19,
         "standard_deviation": 4,
         "result_desc": "牙合平面倾斜度偏小",
-        "flag": -1
+        "flag": -1,
     },
     {
         "name": "Go-Pog&mm",
@@ -131,7 +132,7 @@ export const mock_table: ITableData[] = [
         "standard_value": 73,
         "standard_deviation": 4,
         "result_desc": "下颌体长度偏小",
-        "flag": -1
+        "flag": -1,
     },
     {
         "name": "Go-Co&mm",
@@ -140,7 +141,7 @@ export const mock_table: ITableData[] = [
         "standard_value": 56,
         "standard_deviation": 4,
         "result_desc": "下颌升支偏短",
-        "flag": -1
+        "flag": -1,
     },
     {
         "name": "MP-SN&deg",
@@ -149,7 +150,7 @@ export const mock_table: ITableData[] = [
         "standard_value": 33,
         "standard_deviation": 4,
         "result_desc": "下颌体陡度正常",
-        "flag": 0
+        "flag": 0,
     },
     {
         "name": "FH-MP&deg",
@@ -158,7 +159,7 @@ export const mock_table: ITableData[] = [
         "standard_value": 28,
         "standard_deviation": 4,
         "result_desc": "水平生长型，下颌体平",
-        "flag": -1
+        "flag": -1,
     },
     {
         "name": "SGn-FH&deg",
@@ -167,7 +168,7 @@ export const mock_table: ITableData[] = [
         "standard_value": 64,
         "standard_deviation": 3,
         "result_desc": "颏部前突",
-        "flag": -1
+        "flag": -1,
     },
     {
         "name": "NBa-PtGn&deg",
@@ -176,7 +177,7 @@ export const mock_table: ITableData[] = [
         "standard_value": 88,
         "standard_deviation": 3,
         "result_desc": "下颌生长正常",
-        "flag": 0
+        "flag": 0,
     },
     {
         "name": "N-ANS&mm",
@@ -185,7 +186,7 @@ export const mock_table: ITableData[] = [
         "standard_value": 53,
         "standard_deviation": 3,
         "result_desc": "上面高度偏小",
-        "flag": -1
+        "flag": -1,
     },
     {
         "name": "S-Go&mm",
@@ -194,7 +195,7 @@ export const mock_table: ITableData[] = [
         "standard_value": 75,
         "standard_deviation": 5,
         "result_desc": "后面高度偏小",
-        "flag": -1
+        "flag": -1,
     },
     {
         "name": "S-Go/N-Me&rate",
@@ -203,7 +204,7 @@ export const mock_table: ITableData[] = [
         "standard_value": 66,
         "standard_deviation": 4,
         "result_desc": "平均生长型",
-        "flag": 0
+        "flag": 0,
     },
     {
         "name": "ANS-Me/N-Me&rate",
@@ -212,7 +213,7 @@ export const mock_table: ITableData[] = [
         "standard_value": 53,
         "standard_deviation": 2,
         "result_desc": "下面高偏长",
-        "flag": 1
+        "flag": 1,
     },
     {
         "name": "U1-L1&deg",
@@ -221,7 +222,7 @@ export const mock_table: ITableData[] = [
         "standard_value": 127,
         "standard_deviation": 9,
         "result_desc": "上下中切牙的相对突度正常",
-        "flag": 0
+        "flag": 0,
     },
     {
         "name": "U1-SN&deg",
@@ -230,7 +231,7 @@ export const mock_table: ITableData[] = [
         "standard_value": 105,
         "standard_deviation": 6,
         "result_desc": "上下中切牙的相对突度正常",
-        "flag": 0
+        "flag": 0,
     },
     {
         "name": "U1-NA&mm",
@@ -239,7 +240,7 @@ export const mock_table: ITableData[] = [
         "standard_value": 4,
         "standard_deviation": 2,
         "result_desc": "上中切牙突度大",
-        "flag": 1
+        "flag": 1,
     },
     {
         "name": "U1-NA&deg",
@@ -248,7 +249,7 @@ export const mock_table: ITableData[] = [
         "standard_value": 21,
         "standard_deviation": 6,
         "result_desc": "上中切牙唇倾",
-        "flag": 1
+        "flag": 1,
     },
     {
         "name": "L1-NB&mm",
@@ -257,7 +258,7 @@ export const mock_table: ITableData[] = [
         "standard_value": 6,
         "standard_deviation": 2,
         "result_desc": "下中切牙突度正常",
-        "flag": 0
+        "flag": 0,
     },
     {
         "name": "L1-NB&deg",
@@ -266,7 +267,7 @@ export const mock_table: ITableData[] = [
         "standard_value": 28,
         "standard_deviation": 6,
         "result_desc": "下中切牙突度正常",
-        "flag": 0
+        "flag": 0,
     },
     {
         "name": "L1-FH&deg",
@@ -275,7 +276,7 @@ export const mock_table: ITableData[] = [
         "standard_value": 57,
         "standard_deviation": 7,
         "result_desc": "下中切牙倾斜度、突度正常",
-        "flag": 0
+        "flag": 0,
     },
     {
         "name": "U1-Apo&mm",
@@ -284,7 +285,7 @@ export const mock_table: ITableData[] = [
         "standard_value": 7,
         "standard_deviation": 2,
         "result_desc": "上中切牙突度正常",
-        "flag": 0
+        "flag": 0,
     },
     {
         "name": "L1-Apo&mm",
@@ -293,7 +294,7 @@ export const mock_table: ITableData[] = [
         "standard_value": 3,
         "standard_deviation": 2,
         "result_desc": "下中切牙突度过大",
-        "flag": 1
+        "flag": 1,
     },
     {
         "name": "U1-PP&mm",
@@ -302,7 +303,7 @@ export const mock_table: ITableData[] = [
         "standard_value": 28,
         "standard_deviation": 2,
         "result_desc": "上前牙槽高度偏小",
-        "flag": -1
+        "flag": -1,
     },
     {
         "name": "U6-PP&mm",
@@ -311,7 +312,7 @@ export const mock_table: ITableData[] = [
         "standard_value": 22,
         "standard_deviation": 2,
         "result_desc": "上后牙槽高度正常",
-        "flag": 0
+        "flag": 0,
     },
     {
         "name": "L1-MP&mm",
@@ -320,7 +321,7 @@ export const mock_table: ITableData[] = [
         "standard_value": 40,
         "standard_deviation": 2,
         "result_desc": "下前牙槽高度正常",
-        "flag": 0
+        "flag": 0,
     },
     {
         "name": "L6-MP&mm",
@@ -329,7 +330,7 @@ export const mock_table: ITableData[] = [
         "standard_value": 33,
         "standard_deviation": 2,
         "result_desc": "下后牙槽高度偏小",
-        "flag": -1
+        "flag": -1,
     },
     {
         "name": "Ptm-U6&mm",
@@ -338,7 +339,7 @@ export const mock_table: ITableData[] = [
         "standard_value": 16,
         "standard_deviation": 3,
         "result_desc": "上颌第一磨牙位置正常",
-        "flag": 0
+        "flag": 0,
     },
     {
         "name": "UL-EP&mm",
@@ -347,7 +348,7 @@ export const mock_table: ITableData[] = [
         "standard_value": 2,
         "standard_deviation": 2,
         "result_desc": "上唇位置正常",
-        "flag": 0
+        "flag": 0,
     },
     {
         "name": "LL-EP&mm",
@@ -356,7 +357,7 @@ export const mock_table: ITableData[] = [
         "standard_value": 3,
         "standard_deviation": 2,
         "result_desc": "下唇位置正常",
-        "flag": 0
+        "flag": 0,
     },
     {
         "name": "Z-Angle&deg",
@@ -365,7 +366,7 @@ export const mock_table: ITableData[] = [
         "standard_value": 71,
         "standard_deviation": 5,
         "result_desc": "下颌前突，唇部后缩",
-        "flag": 1
+        "flag": 1,
     },
     {
         "name": "FH-N'Pog'&deg",
@@ -374,7 +375,7 @@ export const mock_table: ITableData[] = [
         "standard_value": 89,
         "standard_deviation": 3,
         "result_desc": "软组织颏部位置正常",
-        "flag": 0
+        "flag": 0,
     },
     {
         "name": "N'-Sn-Pog'&deg",
@@ -383,6 +384,6 @@ export const mock_table: ITableData[] = [
         "standard_value": 167,
         "standard_deviation": 4,
         "result_desc": "III类骨面型趋势",
-        "flag": 1
-    }
+        "flag": 1,
+    },
 ]

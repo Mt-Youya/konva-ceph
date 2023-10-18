@@ -6,7 +6,7 @@ import { changeAngle, changeDistance, changeImgUrl } from "@/stores/home/useMeas
 import { changePointList } from "@/stores/home/useDataPoints"
 import { setRulerScaling, setTableData } from "@/stores/home/getTableData"
 import { getTableData } from "@/apis/getList"
-import { urlToFile } from "@/utils/url2File"
+import { imageToFileByCanvas } from "@/utils/image2File"
 import { ImageFileTypes } from "@/types"
 import { actionKeys } from "../data"
 import {
@@ -18,11 +18,16 @@ import {
     ScHeaderResetButton,
     ScHeaderWrapper,
 } from "./styled"
+import styled from "styled-components"
 
 import type { DragEvent } from "react"
 import type { ImageExcAll } from "@/types"
 import type { RootState } from "@/stores"
 import type { ActionType } from "../data"
+
+const ScUploadBtn = styled.div`
+
+`
 
 function InteractiveActions() {
     const [open, setOpen] = useState(false)
@@ -50,8 +55,12 @@ function InteractiveActions() {
 
     async function handleDrop(e: DragEvent) {
         const src = e.dataTransfer?.getData("text/plain")!
+        const image = new Image()
+        image.src = src
         try {
-            const file = await urlToFile(src, "image.jpg")
+            const file = await imageToFileByCanvas(image, "image.jpg")
+            const imgUrl = URL.createObjectURL(file)
+            dispatch(changeImgUrl(imgUrl))
             fetchFileData(file)
         } catch (err: any) {
             messageApi.error(err)
@@ -149,9 +158,11 @@ function InteractiveActions() {
                         <span> 重置 </span>
                     </ScHeaderResetButton>
                 </Popconfirm>
-                <ScHeaderNormalButton className="upload" onClick={onUpload} onDrop={handleDrop}>
-                    <span> 上传图片 </span>
-                </ScHeaderNormalButton>
+                <ScUploadBtn onClick={onUpload} onDrop={handleDrop} onDragOver={e => e.preventDefault()}>
+                    <ScHeaderNormalButton className="upload">
+                        <span> 上传图片 </span>
+                    </ScHeaderNormalButton>
+                </ScUploadBtn>
                 <ScHeaderNormalButton onClick={() => setOpen(true)}>
                     <span> 完成头测分析 </span>
                 </ScHeaderNormalButton>
