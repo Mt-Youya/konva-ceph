@@ -3,11 +3,12 @@ import { Group, Line } from "react-konva"
 import { Html } from "react-konva-utils"
 import { CloseOutlined } from "@ant-design/icons"
 import { createLabelStyle, measureAngle } from "@/features"
+import { useLabelId } from "./useHooks"
 import Konva from "konva"
 import SingleCircle from "@/components/SingleCircle"
 
-import type { IPoint } from "@/types"
 import type { KonvaEventObject } from "konva/lib/Node"
+import type { IPoint } from "@/types"
 
 interface IProps {
     points: IPoint[]
@@ -60,8 +61,10 @@ function SingleAngle({ points, movePoint: { x: Mx, y: My }, closeAngle }: IProps
 
     const style = useCircleStyle()!
 
+    const labelId = useLabelId(points, 2)
+
     return (
-        <Group draggable>
+        <Group draggable onDragMove={() => setP3(prev => ({ ...prev }))}>
             <SingleCircle
                 stroke="#FFE400"
                 ref={circle1Ref} point={p1}
@@ -88,7 +91,7 @@ function SingleAngle({ points, movePoint: { x: Mx, y: My }, closeAngle }: IProps
                         ref={circle3Ref} point={p3}
                         onCircleMove={(e) => handleCircleMove(e, END)}
                     />
-                    <Html divProps={{ style }}>
+                    <Html divProps={{ style, id: labelId }}>
                         {Math.round(measureAngle(p2, p1, p2, p3))} °&nbsp;
                         <CloseOutlined style={{ color: "#fff", cursor: "pointer" }} onClick={() => closeAngle()} />
                     </Html>

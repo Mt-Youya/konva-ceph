@@ -4,14 +4,13 @@ import { Group, Line } from "react-konva"
 import { Html } from "react-konva-utils"
 import { CloseOutlined } from "@ant-design/icons"
 import { createLabelStyle } from "@/features"
+import { useLabelId } from "./useHooks"
 import Konva from "konva"
 import SingleCircle from "@/components/SingleCircle"
 
-import type { IPoint } from "@/types"
 import type { KonvaEventObject } from "konva/lib/Node"
+import type { IPoint } from "@/types"
 import type { RootState } from "@/stores"
-
-const START = "start", END = "end"
 
 interface IProps {
     points: IPoint[]
@@ -25,7 +24,8 @@ function SingleLine({ points = [{ x: 0, y: 0 }, { x: 0, y: 0 }], movePoint: { x:
     const { rulerScaling } = useSelector((state: RootState) => state.tableData)
     const circle1Ref = useRef<Konva.Circle>(null)
     const circle2Ref = useRef<Konva.Circle>(null)
-    const labelRef = useRef(null)
+
+    const START = "start", END = "end"
 
     function getDistance(points: [IPoint, IPoint], unit = rulerScaling) {
         const [{ x: x1, y: y1 }, { x: x2, y: y2 }] = points
@@ -66,17 +66,10 @@ function SingleLine({ points = [{ x: 0, y: 0 }, { x: 0, y: 0 }], movePoint: { x:
 
     const style = useCircleStyle()!
 
-    const labelId = `line-${p1.x + p1.y}`
-    useEffect(() => {
-        if (p2) {
-            const label = document.querySelector(`#${labelId}`)
-            console.log(label)
-            label.removeEventListener("wheel", () => void 0, { passive: false })
-        }
+    const labelId = useLabelId(points, 1)
 
-    }, [])
     return (
-        <Group>
+        <Group draggable onDragMove={() => setP2(prev => ({ ...prev }))}>
             <SingleCircle ref={circle1Ref} point={p1} onCircleMove={(e) => handleCircleMove(e, START)} />
             <Line points={p2 ? [p1.x, p1.y, p2.x, p2.y] : [p1.x, p1.y, Mx, My]} stroke="#83ECCB" />
             {p2 && (

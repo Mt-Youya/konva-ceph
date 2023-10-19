@@ -85,7 +85,7 @@ function ImageActions() {
                         defaultValue={contrast * 100}
                         trackStyle={{ backgroundColor: "#979797", height: "2px" }}
                         railStyle={{ backgroundColor: "#979797", height: "2px" }}
-                        onChange={num => handleAction("contrast", num)}
+                        onChange={num => handleAction("contrast", num / 100)}
                     />
                 )}
             </ScHeaderAction>

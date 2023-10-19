@@ -12,7 +12,9 @@ interface ICircleProps {
     stroke?: `#${string}` | `rgb(${string})` | `hsl(${string})` | `hue(${string})`
 }
 
-const SingleCircle = forwardRef(({ point, onCircleMove, stroke = "#83eccb" }: ICircleProps, circleRef: ForwardedRef<Konva.Circle>) => {
+type TCircleRef = ForwardedRef<Konva.Circle>
+
+const SingleCircle = forwardRef(({ point, onCircleMove, stroke = "#83eccb" }: ICircleProps, circleRef: TCircleRef) => {
         return (
             <Circle {...point} draggable fill="#fff" stroke={stroke} radius={5} ref={circleRef}
                     onMouseEnter={e => e.target.getStage()!.container().style.cursor = "pointer"}
@@ -20,7 +22,7 @@ const SingleCircle = forwardRef(({ point, onCircleMove, stroke = "#83eccb" }: IC
                     onDragMove={onCircleMove}
             />
         )
-    }
+    },
 )
 
 export default memo(SingleCircle)
