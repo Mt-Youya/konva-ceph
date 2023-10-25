@@ -17,7 +17,7 @@ export const showPointSlice: Slice<ShowState> = createSlice({
         major: true as boolean,
         support: true as boolean,
         outline: true as boolean,
-        lateral: true as boolean,
+        lateral: false as boolean,
     },
     reducers: {
         changeLateral(state, action) {

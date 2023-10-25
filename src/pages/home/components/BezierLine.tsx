@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react"
+import { Fragment, useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Circle, Group, Line, Text } from "react-konva"
 import { Html } from "react-konva-utils"
@@ -19,6 +19,7 @@ import { changePointList } from "@/stores/home/useDataPoints"
 import { setTableData } from "@/stores/home/getTableData"
 import { getPurePoints, getRelativePointsGroup, shouldJudgeAngles, shouldJudgePositions } from "@/pages/home/data"
 import styled from "styled-components"
+import Konva from "konva"
 
 import type { KonvaEventObject } from "konva/lib/Node"
 import type { IPointItem } from "@/stores/home/useDataPoints"
@@ -26,7 +27,7 @@ import type { IMap, TTargetMap } from "@/pages/home/data"
 import type { RootState } from "@/stores"
 import type { ITableData } from "@/apis/getList"
 
-const AntdScDropdown = styled(Dropdown)`
+const AntdDrop = styled(Dropdown)`
     background-color: #414141;
     color: #fff;
     border-radius: 2px;
@@ -42,17 +43,18 @@ const items = [
 
 const BezierLine = () => {
     const { named, outline, major } = useSelector((state: RootState) => state.showPoint)
-    const { rotate, scaleX } = useSelector((state: RootState) => state.transform)
     const { pointList, lineList } = useSelector((state: RootState) => state.dataPoint)
     const { tableData, rulerScaling } = useSelector((state: RootState) => state.tableData)
+
     const [menuLabel, setMenuLabel] = useState(items[1].label)
     const [targetPointsGroup, setTargetPointsGroup] = useState<TTargetMap>(new Map)
     const [linePos, setLinePos] = useState({ p1: 33, p2: 36, p3: 34, p4: 1 })
-
     const [rulerPoint, setRulerPoint] = useState<IMap>()
+
     const [intersection, setIntersection] = useState({ x: 0, y: 0 })
     const [intersectionKey, setIntersectionKey] = useState("")
 
+    const pointListRef = useRef<Konva.Group | null>(null)
     const dispatch = useDispatch()
 
     // const pointsMethods = getAllPointMethodMap(POINTS_CONSTANTS)
@@ -339,6 +341,7 @@ const BezierLine = () => {
             const RPoints = getPurePoints(pointList)
             // const ruler = gps2IPoint(RPoints)
             setRulerPoint(RPoints)
+
             // @ts-ignore
             window.__ceph_getAllPoint = getAllPointInfoFn
             // @ts-ignore
@@ -356,17 +359,22 @@ const BezierLine = () => {
         }
     }, [tableData])
 
+    const scale = pointListRef.current?.getStage()?.scaleX() ?? 1
+
+    const htmlStyle = {
+        left: rulerPoint?.ruler1[0]! * scale + 40 + "px",
+        top: Math.ceil((rulerPoint?.ruler1[1]! * scale + rulerPoint?.ruler2[1]! * scale) / 2) - 10 + "px",
+        borderColor: "#32393F",
+        textWrap: "nowrap",
+    }
+
     return (
         <Group>
-            {lineList.map((item, index) => {
-                return (
-                    <Fragment key={"line_" + index}>
-                        {outline && (
-                            <Line points={item} stroke="rgb(0,182,255)" strokeWidth={2} tension={.5} bezier={true} />
-                        )}
-                    </Fragment>
-                )
-            })}
+            {lineList.map((item, index) => (
+                <Fragment key={"line_" + index}>
+                    {outline && <Line points={item} stroke="#00b6ff" strokeWidth={2} tension={.5} bezier={true} />}
+                </Fragment>
+            ))}
 
             {!!intersection.x && !!intersection.y && !!pointList.length && (
                 <>
@@ -388,50 +396,34 @@ const BezierLine = () => {
                     />
                 </>
             )}
-
-            {pointList?.map(({ name, gps: [x, y] }, index) => {
-                return (
-                    <Fragment key={"point_" + index}>
-                        {major && (
-                            <Circle
-                                x={x} y={y} fill="#fff" radius={3} draggable
-                                onDragEnd={() => onDrop(name)}
-                                onDragMove={e => onDragMove(e, index)}
-                                onMouseEnter={e => e.target.getStage()!.container().style.cursor = "pointer"}
-                                onMouseOut={e => e.target.getStage()!.container().style.cursor = "default"}
-                            />
-                        )}
-                        {named && (
-                            <Text x={x + 5} y={y} fill="#f00" text={name} rotation={-rotate} scaleX={scaleX} />
-                        )}
-                    </Fragment>
-                )
-            })}
-
+            <Group ref={pointListRef}>
+                {pointList?.map(({ name, gps: [x, y] }, index) => {
+                    return (
+                        <Fragment key={"point_" + index}>
+                            {major && (
+                                <Circle
+                                    name={name}
+                                    x={x} y={y} fill="#fff" radius={4/scale} draggable
+                                    onDragEnd={() => onDrop(name)}
+                                    onDragMove={e => onDragMove(e, index)}
+                                    onMouseEnter={e => e.target.getStage()!.container().style.cursor = "pointer"}
+                                    onMouseOut={e => e.target.getStage()!.container().style.cursor = "default"}
+                                />
+                            )}
+                            {named && (<Text x={x + (5/scale)} y={y} fontSize={20/scale} fill="#f00" text={name} />)}
+                        </Fragment>
+                    )
+                })}
+            </Group>
             {rulerPoint && (
                 <>
                     <Html
-                        divProps={{
-                            style: {
-                                left: rulerPoint.ruler1[0] + 40 + "px",
-                                top: Math.ceil((rulerPoint.ruler1[1] + rulerPoint.ruler2[1]) / 2) - 10 + "px",
-                                borderColor: "#32393F",
-                            },
-                        }}
+                        divProps={{ style: htmlStyle }}
+                        transformFunc={(transform) => ({ ...transform, rotation: 0, scaleY: 1, scaleX: 1 })}
                     >
-                        <AntdScDropdown
-                            menu={{
-                                items,
-                                selectable: true,
-                                defaultSelectedKeys: ["2"],
-                                onClick: onMenuClick,
-                            }}
-                        >
-                        <span>
-                            {menuLabel}
-                            <DownOutlined />
-                        </span>
-                        </AntdScDropdown>
+                        <AntdDrop menu={{ items, selectable: true, defaultSelectedKeys: ["2"], onClick: onMenuClick }}>
+                            <span> {menuLabel} <DownOutlined /></span>
+                        </AntdDrop>
                     </Html>
                     <Line points={[...rulerPoint.ruler1, ...rulerPoint.ruler2]} stroke="#FF005C" />
                 </>

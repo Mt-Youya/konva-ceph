@@ -68,6 +68,8 @@ const ScHeaderAction = styled.div`
     }
 `
 
+
+
 const ScHeaderResetButton = styled.button`
     background-color: #2D3238;
     width: 80px;
@@ -93,7 +95,7 @@ const ScHeaderNormalButton = styled.button`
     background-color: #009DC7;
     color: #fff;
     margin: 0;
-    padding: 0;
+    padding: 0; 
 
     &.upload {
         width: 80px;

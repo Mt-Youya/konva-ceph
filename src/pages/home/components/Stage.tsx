@@ -24,41 +24,46 @@ const StageContainer = () => {
 
     const [width, setWidth] = useState(1000)
     const [height, setHeight] = useState(1000)
+    const [stageScale, setStageScale] = useState(1)
+    const [stageX, setStageX] = useState(0)
+    const [stageY, setStageY] = useState(0)
+    const [_, setTemp] = useState(0)
     const [image] = useImage(imgUrl)
-    const [_, setTemp] = useState(1)
 
     const stageRef = useRef<Konva.Stage | null>(null)
     const layerRef = useRef<Konva.Layer | null>(null)
+    const imageRef = useRef<Konva.Image | null>(null)
 
-    const scaleBy = 1.01
+    const ScaleBy = 1.03
+    const MaxScale = 3
+    const MinScale = .5
 
-    function onWheel(e: KonvaEventObject<WheelEvent>) {
+    function handleWheel(e: KonvaEventObject<WheelEvent>) {
         if (!e.evt.ctrlKey) return
         e.evt.preventDefault()
-
-        handleZoom(e.evt.deltaY, layerRef.current!)
-    }
-
-    function handleZoom(deltaY: number, target: Konva.Layer) {
-        const oldScale = target.scaleX()
-        const pointer = target?.getRelativePointerPosition()!
-
-        const direction = deltaY > 0 ? -1 : 1
-
-        const newScale = direction > 0 ? oldScale * scaleBy : oldScale / scaleBy
+        const direction = e.evt.deltaY > 0 ? -1 : 1
+        const stage = e.target.getStage()!
+        const oldScale = stage.scaleX()
+        const pointer = stage.getPointerPosition()!
 
         const mousePointTo = {
-            x: (pointer.x - target.x()) / oldScale,
-            y: (pointer.y - target.y()) / oldScale,
+            x: pointer.x / oldScale - stage.x() / oldScale,
+            y: pointer.y / oldScale - stage.y() / oldScale,
         }
-        const transPos = {
-            x: pointer.x - mousePointTo.x * newScale,
-            y: pointer.y - mousePointTo.y * newScale,
-        }
+        const newScale =
+                  direction > 0
+                      ? oldScale > MaxScale
+                          ? oldScale
+                          : oldScale * ScaleBy
+                      : oldScale < MinScale
+                          ? oldScale
+                          : oldScale / ScaleBy
+        setStageScale(newScale)
 
-        target.scale({ x: newScale, y: newScale })
-        target.position(transPos)
-        setTemp(prevState => prevState + 1)
+        const newStageX = -(mousePointTo.x - pointer.x / newScale) * newScale
+        const newStageY = -(mousePointTo.y - pointer.y / newScale) * newScale
+        setStageX(newStageX)
+        setStageY(newStageY)
     }
 
     useEffect(() => {
@@ -77,16 +82,40 @@ const StageContainer = () => {
         return () => window.removeEventListener("resize", setStageSize)
     }, [])
 
+    useEffect(() => {
+        if (image) {
+            imageRef.current?.cache()
+            const imgWidth  = image.width,
+                  imgHeight = image.height,
+                  scaleW    = imgWidth / width,
+                  scaleH    = imgHeight / height
+
+            if (scaleW > 1 || scaleH > 1) {
+                const newScale = scaleW > scaleH ? 1 / scaleW : 1 / scaleH
+                setStageX(width * (1 - newScale) / 2)
+                setStageY(height * (1 - newScale) / 2)
+                setStageScale(newScale)
+            } else {
+                setStageScale(1)
+            }
+        }
+    }, [image, lateral])
+
+    function handleDragMove() {
+        setTemp(prevState => prevState + 1)
+    }
+
     return (
         <>
-            <ScStage ref={stageRef} onWheel={onWheel}>
-                <Layer draggable
-                       ref={layerRef} scaleX={scaleX} rotation={rotate}
-                       onDragMove={() => setTemp(prevState => prevState + 1)}
-                >
-                    <Group offset={{ x: (image?.width! - width) / 2, y: (image?.height! - height) / 2 }}>
+            <ScStage ref={stageRef} scaleX={stageScale} scaleY={stageScale} x={stageX} y={stageY} onWheel={handleWheel}>
+                <Layer draggable ref={layerRef} onDragMove={handleDragMove}>
+                    <Group
+                        x={width / 2} y={height / 2} scaleX={scaleX} rotation={rotate}
+                        offset={{ x: image?.width! / 2, y: image?.height! / 2 }}
+                    >
                         {lateral && (
                             <Image
+                                ref={imageRef}
                                 image={image}
                                 filters={[Konva.Filters.Brighten, Konva.Filters.Contrast]}
                                 contrast={contrast}

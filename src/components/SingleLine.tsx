@@ -6,7 +6,7 @@ import { CloseOutlined } from "@ant-design/icons"
 import { createLabelStyle } from "@/features"
 import { useLabelId } from "./useHooks"
 import Konva from "konva"
-import SingleCircle from "@/components/SingleCircle"
+import SingleCircle from "./SingleCircle"
 
 import type { KonvaEventObject } from "konva/lib/Node"
 import type { IPoint } from "@/types"

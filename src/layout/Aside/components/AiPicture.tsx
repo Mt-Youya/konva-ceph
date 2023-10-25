@@ -11,6 +11,11 @@ const ScDiv = styled.div`
 
     & > p {
         margin-bottom: 20px;
+
+        &::after {
+            content: " ( 此图片可以拖拽上传哦哦 )";
+            font-size: 12px;
+        }
     }
 
     img {

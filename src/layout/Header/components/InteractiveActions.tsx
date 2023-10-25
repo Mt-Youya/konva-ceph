@@ -4,6 +4,7 @@ import { message, Popconfirm, Progress } from "antd"
 import { angleIcon, distanceIcon, resetIcon } from "@/assets/headers"
 import { changeAngle, changeDistance, changeImgUrl } from "@/stores/home/useMeasure"
 import { changePointList } from "@/stores/home/useDataPoints"
+import { changeLateral } from "@/stores/home/useShowPoint"
 import { setRulerScaling, setTableData } from "@/stores/home/getTableData"
 import { getTableData } from "@/apis/getList"
 import { imageToFileByCanvas } from "@/utils/image2File"
@@ -105,6 +106,7 @@ function InteractiveActions() {
             sessionStorage.setItem("points", JSON.stringify(points))
             sessionStorage.setItem("tableData", JSON.stringify(tableData))
             sessionStorage.setItem("rulerScaling", JSON.stringify(rulerScaling))
+            dispatch(changeLateral(true))
             const timer = setTimeout(() => {
                 clearTimeout(timer)
                 setLoading(false)

@@ -5,7 +5,7 @@ import { CloseOutlined } from "@ant-design/icons"
 import { createLabelStyle, measureAngle } from "@/features"
 import { useLabelId } from "./useHooks"
 import Konva from "konva"
-import SingleCircle from "@/components/SingleCircle"
+import SingleCircle from "./SingleCircle"
 
 import type { KonvaEventObject } from "konva/lib/Node"
 import type { IPoint } from "@/types"
@@ -54,7 +54,7 @@ function SingleAngle({ points, movePoint: { x: Mx, y: My }, closeAngle }: IProps
                 const labelStyle = createLabelStyle(circle2Pos.x, circle2Pos.y, color, bgColor)
                 setCircleLabelStyle(labelStyle)
             }
-        }, [p1, p2, p3])
+        }, [points, p1, p2, p3])
 
         return circleLabelStyle
     }

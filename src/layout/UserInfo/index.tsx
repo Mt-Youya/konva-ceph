@@ -13,6 +13,7 @@ const ScAside = styled.aside`
     box-shadow: 0 0 4px #363636;
     border-top-right-radius: 12px;
     border-bottom-right-radius: 12px;
+    text-align: center;
 `
 
 const ScUserInfo = styled.div`

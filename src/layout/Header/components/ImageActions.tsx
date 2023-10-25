@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { Slider } from "antd"
@@ -20,10 +20,17 @@ const AntdScSlider = styled(Slider)`
 
 function ImageActions() {
     const { brightness, rotate, contrast, scaleX } = useSelector((state: RootState) => state.transform)
-    const [sliderMap, setSliderMap] = useState({
-        brightnessActive: false,
-        contrastActive: false,
-    })
+
+    interface ISliderMap {
+        [P: string]: boolean
+
+        brightnessActive: boolean
+        contrastActive: boolean
+    }
+
+    const [sliderMap, setSliderMap] = useState<ISliderMap>({ brightnessActive: false, contrastActive: false })
+    const [bright, setBright] = useState(brightness)
+    const [contrasted, setContrasted] = useState(contrast)
 
     const dispatch = useDispatch()
 
@@ -46,46 +53,47 @@ function ImageActions() {
         }
     }
 
+    useEffect(() => handleAction("brightness", bright), [bright])
+
+    useEffect(() => handleAction("contrast", contrasted), [contrasted])
+
     function sliderClick(key: keyof typeof sliderMap) {
-        setSliderMap(prev => ({ ...prev, [key]: !prev[key] }))
+        const otherKey = key === "contrastActive" ? "brightnessActive" : "contrastActive"
+        setSliderMap(prev => ({ [otherKey]: false, [key]: !prev[key] } as ISliderMap))
     }
 
     return (
         <ScHeaderWrapper>
             <Link to="/native">Native</Link>
-            <ScHeaderAction className={scaleX === -1 ? "active" : ""} onClick={() => handleAction("mirror")}>
-                <img src={mirrorIcon} alt="mirror" />
+            <ScHeaderAction>
+                <img src={mirrorIcon} onClick={() => handleAction("mirror")} alt="mirror" />
                 <span> 镜像 </span>
             </ScHeaderAction>
-            <ScHeaderAction className={(rotate / 90) % 4 !== 0 ? "active" : ""} onClick={() => handleAction("rotate")}>
+            <ScHeaderAction onClick={() => handleAction("rotate")}>
                 <img src={rotateIcon} alt="rotate" />
                 <span> 旋转 </span>
             </ScHeaderAction>
-            <ScHeaderAction
-                className={sliderMap.brightnessActive ? "active" : ""}
-                onClick={() => sliderClick("brightnessActive")}
-            >
-                <img src={brightnessIcon} alt="brightness" />
+            <ScHeaderAction onClick={() => sliderClick("brightnessActive")}>
+                <img src={brightnessIcon} alt="brightnessActive" />
                 <span> 亮度 </span>
                 {sliderMap.brightnessActive && (
                     <AntdScSlider
-                        defaultValue={brightness}
-                        trackStyle={{ backgroundColor: "#979797", height: "2px" }}
+                        value={bright} min={-1} max={1} step={.05}
+                        trackStyle={{ backgroundColor: "#93bef2", height: "4px" }}
                         railStyle={{ backgroundColor: "#979797", height: "2px" }}
-                        onChange={num => handleAction("brightness", num)}
+                        onChange={num => setBright(num)}
                     />
                 )}
             </ScHeaderAction>
-            <ScHeaderAction className={sliderMap.contrastActive ? "active" : ""}
-                            onClick={() => sliderClick("contrastActive")}>
-                <img src={contrastRatioIcon} alt="contrastRatio" />
+            <ScHeaderAction onClick={() => sliderClick("contrastActive")}>
+                <img src={contrastRatioIcon} alt="contrastActive" />
                 <span> 对比度 </span>
                 {sliderMap.contrastActive && (
                     <AntdScSlider
-                        defaultValue={contrast * 100}
-                        trackStyle={{ backgroundColor: "#979797", height: "2px" }}
+                        value={contrasted} min={-100} max={100} step={1}
+                        trackStyle={{ backgroundColor: "#93bef2", height: "4px" }}
                         railStyle={{ backgroundColor: "#979797", height: "2px" }}
-                        onChange={num => handleAction("contrast", num / 100)}
+                        onChange={num => setContrasted(num)}
                     />
                 )}
             </ScHeaderAction>
