@@ -403,14 +403,14 @@ const BezierLine = () => {
                             {major && (
                                 <Circle
                                     name={name}
-                                    x={x} y={y} fill="#fff" radius={4/scale} draggable
+                                    x={x} y={y} fill="#fff" radius={4} draggable
                                     onDragEnd={() => onDrop(name)}
                                     onDragMove={e => onDragMove(e, index)}
                                     onMouseEnter={e => e.target.getStage()!.container().style.cursor = "pointer"}
                                     onMouseOut={e => e.target.getStage()!.container().style.cursor = "default"}
                                 />
                             )}
-                            {named && (<Text x={x + (5/scale)} y={y} fontSize={20/scale} fill="#f00" text={name} />)}
+                            {named && (<Text x={x + 5} y={y} fontSize={20} fill="#f00" text={name} />)}
                         </Fragment>
                     )
                 })}

@@ -90,6 +90,7 @@ function InteractiveActions() {
     function fetchFileData(file: File) {
         const fileData = new FormData()
         fileData.append("file", file)
+        dispatch(changeLateral(true))
 
         setLoading(true)
         const intervalId = setInterval(() => {
@@ -106,7 +107,6 @@ function InteractiveActions() {
             sessionStorage.setItem("points", JSON.stringify(points))
             sessionStorage.setItem("tableData", JSON.stringify(tableData))
             sessionStorage.setItem("rulerScaling", JSON.stringify(rulerScaling))
-            dispatch(changeLateral(true))
             const timer = setTimeout(() => {
                 clearTimeout(timer)
                 setLoading(false)
@@ -178,7 +178,7 @@ function InteractiveActions() {
 
             <AntdScMask
                 centered open={loading} footer={null} closeIcon={null} key="loading" keyboard
-                maskStyle={{ backgroundColor: "#00000080", backdropFilter: "saturate(180%) blur(20px)" }}
+                styles={{ mask: { backgroundColor: "#00000080", backdropFilter: "saturate(180%) blur(20px)" } }}
             >
                 <p> 正在为您生成头影测量 ... </p>
                 <Progress type="circle" percent={rate} size={80} strokeColor={["#fff"]} trailColor="#363636" />

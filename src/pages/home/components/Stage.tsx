@@ -85,21 +85,8 @@ const StageContainer = () => {
     useEffect(() => {
         if (image) {
             imageRef.current?.cache()
-            const imgWidth  = image.width,
-                  imgHeight = image.height,
-                  scaleW    = imgWidth / width,
-                  scaleH    = imgHeight / height
-
-            if (scaleW > 1 || scaleH > 1) {
-                const newScale = scaleW > scaleH ? 1 / scaleW : 1 / scaleH
-                setStageX(width * (1 - newScale) / 2)
-                setStageY(height * (1 - newScale) / 2)
-                setStageScale(newScale)
-            } else {
-                setStageScale(1)
-            }
         }
-    }, [image, lateral])
+    }, [image])
 
     function handleDragMove() {
         setTemp(prevState => prevState + 1)
