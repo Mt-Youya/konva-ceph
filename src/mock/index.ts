@@ -10,7 +10,7 @@ interface MockTableRes extends Omit<TTableRes, "ruler-scaling"> {
 
 export default (function() {
     const mode = import.meta.env.VITE_MODE
-    if (mode === "development") {
+    if (mode === "development"|| mode ==="production") {
         Mock.mock("/ceph/measure", (): IAxiosResponse<MockTableRes> => {
             return {
                 code: 0,
