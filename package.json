@@ -27,6 +27,7 @@
     "@reduxjs/toolkit": "^1.9.5",
     "antd": "^5.10.2",
     "axios": "^1.5.1",
+    "jszip": "^3.10.1",
     "konva": "^9.2.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -37,7 +38,8 @@
     "react-router-dom": "^6.17.0",
     "styled-components": "^6.0.7",
     "use-image": "^1.1.1",
-    "web-vitals": "^3.4.0"
+    "web-vitals": "^3.4.0",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/mockjs": "^1.0.8",
@@ -49,6 +51,7 @@
     "mockjs": "^1.1.0",
     "terser": "^5.19.4",
     "typescript": "^5.0.2",
+    "unplugin-auto-import": "^0.17.2",
     "vite": "^4.4.5",
     "vite-bundle-visualizer": "^0.10.0",
     "vite-plugin-cdn-import": "^0.3.5",

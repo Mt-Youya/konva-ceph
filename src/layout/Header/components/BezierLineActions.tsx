@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux"
 import { changeLateral, changeMajor, changeNamed, changeOutline, changeSupport } from "@/stores/home/useShowPoint"
-import { actionKeys } from "../data"
+import { actionKeys } from "../data/data"
 import { ScHeaderAction, ScHeaderWrapper } from "./styled"
 import {
     lateralIcon,
@@ -16,7 +16,7 @@ import {
 } from "@/assets/headers"
 
 import type { RootState } from "@/stores"
-import type { ActionType } from "../data"
+import type { ActionType } from "../data/data"
 
 function BezierLineActions() {
     const { named, outline, major, support, lateral } = useSelector((state: RootState) => state.showPoint)

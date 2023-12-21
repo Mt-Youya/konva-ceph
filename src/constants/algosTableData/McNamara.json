@@ -1,0 +1,100 @@
+[
+    {
+        "name": "A-Np&mm",
+        "measure_name": "A-Np(上颌突度mm)",
+        "measure_value": 0,
+        "standard_value": 0.8,
+        "standard_deviation": 2.1,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "上颌后缩",
+            "normal": "上颌突度正常",
+            "up": "上颌前突"
+        }
+    },
+    {
+        "name": "Pog-Np&mm",
+        "measure_name": "Pog-Np(下颌突度mm)",
+        "measure_value": 0,
+        "standard_value": -3.1,
+        "standard_deviation": 4.9,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "下颌后缩 ",
+            "normal": "下颌突度正常",
+            "up": "下颌前突"
+        }
+    },
+    {
+        "name": "Co-A&mm",
+        "measure_name": "Co-A(有效上颌长度mm)",
+        "measure_value": 0,
+        "standard_value": 76.0,
+        "standard_deviation": 3.9,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "上颌相对下颌后缩，提示上颌发育不足",
+            "normal": "上颌长度正常",
+            "up": "上颌相对下颌前突，上颌发育过度"
+        }
+    },
+    {
+        "name": "Co-Gn&mm",
+        "measure_name": "Co-Gn(有效下颌长度mm)",
+        "measure_value": 0,
+        "standard_value": 103.4,
+        "standard_deviation": 5.3,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "下颌相对上颌后缩，提示下颌发育不足",
+            "normal": "下颌长度正常",
+            "up": "下颌相对上颌前突，下颌发育过度"
+        }
+    },
+    {
+        "name": "ANS-Me&mm",
+        "measure_name": "ANS-Me(前下面高mm)",
+        "measure_value": 0,
+        "standard_value": 61.0,
+        "standard_deviation": 3.4,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "前下面部高度偏小",
+            "normal": "前下面部高度正常",
+            "up": "前下面部高度偏大"
+        }
+    },
+    {
+        "name": "U1-A&mm",
+        "measure_name": "U1-A(上中切牙突距mm)",
+        "measure_value": 0,
+        "standard_value": 7.0,
+        "standard_deviation": 2.4,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "上中切牙后缩",
+            "normal": "上中切牙突度正常",
+            "up": "上中切牙前突"
+        }
+    },
+    {
+        "name": "L1-APog&mm",
+        "measure_name": "L1-APog(下中切牙突距mm)",
+        "measure_value": 0,
+        "standard_value": 5.3,
+        "standard_deviation": 2.7,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "下中切牙后缩",
+            "normal": "下中切牙突度正常",
+            "up": "下中切牙前突"
+        }
+    }
+]

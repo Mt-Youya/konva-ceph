@@ -1,0 +1,142 @@
+[
+    {
+        "name": "Co-S&mm",
+        "measure_name": "Co-S(mm)",
+        "measure_value": 0,
+        "standard_value": 17.4,
+        "standard_deviation": 2.1,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "下颌后部位置靠前",
+            "normal": "下颌后部位置正常",
+            "up": "下颌后部位置靠后"
+        }
+    },
+    {
+        "name": "S-Ptm&mm",
+        "measure_name": "S-Ptm(mm)",
+        "measure_value": 0,
+        "standard_value": 17.1,
+        "standard_deviation": 2.3,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "上颌后部位置靠后",
+            "normal": "上颌后部位置正常",
+            "up": "上颌后部位置靠前"
+        }
+    },
+    {
+        "name": "ANS-Ptm&mm",
+        "measure_name": "ANS-Ptm(上颌长度)(mm)",
+        "measure_value": 0,
+        "standard_value": 49.9,
+        "standard_deviation": 2.1,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "上颌偏短",
+            "normal": "上颌长度正常",
+            "up": "上颌偏长"
+        }
+    },
+    {
+        "name": "Ptm-U6&mm",
+        "measure_name": "Ptm-U6(mm)",
+        "measure_value": 0,
+        "standard_value": 14.6,
+        "standard_deviation": 3.0,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "上颌第一磨牙位置靠后",
+            "normal": "上颌第一磨牙位置正常 ",
+            "up": "上颌第一磨牙位置靠前 "
+        }
+    },
+    {
+        "name": "Co-Pog&mm",
+        "measure_name": "Co-Po(下颌长度)(mm)",
+        "measure_value": 0,
+        "standard_value": 106.7,
+        "standard_deviation": 2.9,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "下颌偏短",
+            "normal": "下颌长度正常",
+            "up": "下颌偏长"
+        }
+    },
+    {
+        "name": "N-Me&mm",
+        "measure_name": "N-Me(全面高)(mm)",
+        "measure_value": 0,
+        "standard_value": 119.7,
+        "standard_deviation": 4.6,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "全面高度偏小 ",
+            "normal": "全面高度正常",
+            "up": "全面高度偏长 "
+        }
+    },
+    {
+        "name": "N-ANS&mm",
+        "measure_name": "N-ANS(上面高mm)",
+        "measure_value": 0,
+        "standard_value": 53.8,
+        "standard_deviation": 2.8,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "上面高度偏小 ",
+            "normal": "上面高度正常 ",
+            "up": "上面高度偏长 "
+        }
+    },
+    {
+        "name": "ANS-Me&mm",
+        "measure_name": "ANS-Me(下面高)(mm)",
+        "measure_value": 0,
+        "standard_value": 65.8,
+        "standard_deviation": 4.1,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "下面部高度偏小",
+            "normal": "下面部高度正常",
+            "up": "下面部高度偏大"
+        }
+    },
+    {
+        "name": "N-ANS/N-Me&rate",
+        "measure_name": "N-ANS/N-Me(%)",
+        "measure_value": 0,
+        "standard_value": 45.0,
+        "standard_deviation": 2.1,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "上面高偏短 ",
+            "normal": "上面高与全面高比值协调",
+            "up": "上面高偏长 "
+        }
+    },
+    {
+        "name": "ANS-Me/N-Me&rate",
+        "measure_name": "ANS-Me/N-Me(下前面高比%)",
+        "measure_value": 0,
+        "standard_value": 55.0,
+        "standard_deviation": 2.5,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "下面高偏短 ",
+            "normal": "下面高与全面高比值协调 ",
+            "up": "下面高偏长 "
+        }
+    }
+]

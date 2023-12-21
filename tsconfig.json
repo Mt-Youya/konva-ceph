@@ -31,11 +31,10 @@
     // best practices
     "allowJs": true,
     "declaration": true,
-    "composite": true,
     "downlevelIteration": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["src"],
+  "include": ["src", "src/**/*.json", "*.d.ts"],
   "exclude": ["node_modules", "dist"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

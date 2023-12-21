@@ -2,21 +2,20 @@ import { createSlice } from "@reduxjs/toolkit"
 
 import type { Slice } from "@reduxjs/toolkit"
 
-export interface TransformState {
-    contrast: number,
-    brightness: number,
-    scaleX: number,
-    rotate: number,
-}
+export type TransformState = ReturnType<typeof createTransformState>
 
-export const transformSlice: Slice<TransformState> = createSlice({
-    name: "transform",
-    initialState: {
+export function createTransformState() {
+    return {
         contrast: 0,
         brightness: 0,
         scaleX: 1,
         rotate: 0,
-    },
+    }
+}
+
+export const transformSlice: Slice<TransformState> = createSlice({
+    name: "transform",
+    initialState: createTransformState(),
     reducers: {
         changeContrast: (state, action) => {
             state.contrast = action.payload

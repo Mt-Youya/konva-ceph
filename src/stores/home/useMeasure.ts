@@ -2,19 +2,19 @@ import { createSlice } from "@reduxjs/toolkit"
 
 import type { Slice } from "@reduxjs/toolkit"
 
-export interface MeasureState {
-    distance: boolean
-    angle: boolean
-    imgUrl: string
+export type MeasureState = ReturnType<typeof createMeasureState>
+
+export function createMeasureState() {
+    return {
+        distance: false,
+        angle: false,
+        imgUrl: "",
+    }
 }
 
 export const measureSlice: Slice<MeasureState> = createSlice({
     name: "measure",
-    initialState: {
-        distance: false as boolean,
-        angle: false as boolean,
-        imgUrl: "" as string,
-    },
+    initialState: createMeasureState(),
     reducers: {
         changeDistance(state, action) {
             state.distance = action.payload

@@ -8,7 +8,7 @@ import Konva from "konva"
 import SingleCircle from "./SingleCircle"
 
 import type { KonvaEventObject } from "konva/lib/Node"
-import type { IPoint } from "@/types"
+import type { IPoint, TKDragEvent } from "@/types"
 
 interface IProps {
     points: IPoint[]
@@ -68,7 +68,7 @@ function SingleAngle({ points, movePoint: { x: Mx, y: My }, closeAngle }: IProps
             <SingleCircle
                 stroke="#FFE400"
                 ref={circle1Ref} point={p1}
-                onCircleMove={(e) => handleCircleMove(e, FIRST)}
+                onDragMove={(e: TKDragEvent) => handleCircleMove(e, FIRST)}
             />
             <Line points={p2 ? [p1.x, p1.y, p2.x, p2.y] : [p1.x, p1.y, Mx, My]} stroke="#ffe40080" />
             {p2 && (
@@ -76,7 +76,7 @@ function SingleAngle({ points, movePoint: { x: Mx, y: My }, closeAngle }: IProps
                     <SingleCircle
                         stroke="#FFE400"
                         ref={circle2Ref} point={p2}
-                        onCircleMove={(e) => handleCircleMove(e, SECOND)}
+                        onDragMove={(e: TKDragEvent) => handleCircleMove(e, SECOND)}
                     />
                     <Line
                         stroke="#ffe40080"
@@ -89,7 +89,7 @@ function SingleAngle({ points, movePoint: { x: Mx, y: My }, closeAngle }: IProps
                     <SingleCircle
                         stroke="#FFE400"
                         ref={circle3Ref} point={p3}
-                        onCircleMove={(e) => handleCircleMove(e, END)}
+                        onDragMove={(e: TKDragEvent) => handleCircleMove(e, END)}
                     />
                     <Html divProps={{ style, id: labelId }}>
                         {Math.round(measureAngle(p2, p1, p2, p3))} °&nbsp;

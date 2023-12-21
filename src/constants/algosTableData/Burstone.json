@@ -1,0 +1,184 @@
+[
+    {
+        "name": "G-Sn-Pg'&deg",
+        "measure_name": "G-Sn-Pg'(面突角)",
+        "measure_value": 0,
+        "standard_value": 8.4,
+        "standard_deviation": 8.8,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "侧貌偏凹,III类骨面型趋势",
+            "normal": "侧貌正常",
+            "up": "侧貌偏凸,II类骨面型趋势"
+        }
+    },
+    {
+        "name": "G-Sn&mm",
+        "measure_name": "G-Sn(HP)(上颌突距mm)",
+        "measure_value": 0,
+        "standard_value": 5.3,
+        "standard_deviation": 4.6,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "上颌后缩",
+            "normal": "上颌突度正常",
+            "up": "上颌前突"
+        }
+    },
+    {
+        "name": "G-Pg'&mm",
+        "measure_name": "G-Pg'(HP)(下颌突距mm)",
+        "measure_value": 0,
+        "standard_value": 6.8,
+        "standard_deviation": 5.2,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "下颌后缩",
+            "normal": "下颌突度正常",
+            "up": "下颌前突"
+        }
+    },
+    {
+        "name": "Sn-Gn'-C&deg",
+        "measure_name": "Sn-Gn'-C(下颜面咽喉角)",
+        "measure_value": 0,
+        "standard_value": 98.5,
+        "standard_deviation": 9.0,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "颏部前突",
+            "normal": "软组织颏部突度正常",
+            "up": "颏部后缩"
+        }
+    },
+    {
+        "name": "G-Sn/Sn-Me'&rate",
+        "measure_name": "G-Sn/Sn-Me'(HP)(上下面高比%)",
+        "measure_value": 0,
+        "standard_value": 104.1,
+        "standard_deviation": 10.9,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "上下面高比偏小",
+            "normal": "上下面高比值正常",
+            "up": "上下面高比偏大"
+        }
+    },
+    {
+        "name": "Sn-Gn'/C-Gn'&rate",
+        "measure_name": "Sn-Gn'/C-Gn'(面下部高度深度比%)",
+        "measure_value": 0,
+        "standard_value": 136.6,
+        "standard_deviation": 31.5,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "颏部前突",
+            "normal": "颏部突度正常",
+            "up": "颏部后缩"
+        }
+    },
+    {
+        "name": "Cm-Sn-Ls&deg",
+        "measure_name": "Cm-Sn-Ls(鼻唇角)",
+        "measure_value": 0,
+        "standard_value": 85.7,
+        "standard_deviation": 19.2,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "鼻唇角偏小",
+            "normal": "上唇位置正常",
+            "up": "鼻唇角偏大"
+        }
+    },
+    {
+        "name": "Ls-SnPg'&mm",
+        "measure_name": "Ls-SnPg'(上唇突距mm)",
+        "measure_value": 0,
+        "standard_value": 5.5,
+        "standard_deviation": 1.9,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "上唇后缩",
+            "normal": "上唇位置正常",
+            "up": "上唇前突"
+        }
+    },
+    {
+        "name": "Li-SnPg'&mm",
+        "measure_name": "Li-SnPg'(下唇突距mm)",
+        "measure_value": 0,
+        "standard_value": 4.5,
+        "standard_deviation": 1.4,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "下唇后缩",
+            "normal": "下唇位置正常",
+            "up": "下唇前突"
+        }
+    },
+    {
+        "name": "Si-LiPg'&mm",
+        "measure_name": "Si-LiPg'(颏唇沟深度mm)",
+        "measure_value": 0,
+        "standard_value": 5.9,
+        "standard_deviation": 1.4,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "颏唇沟浅",
+            "normal": "颏唇沟深度正常",
+            "up": "颏唇沟深"
+        }
+    },
+    {
+        "name": "Sn-Stms/Stmi-Me'&rate",
+        "measure_name": "Sn-Stms/Stmi-Me'(垂直唇颏比%)",
+        "measure_value": 0,
+        "standard_value": 42.9,
+        "standard_deviation": 4.0,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "垂直唇颏比偏小",
+            "normal": "垂直唇颏比正常",
+            "up": "垂直唇颏比偏大"
+        }
+    },
+    {
+        "name": "Stms-Stmi&mm",
+        "measure_name": "Stms-Stmi(HP)(唇间隙mm)",
+        "measure_value": 0,
+        "standard_value": 0.0,
+        "standard_deviation": 0.1,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "唇间隙偏小",
+            "normal": "唇间隙正常",
+            "up": "唇间隙偏大"
+        }
+    },
+    {
+        "name": "Stms-U1&mm",
+        "measure_name": "Stms-U1(上切牙暴露程度mm)",
+        "measure_value": 0,
+        "standard_value": 2.9,
+        "standard_deviation": 1.4,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "上切牙暴露量小",
+            "normal": "上切牙暴露量正常",
+            "up": "上切牙暴露量多"
+        }
+    }
+]

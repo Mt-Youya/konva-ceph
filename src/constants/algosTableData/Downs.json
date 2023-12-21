@@ -1,0 +1,142 @@
+[
+    {
+        "name": "FH-NPo&deg",
+        "measure_name": "FH-NPo(面角)",
+        "measure_value": 0,
+        "standard_value": 85.5,
+        "standard_deviation": 3.0,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "下颌向前生长不足，颏部后缩，面高较大",
+            "normal": "下颌骨矢状向关系正常 ",
+            "up": "下颌向前生长过度，颏部突，面高偏小"
+        }
+    },
+    {
+        "name": "NA-APo&deg",
+        "measure_name": "NA-APo(颌凸角)",
+        "measure_value": 0,
+        "standard_value": 6.5,
+        "standard_deviation": 4.5,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "上颌相对面部后缩",
+            "normal": "上颌相对面部正常",
+            "up": "上颌相对面部前突"
+        }
+    },
+    {
+        "name": "AB-NPo&deg",
+        "measure_name": "AB-NPo(上下齿槽座角)",
+        "measure_value": 0,
+        "standard_value": -5.4,
+        "standard_deviation": 2.3,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "骨性II类趋势",
+            "normal": "颌骨位置正常 ",
+            "up": "骨性III类趋势"
+        }
+    },
+    {
+        "name": "FH-MP&deg",
+        "measure_name": "FH-MP(下颌平面角)",
+        "measure_value": 0,
+        "standard_value": 27.9,
+        "standard_deviation": 4.4,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "水平生长型，下颌体平 ",
+            "normal": "平均生长型，下颌体陡度正常 ",
+            "up": "垂直生长型，下颌体陡"
+        }
+    },
+    {
+        "name": "SGn-FH&deg",
+        "measure_name": "SGn-FH(Y轴角)",
+        "measure_value": 0,
+        "standard_value": 63.5,
+        "standard_deviation": 3.2,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "颏部前突 ",
+            "normal": "颏部发育正常",
+            "up": "颏部后缩"
+        }
+    },
+    {
+        "name": "OP-FH&deg",
+        "measure_name": "OP-FH(牙合平面角)",
+        "measure_value": 0,
+        "standard_value": 14.0,
+        "standard_deviation": 3.8,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "牙合平面偏平",
+            "normal": "牙合平面正常",
+            "up": "牙合平面偏陡"
+        }
+    },
+    {
+        "name": "U1-L1&deg",
+        "measure_name": "U1-L1(上下中切牙角)",
+        "measure_value": 0,
+        "standard_value": 126.9,
+        "standard_deviation": 8.5,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "上下中切牙的相对突度大",
+            "normal": "上下中切牙的相对突度正常 ",
+            "up": "上下中切牙的相对突度小"
+        }
+    },
+    {
+        "name": "L1-OP&deg",
+        "measure_name": "L1-OP(下中切牙-牙合平面角)",
+        "measure_value": 0,
+        "standard_value": 109.0,
+        "standard_deviation": 5.6,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "下中切牙相对牙合平面舌倾",
+            "normal": "下中切牙相对牙合平面正常",
+            "up": "下中切牙相对牙合平面唇倾"
+        }
+    },
+    {
+        "name": "U1-Apo&mm",
+        "measure_name": "U1-Apo(mm)",
+        "measure_value": 0,
+        "standard_value": 6.7,
+        "standard_deviation": 2.0,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "上中切牙突度过小",
+            "normal": "上中切牙突度正常 ",
+            "up": "上中切牙突度过大"
+        }
+    },
+    {
+        "name": "L1-MP&deg",
+        "measure_name": "L1-MP(下中切牙-下颌平面角)",
+        "measure_value": 0,
+        "standard_value": 95.0,
+        "standard_deviation": 6.5,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "下前牙相对下颌平面唇倾",
+            "normal": "下前牙相对下颌平面唇倾斜度正常 ",
+            "up": "下前牙相对下颌平面舌倾"
+        }
+    }
+]

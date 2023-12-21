@@ -1,0 +1,114 @@
+[
+    {
+        "name": "N-FH&mm",
+        "measure_name": "N-FH(mm)",
+        "measure_value": 0,
+        "standard_value": "-",
+        "standard_deviation": "-",
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "",
+            "normal": "",
+            "up": ""
+        }
+    },
+    {
+        "name": "N-FH&mm",
+        "measure_name": "ANS-FH(mm)",
+        "measure_value": 0,
+        "standard_value": "-",
+        "standard_deviation": "-",
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "",
+            "normal": "",
+            "up": ""
+        }
+    },
+    {
+        "name": "A-FH&mm",
+        "measure_name": "A-FH(mm)",
+        "measure_value": 0,
+        "standard_value": "-",
+        "standard_deviation": "-",
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "",
+            "normal": "",
+            "up": ""
+        }
+    },
+    {
+        "name": "B-N&mm",
+        "measure_name": "B-N(mm)",
+        "measure_value": 0,
+        "standard_value": "-",
+        "standard_deviation": "-",
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "",
+            "normal": "",
+            "up": ""
+        }
+    },
+    {
+        "name": "SN-FH&deg",
+        "measure_name": "SN-FH（°）",
+        "measure_value": 0,
+        "standard_value": "-",
+        "standard_deviation": "-",
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "",
+            "normal": "",
+            "up": ""
+        }
+    },
+    {
+        "name": "A-N&mm",
+        "measure_name": "A-N（mm）",
+        "measure_value": 0,
+        "standard_value": "-",
+        "standard_deviation": "-",
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "",
+            "normal": "",
+            "up": ""
+        }
+    },
+    {
+        "name": "B-FH&mm",
+        "measure_name": "B-FH（mm）",
+        "measure_value": 0,
+        "standard_value": "-",
+        "standard_deviation": "-",
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": " ",
+            "normal": "  ",
+            "up": " "
+        }
+    },
+    {
+        "name": "Me-FH&mm",
+        "measure_name": "Me-FH（mm）",
+        "measure_value": 0,
+        "standard_value": "-",
+        "standard_deviation": "-",
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "",
+            "normal": "",
+            "up": ""
+        }
+    }
+]

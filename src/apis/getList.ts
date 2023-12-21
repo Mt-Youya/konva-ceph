@@ -11,6 +11,11 @@ export interface ITableData {
     standard_deviation: number
     standard_value: number
     name: string
+    tips?: {
+        normal: string
+        up: string
+        down: string
+    }
 }
 
 export interface IGpsPointItem {
@@ -31,7 +36,7 @@ export function getTableData(data: TFormData) {
             method: METHOD.POST,
             data,
             headers: FileHeader,
-            timeout: 20000,
+            timeout: 30000,
         },
     )
 }

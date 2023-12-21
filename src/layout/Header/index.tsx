@@ -4,26 +4,27 @@ import InteractiveActions from "./components/InteractiveActions"
 import styled from "styled-components"
 
 const ScHeader = styled.header`
-    height: 100px;
+    height: 110px;
     color: #f9f9f9;
     user-select: none;
-    display: grid;
-    grid-template-columns: .6fr .8fr 1fr;
-    gap: 10%;
-    padding: 0 100px;
-    background-color: #1f2327;
-    backdrop-filter: saturate(180%) blur(20px);
-    box-shadow: 0 0 4px #292e33;
-    border-bottom-left-radius: 12px;
-    border-bottom-right-radius: 12px;
-    
-    @media screen  and (width: 1440px) {
-        gap: 7%;
-        padding: 0 70px;
+    display: flex;
+    padding: 20px 6% 0 6%;
+    gap: 60px;
+    @media screen  and (max-width: 1980px) {
+        gap: 20px;
+        padding: 15px 3%;
     }
-    @media screen  and (width: 900px) {
-        gap: 4%;
-        padding: 0 40px;
+    @media screen  and (max-width: 1700px) {
+        gap: 10px;
+        padding: 15px 2%;
+    }
+    @media screen  and (max-width: 1440px) {
+        gap: 5px;
+        padding: 15px 1%;
+    }
+    @media screen  and (max-width: 1080px) {
+        gap: 0;
+        padding: 15px .5%;
     }
 `
 

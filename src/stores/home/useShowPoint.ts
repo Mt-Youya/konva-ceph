@@ -2,23 +2,21 @@ import { createSlice } from "@reduxjs/toolkit"
 
 import type { Slice } from "@reduxjs/toolkit"
 
-export interface ShowState {
-    named: boolean
-    major: boolean
-    support: boolean
-    outline: boolean
-    lateral: boolean
+export type ShowState = ReturnType<typeof createShowPointState>
+
+export function createShowPointState() {
+    return {
+        named: true,
+        major: true,
+        support: true,
+        outline: true,
+        lateral: true,
+    }
 }
 
 export const showPointSlice: Slice<ShowState> = createSlice({
     name: "showPoint",
-    initialState: {
-        named: true as boolean,
-        major: true as boolean,
-        support: true as boolean,
-        outline: true as boolean,
-        lateral: false as boolean,
-    },
+    initialState: createShowPointState(),
     reducers: {
         changeLateral(state, action) {
             state.lateral = action.payload

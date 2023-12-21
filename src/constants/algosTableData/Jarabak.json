@@ -1,0 +1,198 @@
+[
+    {
+        "name": "N-S-Ar&deg",
+        "measure_name": "N-S-Ar(鞍角)",
+        "measure_value": 0,
+        "standard_value": 126.2,
+        "standard_deviation": 4.7,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "髁突位置靠近中",
+            "normal": "髁突位置正常",
+            "up": "髁突位置靠远中"
+        }
+    },
+    {
+        "name": "S-Ar-Go'&deg",
+        "measure_name": "S-Ar-Go'(关节角)",
+        "measure_value": 0,
+        "standard_value": 145.7,
+        "standard_deviation": 5.6,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "下颌水平向生长趋势",
+            "normal": "下颌位置正常",
+            "up": "下颌垂直向生长趋势"
+        }
+    },
+    {
+        "name": "Ar-Go'-Me&deg",
+        "measure_name": "Ar-Go'-Me(下颌角)",
+        "measure_value": 0,
+        "standard_value": 123.6,
+        "standard_deviation": 5.1,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "下颌角偏小，下颌逆时针旋转趋势",
+            "normal": "下颌角正常",
+            "up": "下颌角偏大，下颌顺时针旋转趋势"
+        }
+    },
+    {
+        "name": "Ar-Go'-N&deg",
+        "measure_name": "Ar-Go'-N(下颌角上份)",
+        "measure_value": 0,
+        "standard_value": 48.0,
+        "standard_deviation": 3.3,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "颏部后缩趋势",
+            "normal": "下颌升支倾斜度正常",
+            "up": "颏部前突趋势"
+        }
+    },
+    {
+        "name": "N-Go'-Me&deg",
+        "measure_name": "N-Go'-Me(下颌角下份)",
+        "measure_value": 0,
+        "standard_value": 75.7,
+        "standard_deviation": 4.2,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "下颌逆时针旋转趋势",
+            "normal": "下颌体倾斜度正常",
+            "up": "下颌顺时针旋转趋势"
+        }
+    },
+    {
+        "name": "S-Ar-Go&deg",
+        "measure_name": "蝶鞍角+关节角+下颌角(S+Ar+Go)",
+        "measure_value": 0,
+        "standard_value": 395.4,
+        "standard_deviation": 5.7,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "逆时针生长型:后面高及面深度较前面高生长明显，下颌向前上旋转",
+            "normal": "平均生长型：前后面部生长协调，下颌沿生长轴向前下生长",
+            "up": "顺时针生长型：前面部生长较后面部明显，下颌向下前及下后方旋转"
+        }
+    },
+    {
+        "name": "Ar-S&mm",
+        "measure_name": "Ar-S(后颅底长mm)",
+        "measure_value": 0,
+        "standard_value": 33.2,
+        "standard_deviation": 4.2,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "后颅底偏短",
+            "normal": "后颅底正常",
+            "up": "后颅底偏长"
+        }
+    },
+    {
+        "name": "Ar-Go'&mm",
+        "measure_name": "Ar-Go'(下颌升支高mm)",
+        "measure_value": 0,
+        "standard_value": 45.5,
+        "standard_deviation": 5.6,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "下颌支偏短",
+            "normal": "下颌支正常",
+            "up": "下颌支偏长"
+        }
+    },
+    {
+        "name": "Go'-Me&mm",
+        "measure_name": "Go'-Me(下颌长mm)",
+        "measure_value": 0,
+        "standard_value": 68.4,
+        "standard_deviation": 6.3,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "下颌体偏短",
+            "normal": "下颌体正常",
+            "up": "下颌体偏长"
+        }
+    },
+    {
+        "name": "N-Me&mm",
+        "measure_name": "N-Me(mm)",
+        "measure_value": 0,
+        "standard_value": 115.6,
+        "standard_deviation": 10.0,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "前面高偏短",
+            "normal": "前面高正常",
+            "up": "前面高偏长"
+        }
+    },
+    {
+        "name": "S-Go'&mm",
+        "measure_name": "S-Go'(后面高mm)",
+        "measure_value": 0,
+        "standard_value": 75.2,
+        "standard_deviation": 8.2,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "后面高偏小",
+            "normal": "后面高正常",
+            "up": "后面高偏大"
+        }
+    },
+    {
+        "name": "S-Ar/Ar-Go'&rate",
+        "measure_name": "S-Ar/Ar-Go'(后颅底长/下颌升支高)",
+        "measure_value": 0,
+        "standard_value": 73.4,
+        "standard_deviation": 8.9,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "后面高过高，下颌前突",
+            "normal": "垂直骨面型较好",
+            "up": "后面高不足，下颌后缩"
+        }
+    },
+    {
+        "name": "S-N/Go'-Me&rate",
+        "measure_name": "S-N/Go'-Me(前颅底长/下颌长)",
+        "measure_value": 0,
+        "standard_value": 94.4,
+        "standard_deviation": 5.7,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "下颌体偏长或前颅底偏短",
+            "normal": "下颌体与前颅底生长协调",
+            "up": "下颌体偏短或前颅底偏长"
+        }
+    },
+    {
+        "name": "S-Go'/N-Me&rate",
+        "measure_name": "S-Go'/N-Me(FHI面高指数：后前面高比%)",
+        "measure_value": 0,
+        "standard_value": 65.2,
+        "standard_deviation": 4.9,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "顺时针生长型：前面部生长较后面部明显，下颌向下前及下后方旋转",
+            "normal": "平均生长型：前后面部生长协调，下颌沿生长轴向前下生长",
+            "up": "逆时针生长型:后面高及面深度较前面高生长明显，下颌向前上旋转"
+        }
+    }
+]

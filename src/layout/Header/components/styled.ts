@@ -1,22 +1,70 @@
 import { Divider, Modal } from "antd"
 import styled from "styled-components"
 
+import type { ModalProps } from "antd"
+
 const ScHeaderWrapper = styled.div`
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    gap: 35px;
+    @media (max-width: 1980px) {
+        gap: 10px;
+    }
+    @media (max-width: 1700px) {
+        gap: 0;
+    }
+
+    &.interactive-wrapper {
+        gap: 100px;
+        flex: 1;
+        @media (max-width: 1980px) {
+            flex-wrap: wrap;
+            gap: 0;
+        }
+    }
 `
 
-const ScHeaderAction = styled.div`
+
+const ScHeaderBtnContainer = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex: 1;
+    justify-content: flex-end;
+`
+
+const ScHeaderMeasureContainer = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    @media (max-width: 1980px) {
+        gap: 0;
+    }
+    @media (max-width: 1700px) {
+        justify-content: space-between;
+    }
+`
+
+const ScHeaderAction = styled.div<{ $active?: boolean }>`
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    gap: 10px;
+    gap: 15px;
     cursor: pointer;
     position: relative;
-    padding: 10px;
+    background-color: ${({ $active }) => $active ? "#414141" : "unset"};
+    padding: 15px 10px;
+    border-radius: 8px;
+    border: 1px solid ${({ $active }) => $active ? "#32393F" : "transparent"};
+    min-width: 60px;
+    box-sizing: border-box;
 
+
+    @media (max-width: 1980px) {
+        gap: 10px;
+    }
     &::after {
         z-index: 2;
         background-color: #2E436EFF;
@@ -54,21 +102,25 @@ const ScHeaderAction = styled.div`
     }
 
     img {
-        z-index: 4;
         width: 30px;
         aspect-ratio: 1;
+        z-index: 4;
+        @media (max-width: 1700px) {
+            width: 20px;
+        }
     }
 
     span {
-        z-index: 4;
-        font-size: 12px;
+        font-size: 14px;
         line-height: 14px;
-        display: flex;
-        flex: 1;
+        white-space: nowrap;
+        z-index: 4;
+        
+        @media (max-width: 1700px) {
+            font-size: 12px;
+        }
     }
 `
-
-
 
 const ScHeaderResetButton = styled.button`
     background-color: #2D3238;
@@ -76,44 +128,60 @@ const ScHeaderResetButton = styled.button`
     height: 40px;
     border-radius: 2px;
     padding: 0;
-    margin: 0;
+    margin-right: 10px;
     color: #fff;
     font-weight: 600;
     border: 1px solid #33393F;
     font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+
+    @media (max-width: 1700px) {
+        width: 60px;
+        height: 36px;
+        font-size: 12px;
+        gap: 3px;
+    }
 
     img {
         width: 16px;
-        height: 20px;
+        @media (max-width: 1700px) {
+            width: 13px;
+        }
     }
 `
 
 const ScHeaderNormalButton = styled.button`
     font-size: 14px;
-    width: 120px;
+    width: 80px;
     height: 40px;
     background-color: #009DC7;
     color: #fff;
     margin: 0;
-    padding: 0; 
-
-    &.upload {
-        width: 80px;
+    padding: 0;
+    @media (max-width: 1700px) {
+        width: 52.5px;
+        height: 36px;
+        font-size: 12px;
     }
 `
 
 export {
     ScHeaderWrapper,
     ScHeaderAction,
+    ScHeaderBtnContainer,
+    ScHeaderMeasureContainer,
     ScHeaderResetButton,
     ScHeaderNormalButton,
 }
 
-
 const AntdScDivider = styled(Divider)`
     margin: 10px 0;
 `
-const AntdScModal = styled(Modal)`
+
+const AntdScModal = styled(Modal)<ModalProps>`
     width: 520px;
 
     .ant-modal-content {
@@ -130,7 +198,8 @@ const AntdScModal = styled(Modal)`
         }
     }
 `
-const AntdScMask = styled(Modal)`
+
+const AntdScMask = styled(Modal)<ModalProps>`
     .ant-modal-content {
         box-shadow: 0 0 20px #363636;
         background-color: #1f2327;
@@ -148,7 +217,6 @@ const AntdScMask = styled(Modal)`
             height: 100%;
         }
 
-
         .ant-progress-text {
             color: #fff;
         }
@@ -159,5 +227,5 @@ const AntdScMask = styled(Modal)`
 export {
     AntdScDivider,
     AntdScMask,
-    AntdScModal
+    AntdScModal,
 }

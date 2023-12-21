@@ -1,9 +1,14 @@
+import { useSelector } from "react-redux"
+import { Stage, Layer, Image, Circle, Text } from "react-konva"
+import XRay from "@/assets/XRays/ai-exp.png"
+import constants from "../data/constMap.json"
 import styled from "styled-components"
-import XRay from "@/assets/XRays/xray_default.jpg?url"
+import Konva from "konva"
+import useImage from "use-image"
 
-import type { FC, DragEvent } from "react"
+import type { RootState } from "@/stores"
 
-const ScDiv = styled.div`
+const ScContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -11,17 +16,6 @@ const ScDiv = styled.div`
 
     & > p {
         margin-bottom: 20px;
-
-        &::after {
-            content: " ( 此图片可以拖拽上传哦哦 )";
-            font-size: 12px;
-        }
-    }
-
-    img {
-        width: 100%;
-        aspect-ratio: 1/1;
-        border-radius: 8px;
     }
 
     .desc {
@@ -33,28 +27,70 @@ const ScDiv = styled.div`
     }
 `
 
-interface IProps {
-    src?: string
-    desc?: {
-        name?: string
-        text?: string
-    }
+const ScStage = styled(Stage)`
+    width: 440px;
+    height: 440px;
+    border-radius: 5px;
+    overflow: hidden;
+`
+
+interface PointData {
+    key: string
+    name: string
+    text: string
+    pos: number[]
 }
 
-const AiPicture: FC<IProps> = ({ src = XRay, desc }) => {
-    function handleDragStart(e: DragEvent) {
-        e.dataTransfer?.setData("text/plain", src)
-    }
+interface PointProps {
+    [key: string]: PointData
+}
+
+const pointConstants: PointProps = { ...constants }
+
+const AiPicture = () => {
+    const [image] = useImage(XRay)
+    const [pointData, setPointData] = useState<PointData | null>(null)
+    const [pointX, setPointX] = useState<number>(0)
+    const [pointY, setPointY] = useState<number>(0)
+    const { selectPointKey } = useSelector((state: RootState) => state.userInfo)
+
+    const stageRef = useRef<Konva.Stage | null>(null)
+    const imgScale = 440 / 600
+
+    useEffect(() => {
+        const stage = stageRef.current!
+        const stageWrapper = stage?.attrs.container
+        if (stage) {
+            stage?.width(stageWrapper.clientWidth)
+            stage?.height(stageWrapper.clientHeight)
+        }
+    }, [])
+
+    useEffect(() => {
+        if (selectPointKey) {
+            const newPointData = pointConstants[selectPointKey]
+            setPointData(newPointData)
+            setPointX(newPointData.pos[0] * imgScale)
+            setPointY(newPointData.pos[1] * imgScale)
+        }
+    }, [selectPointKey])
 
     return (
-        <ScDiv>
+        <ScContainer>
             <p>Ai点介绍</p>
-            <img onDragStart={handleDragStart} src={src} draggable={true} alt={desc?.name || "软组织鼻根点(N')"} />
+            <ScStage ref={stageRef}>
+                <Layer>
+                    <Image image={image} width={440} height={440} />
+                    <Circle x={pointX} y={pointY} radius={3} fill="red" />
+                    <Text x={pointX - 20} y={pointY - 20} text={pointData?.key} fill="#f00" fontSize={14} />
+                </Layer>
+            </ScStage>
+
             <div className="desc">
-                <p>{desc?.name ?? "软组织鼻根点(N')"}</p>
-                <p> {desc?.text ?? "软组织侧面上相应之鼻根点软组织侧面上相应之鼻根点软组织侧面上相应之鼻根点软组织侧面上相应之鼻根点"} </p>
+                <p>{pointData?.name}</p>
+                <p>{pointData?.text} </p>
             </div>
-        </ScDiv>
+        </ScContainer>
     )
 }
 

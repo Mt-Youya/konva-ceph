@@ -1,0 +1,198 @@
+[
+    {
+        "name": "SNA&deg",
+        "measure_name": "SNA",
+        "measure_value": 0,
+        "standard_value": 82.8,
+        "standard_deviation": 4.0,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "上颌骨相对前颅底平面后缩 ",
+            "normal": "上颌骨相对前颅底平面的位置正常 ",
+            "up": "上颌骨相对前颅底平面前突"
+        }
+    },
+    {
+        "name": "SNB&deg",
+        "measure_name": "SNB",
+        "measure_value": 0,
+        "standard_value": 80.0,
+        "standard_deviation": 3.9,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "下颌骨相对前颅底平面后缩 ",
+            "normal": "下颌骨相对前颅底平面的位置正常 ",
+            "up": "下颌骨相对前颅底平面前突"
+        }
+    },
+    {
+        "name": "ANB&deg",
+        "measure_name": "ANB",
+        "measure_value": 0,
+        "standard_value": 2.7,
+        "standard_deviation": 2.0,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "骨性III类趋势 ",
+            "normal": "颌骨位置正常 ",
+            "up": "骨性II类趋势"
+        }
+    },
+    {
+        "name": "SND&deg",
+        "measure_name": "SND",
+        "measure_value": 0,
+        "standard_value": 77.3,
+        "standard_deviation": 3.8,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "下颌后缩趋势",
+            "normal": "下颌突度正常",
+            "up": "下颌前突趋势"
+        }
+    },
+    {
+        "name": "Po-NB&mm",
+        "measure_name": "Po-NB(mm)",
+        "measure_value": 0,
+        "standard_value": 1.0,
+        "standard_deviation": 1.5,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "颏部后缩",
+            "normal": "颏部发育正常",
+            "up": "颏部前突"
+        }
+    },
+    {
+        "name": "OP-SN&deg",
+        "measure_name": "OP-SN",
+        "measure_value": 0,
+        "standard_value": 16.1,
+        "standard_deviation": 5.0,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "牙合平面倾斜度偏小",
+            "normal": "牙合平面斜度正常 ",
+            "up": "牙合平面倾斜度偏大 "
+        }
+    },
+    {
+        "name": "GoGn-SN&deg",
+        "measure_name": "GoGn-SN",
+        "measure_value": 0,
+        "standard_value": 32.5,
+        "standard_deviation": 5.2,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "下颌平面平",
+            "normal": "下颌平面陡度正常",
+            "up": "下颌平面陡"
+        }
+    },
+    {
+        "name": "SE&mm",
+        "measure_name": "SE(mm)",
+        "measure_value": 0,
+        "standard_value": 20.2,
+        "standard_deviation": 2.6,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "髁突相对颅底位置靠前",
+            "normal": "髁突相对颅底的位置关系正常",
+            "up": "髁突相对颅底位置靠后"
+        }
+    },
+    {
+        "name": "SL&mm",
+        "measure_name": "SL(mm)",
+        "measure_value": 0,
+        "standard_value": 52.1,
+        "standard_deviation": 5.4,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "颏部相对颅底后缩",
+            "normal": "颏部相对颅底的位置关系正常",
+            "up": "颏部相对颅底前突"
+        }
+    },
+    {
+        "name": "U1-NA&mm",
+        "measure_name": "U1-NA(mm)",
+        "measure_value": 0,
+        "standard_value": 5.1,
+        "standard_deviation": 2.4,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "上中切牙突度小 ",
+            "normal": "上中切牙突度正常 ",
+            "up": "上中切牙突度大"
+        }
+    },
+    {
+        "name": "U1-NA&deg",
+        "measure_name": "U1-NA",
+        "measure_value": 0,
+        "standard_value": 22.8,
+        "standard_deviation": 5.7,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "上中切牙舌倾 ",
+            "normal": "上中切牙倾斜度正常 ",
+            "up": "上中切牙唇倾 "
+        }
+    },
+    {
+        "name": "L1-NB&mm",
+        "measure_name": "L1-NB(mm)",
+        "measure_value": 0,
+        "standard_value": 6.7,
+        "standard_deviation": 2.1,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "下中切牙突度小 ",
+            "normal": "下中切牙突度正常 ",
+            "up": "下中切牙突度大 "
+        }
+    },
+    {
+        "name": "L1-NB&deg",
+        "measure_name": "L1-NB",
+        "measure_value": 0,
+        "standard_value": 30.3,
+        "standard_deviation": 5.8,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "下中切牙舌倾 ",
+            "normal": "下中切牙突度正常 ",
+            "up": "下中切牙唇倾 "
+        }
+    },
+    {
+        "name": "U1-L1&deg",
+        "measure_name": "U1-L1(上下中切牙角)",
+        "measure_value": 0,
+        "standard_value": 124.0,
+        "standard_deviation": 8.2,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "上下中切牙的相对突度大",
+            "normal": "上下中切牙的相对突度正常 ",
+            "up": "上下中切牙的相对突度小"
+        }
+    }
+]

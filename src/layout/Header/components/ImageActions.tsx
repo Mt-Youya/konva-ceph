@@ -1,20 +1,18 @@
-import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { Slider } from "antd"
 import { mirrorIcon, rotateIcon, brightnessIcon, contrastRatioIcon } from "@/assets/headers"
 import { ScHeaderAction, ScHeaderWrapper } from "./styled"
-import { actionKeys } from "../data.ts"
+import { actionKeys } from "../data/data"
 import { changeBrightness, changeContrast, changeRotate, changeScaleX } from "@/stores/home/useTransform.ts"
 import styled from "styled-components"
 
 import type { RootState } from "@/stores"
-import type { ActionType } from "../data.ts"
+import type { ActionType } from "../data/data"
 
 const AntdScSlider = styled(Slider)`
     width: 200px;
     position: absolute;
-    bottom: -30%;
+    bottom: -50%;
     z-index: 999;
 `
 
@@ -62,9 +60,13 @@ function ImageActions() {
         setSliderMap(prev => ({ [otherKey]: false, [key]: !prev[key] } as ISliderMap))
     }
 
+    const sliderStyle = {
+        track: { backgroundColor: "#93bef2", height: "4px" },
+        rail: { backgroundColor: "#979797", height: "2px" },
+    }
+
     return (
         <ScHeaderWrapper>
-            <Link to="/native">Native</Link>
             <ScHeaderAction>
                 <img src={mirrorIcon} onClick={() => handleAction("mirror")} alt="mirror" />
                 <span> 镜像 </span>
@@ -73,26 +75,24 @@ function ImageActions() {
                 <img src={rotateIcon} alt="rotate" />
                 <span> 旋转 </span>
             </ScHeaderAction>
-            <ScHeaderAction onClick={() => sliderClick("brightnessActive")}>
-                <img src={brightnessIcon} alt="brightnessActive" />
+            {/*@ts-ignore*/}
+            <ScHeaderAction $active={sliderMap.brightnessActive} onClick={() => sliderClick("brightnessActive")}>
+                <img src={brightnessIcon} alt="brightness" />
                 <span> 亮度 </span>
                 {sliderMap.brightnessActive && (
                     <AntdScSlider
-                        value={bright} min={-1} max={1} step={.05}
-                        trackStyle={{ backgroundColor: "#93bef2", height: "4px" }}
-                        railStyle={{ backgroundColor: "#979797", height: "2px" }}
+                        min={-1} max={1} step={.05} value={bright} styles={sliderStyle}
                         onChange={num => setBright(num)}
                     />
                 )}
             </ScHeaderAction>
-            <ScHeaderAction onClick={() => sliderClick("contrastActive")}>
-                <img src={contrastRatioIcon} alt="contrastActive" />
+            {/*@ts-ignore*/}
+            <ScHeaderAction $active={sliderMap.contrastActive} onClick={() => sliderClick("contrastActive")}>
+                <img src={contrastRatioIcon} alt="contrast" />
                 <span> 对比度 </span>
                 {sliderMap.contrastActive && (
                     <AntdScSlider
-                        value={contrasted} min={-100} max={100} step={1}
-                        trackStyle={{ backgroundColor: "#93bef2", height: "4px" }}
-                        railStyle={{ backgroundColor: "#979797", height: "2px" }}
+                        min={-100} max={100} step={1} value={contrasted} styles={sliderStyle}
                         onChange={num => setContrasted(num)}
                     />
                 )}

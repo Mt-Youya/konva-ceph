@@ -1,0 +1,128 @@
+[
+    {
+        "name": "NBa-PtGn&deg",
+        "measure_name": "NBa-PtGn(面轴角)",
+        "measure_value": 0,
+        "standard_value": 93.2,
+        "standard_deviation": 3.4,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "下颌发育不足，颏部后缩，面高偏大 ",
+            "normal": "下颌生长正常 ",
+            "up": "下颌发育过度，颏部前突，面高偏小 "
+        }
+    },
+    {
+        "name": "FH-NPo&deg",
+        "measure_name": "FH-NPo(面角)",
+        "measure_value": 0,
+        "standard_value": 88.2,
+        "standard_deviation": 3.2,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "颏部后缩",
+            "normal": "颏部前后突度正常",
+            "up": "颏部前突"
+        }
+    },
+    {
+        "name": "FH-MP&deg",
+        "measure_name": "FH-MP(下颌平面角)",
+        "measure_value": 0,
+        "standard_value": 27.6,
+        "standard_deviation": 5.7,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "水平生长型，下颌体平 ",
+            "normal": "平均生长型，下颌体陡度正常 ",
+            "up": "垂直生长型，下颌体陡"
+        }
+    },
+    {
+        "name": "MP-NPog&deg",
+        "measure_name": "MP-NPog(颏角)",
+        "measure_value": 0,
+        "standard_value": 66.3,
+        "standard_deviation": 5.0,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "凹面型，颏部前突",
+            "normal": "直面型",
+            "up": "突面型，颏部后缩"
+        }
+    },
+    {
+        "name": "A-NPog&mm",
+        "measure_name": "A-NPog(A点突度mm)",
+        "measure_value": 0,
+        "standard_value": 3.7,
+        "standard_deviation": 2.6,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "上颌后缩",
+            "normal": "上颌突度正常",
+            "up": "上颌前突"
+        }
+    },
+    {
+        "name": "U1-Apo&mm",
+        "measure_name": "U1-Apo(mm)",
+        "measure_value": 0,
+        "standard_value": 7.6,
+        "standard_deviation": 2.0,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "上中切牙突度过小",
+            "normal": "上中切牙突度正常 ",
+            "up": "上中切牙突度过大"
+        }
+    },
+    {
+        "name": "L1-APog&mm",
+        "measure_name": "L1-APog(下中切牙突距mm)",
+        "measure_value": 0,
+        "standard_value": 4.60,
+        "standard_deviation": 1.90,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "下中切牙舌倾",
+            "normal": "下中切牙直立",
+            "up": "下中切牙唇倾"
+        }
+    },
+    {
+        "name": "L1-APog&deg",
+        "measure_name": "L1-APog(下中切牙倾斜度)",
+        "measure_value": 0,
+        "standard_value": 24.40,
+        "standard_deviation": 4.10,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "下中切牙舌倾",
+            "normal": "下中切牙直立",
+            "up": "下中切牙唇倾"
+        }
+    },
+    {
+        "name": "LL-EP&mm",
+        "measure_name": "LL-EP(下唇位置mm)",
+        "measure_value": 0,
+        "standard_value": 0.3,
+        "standard_deviation": 2.1,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "下唇缩 ",
+            "normal": "下唇位置正常 ",
+            "up": "下唇突"
+        }
+    }
+]

@@ -1,0 +1,170 @@
+[
+    {
+        "name": "L1-FH&deg",
+        "measure_name": "FMIA(L1-FH)",
+        "measure_value": 0,
+        "standard_value": 54.9,
+        "standard_deviation": 6.1,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "下中切牙唇倾 ",
+            "normal": "下中切牙倾斜度、突度正常 ",
+            "up": "下中切牙舌倾 "
+        }
+    },
+    {
+        "name": "FMA&deg",
+        "measure_name": "FMA(FH-MP)",
+        "measure_value": 0,
+        "standard_value": 31.3,
+        "standard_deviation": 5,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "水平生长型，下颌体平",
+            "normal": "平均生长型，下颌体陡度正常",
+            "up": "垂直生长型，下颌体陡"
+        }
+    },
+    {
+        "name": "L1-MP&deg",
+        "measure_name": "IMPA(L1-MP)",
+        "measure_value": 0,
+        "standard_value": 93.9,
+        "standard_deviation": 6.2,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "下前牙相对下颌平面唇倾",
+            "normal": "下前牙相对下颌平面唇倾斜度正常",
+            "up": "下前牙相对下颌平面舌倾"
+        }
+    },
+    {
+        "name": "SNA&deg",
+        "measure_name": "SNA",
+        "measure_value": 0,
+        "standard_value": 82.8,
+        "standard_deviation": 4,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "上颌骨相对前颅底平面后缩 ",
+            "normal": "上颌骨相对前颅底平面的位置正常 ",
+            "up": "上颌骨相对前颅底平面前突"
+        }
+    },
+    {
+        "name": "SNB&deg",
+        "measure_name": "SNB",
+        "measure_value": 0,
+        "standard_value": 80.1,
+        "standard_deviation": 3.9,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "下颌骨相对前颅底平面后缩 ",
+            "normal": "下颌骨相对前颅底平面的位置正常 ",
+            "up": "下颌骨相对前颅底平面前突"
+        }
+    },
+    {
+        "name": "ANB&deg",
+        "measure_name": "ANB",
+        "measure_value": 0,
+        "standard_value": 2.7,
+        "standard_deviation": 2,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "骨性III类趋势 ",
+            "normal": "颌骨位置正常 ",
+            "up": "骨性II类趋势"
+        }
+    },
+    {
+        "name": "Wits&mm",
+        "measure_name": "AO-BO(Witsmm)",
+        "measure_value": 0,
+        "standard_value": -1,
+        "standard_deviation": 2.8,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "下颌相对上颌突，骨性III类趋势",
+            "normal": "上下颌骨前部的相互关系正常",
+            "up": "上颌相对下颌突，骨性II类趋势"
+        }
+    },
+    {
+        "name": "OP-FH&deg",
+        "measure_name": "OP角(OP-FH)",
+        "measure_value": 0,
+        "standard_value": 10,
+        "standard_deviation": 2,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "牙合平面偏平",
+            "normal": "牙合平面正常",
+            "up": "牙合平面偏陡"
+        }
+    },
+    {
+        "name": "Z-Angle&deg",
+        "measure_name": "Z-Angle",
+        "measure_value": 0,
+        "standard_value": 75,
+        "standard_deviation": 5,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "下颌后缩，唇部前突",
+            "normal": "下颌位置及唇突度协调 ",
+            "up": "下颌前突，唇部后缩 "
+        }
+    },
+    {
+        "name": "AFH&mm",
+        "measure_name": "AFH(前下面高mm)",
+        "measure_value": 0,
+        "standard_value": 64,
+        "standard_deviation": 0,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "前下面高度",
+            "normal": "前下面高度",
+            "up": "前下面高度"
+        }
+    },
+    {
+        "name": "PFH&mm",
+        "measure_name": "PFH(后面高mm)",
+        "measure_value": 0,
+        "standard_value": 47,
+        "standard_deviation": 0,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "后面高度",
+            "normal": "后面高度",
+            "up": "后面高度"
+        }
+    },
+    {
+        "name": "PFH/AFH&rate",
+        "measure_name": "PFH/AFH(面高指数%)",
+        "measure_value": 0,
+        "standard_value": 70,
+        "standard_deviation": 5,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "垂直生长型",
+            "normal": "平均生长型",
+            "up": "水平生长型"
+        }
+    }
+]

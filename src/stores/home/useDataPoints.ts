@@ -7,17 +7,23 @@ export interface IPointItem {
     name: string
 }
 
-export interface DataState {
+export type DataState = ReturnType<typeof createDataState>
+
+interface StateType {
     pointList: IPointItem[]
     lineList: number[][]
 }
 
+export function createDataState(): StateType {
+    return {
+        pointList: [],
+        lineList: [],
+    }
+}
+
 export const dataSlice: Slice<DataState> = createSlice({
     name: "dataPoints",
-    initialState: {
-        pointList: [] as IPointItem[],
-        lineList: [] as number[][],
-    },
+    initialState: createDataState(),
     reducers: {
         changePointList(state, action) {
             state.pointList = action.payload

@@ -1,15 +1,21 @@
-import type { IPoint } from "@/types/canvasCtx"
+import randomUUID from "@/utils/randomUUID"
+
+import type { IPoint } from "@/types"
+import type { TReturnI2VPos } from "@/pages/home/algorithms/common"
+
+const { ceil, sqrt, cos, sin, acos, abs, PI } = Math
 
 export function createLabelStyle(leftX: number, topY: number, color = "#83ECCB", bgColor = "#32393F") {
     return {
-        left: Math.ceil(leftX) + 10 + "px",
-        top: Math.ceil(topY) + "px",
+        left: ceil(leftX) + 10 + "px",
+        top: ceil(topY) + "px",
         color,
         backgroundColor: bgColor,
         borderRadius: "2px",
         padding: "6px",
         border: "1px solid #414141",
         transform: "none",
+        zIndex: 99999999999999,
     }
 }
 
@@ -26,11 +32,11 @@ export function measureAngle(p1: IPoint, p2: IPoint, p3: IPoint, p4: IPoint) {
     const Va = { x: p2.x - p1.x, y: p2.y - p1.y }
     const Vb = { x: p4.x - p3.x, y: p4.y - p3.y }
     const dotProduct = Va.x * Vb.x + Va.y * Vb.y
-    const magnitudeV1 = Math.sqrt(Va.x * Va.x + Va.y * Va.y)
-    const magnitudeV2 = Math.sqrt(Vb.x * Vb.x + Vb.y * Vb.y)
+    const magnitudeV1 = sqrt(Va.x * Va.x + Va.y * Va.y)
+    const magnitudeV2 = sqrt(Vb.x * Vb.x + Vb.y * Vb.y)
     const cosAngle = dotProduct / (magnitudeV1 * magnitudeV2)
-    // const angle = Math.atan2(Va.y, Va.x) - Math.atan2(Vb.y, Vb.x) // 待验证 atan2
-    return Math.acos(cosAngle) * (180 / Math.PI)
+    // const angle = atan2(Va.y, Va.x) - atan2(Vb.y, Vb.x) // 待验证 atan2
+    return acos(cosAngle) * (180 / PI)
 }
 
 /**
@@ -45,11 +51,12 @@ export function point2LineDistance(P: IPoint, Pa: IPoint, Pb: IPoint) {
     const { x: x0, y: y0 } = P
     const { x: x1, y: y1 } = Pa
     const { x: x2, y: y2 } = Pb
-    if (x1 === x2 && y1 === y2)
-        return Math.sqrt((x1 - x0) * (x1 - x0) + (y1 - y0) * (y1 - y0))
+    if (x1 === x2 && y1 === y2) {
+        return sqrt((x1 - x0) * (x1 - x0) + (y1 - y0) * (y1 - y0))
+    }
 
-    const numerator = Math.abs((y2 - y1) * x0 - (x2 - x1) * y0 + x2 * y1 - y2 * x1)
-    const denominator = Math.sqrt((y2 - y1) ** 2 + (x2 - x1) ** 2)
+    const numerator = abs((y2 - y1) * x0 - (x2 - x1) * y0 + x2 * y1 - y2 * x1)
+    const denominator = sqrt((y2 - y1) ** 2 + (x2 - x1) ** 2)
     return numerator / denominator
 }
 
@@ -103,7 +110,7 @@ export function point2PointDistance(Pa: IPoint, Pb: IPoint) {
 
     const dx = x2 - x1
     const dy = y2 - y1
-    return Math.sqrt(dx ** 2 + dy ** 2)
+    return sqrt(dx ** 2 + dy ** 2)
 }
 
 /**
@@ -118,7 +125,7 @@ export function getOriginPointIncludeAngle(Pa: IPoint, Pb: IPoint) {
     return measureAngle(x1, origin, Pa, Pb)
 }
 
-export const pointInVectorSymbol = Symbol("pointInVector" + (Math.random() * 10).toFixed(2))
+export const pointInVectorSymbol = Symbol("pointInVector" + randomUUID())
 
 /**
  * 根据叉乘获取点在向量的位置
@@ -163,24 +170,25 @@ export function getSlope(Pa: IPoint, Pb: IPoint) {
  * @param x {number} P点x坐标
  * @param y {number} P点y坐标
  * @param theta {number} 旋转角度 θ
- * @param slope {number} 斜率 k
  * @return rotatedPoint 旋转后的坐标
  */
-export function getRotatedPoint(x: number, y: number, theta: number, slope: number): IPoint {
+export function getRotatedPoint(x: number, y: number, theta: number) {
+    const rad = (theta * PI) / 180
+    const slope = x * y
     if (slope > 0) {
-        const Px = x * Math.cos(theta) + y * Math.sin(theta)
-        const Py = y * Math.cos(theta) - x * Math.sin(theta)
+        const Px = x * cos(rad) + y * sin(rad)
+        const Py = y * cos(rad) - x * sin(rad)
         return { x: Px, y: Py }
     }
     if (slope < 0) {
-        const Px = x * Math.cos(theta) - y * Math.sin(theta)
-        const Py = y * Math.cos(theta) + x * Math.sin(theta)
+        const Px = x * cos(rad) - y * sin(rad)
+        const Py = y * cos(rad) + x * sin(rad)
         return { x: Px, y: Py }
     }
     return { x, y }
 }
 
-export const parallelSymbol = Symbol("parallel" + (Math.random() * 10).toFixed(2))
+export const parallelSymbol = Symbol("parallel" + randomUUID())
 
 /**
  * 获取向量所在直线的点相对于向量的位置
@@ -255,4 +263,45 @@ export function getLine2LineIntersection(p1: IPoint, p2: IPoint, p3: IPoint, p4:
         x,
         y,
     }
+}
+
+// 根据Pa Pb 与水平线的夹角获取 P 经过旋转 夹角度数 后的坐标
+export function getRotatedPointByAngle(P: IPoint, Pa: IPoint, Pb: IPoint) {
+    const { x: x0, y: y0 } = P
+    const includeAngle = getOriginPointIncludeAngle(Pa, Pb)
+    return getRotatedPoint(x0, y0, includeAngle)
+}
+
+// 以 Po为原点旋转theta 角度后的坐标
+export function getRotatedPointByPoint(P: IPoint, Po: IPoint, theta = -7) {
+    const { x: x0, y: y0 } = P
+    const { x: x1, y: y1 } = Po
+    const x = x0 - x1
+    const y = y0 - y1
+    return getRotatedPoint(x, y, theta)
+}
+
+// 以 Po为原点旋转theta 角度后的直线一般式方程
+export function getRotatedEquationByTheta(Pa: IPoint, Pb: IPoint, theta: number, Po: IPoint) {
+    const deltaX = Pb.x - Po.x
+    const deltaY = Pb.y - Po.y
+
+    const rotatedX = Po.x + deltaX * cos(theta) - deltaY * sin(theta)
+    const rotatedY = Po.y + deltaX * sin(theta) + deltaY * cos(theta)
+
+    const A = rotatedY - Pa.y
+    const B = Pa.x - rotatedX
+    const C = Pa.x * rotatedY - rotatedX * Pa.y
+
+    return { A, B, C }
+}
+
+export function judgeMinusAngle(Pa: TReturnI2VPos, Pb: TReturnI2VPos) {
+    if (Pa === "front" && Pb !== "back") {
+        return -1
+    }
+    if (Pa === parallelSymbol && Pb === "front") {
+        return -1
+    }
+    return 1
 }

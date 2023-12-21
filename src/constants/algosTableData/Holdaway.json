@@ -1,0 +1,142 @@
+[
+    {
+        "name": "A-Npog&mm",
+        "measure_name": "A-Npog(A点突度mm)",
+        "measure_value": 0,
+        "standard_value": 2.4,
+        "standard_deviation": 2.2,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "骨侧面后缩",
+            "normal": "骨侧面突度正常",
+            "up": "骨侧面前突"
+        }
+    },
+    {
+        "name": "FH-N'Pog'-Holdaway&deg",
+        "measure_name": "FH-N'Pog'-Holdaway(软组织面角)",
+        "measure_value": 0,
+        "standard_value": 89.3,
+        "standard_deviation": 3.0,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "软组织颏部后缩",
+            "normal": "软组织颏部突度正常",
+            "up": "软组织颏部前突 "
+        }
+    },
+    {
+        "name": "Prn-Sn&mm",
+        "measure_name": "Prn-Sn(鼻突度mm)",
+        "measure_value": 0,
+        "standard_value": 12.3,
+        "standard_deviation": 1.4,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "鼻突度偏小",
+            "normal": "鼻突度正常",
+            "up": "鼻突度偏大"
+        }
+    },
+    {
+        "name": "Ss-Ls&mm",
+        "measure_name": "Ss-Ls(上唇沟深度mm)",
+        "measure_value": 0,
+        "standard_value": 4.6,
+        "standard_deviation": 1.2,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "上唇沟浅",
+            "normal": "上唇沟深度正常",
+            "up": "上唇沟深"
+        }
+    },
+    {
+        "name": "Sn-H&mm",
+        "measure_name": "Sn-H(鼻底点至H线距mm)",
+        "measure_value": 0,
+        "standard_value": 8.5,
+        "standard_deviation": 1.8,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "鼻唇形态不调",
+            "normal": "鼻唇形态正常",
+            "up": "鼻唇形态不调"
+        }
+    },
+    {
+        "name": "H-N'Pm'&deg",
+        "measure_name": "H-N'Pm'(H角)",
+        "measure_value": 0,
+        "standard_value": 15.3,
+        "standard_deviation": 3.3,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "上唇相对后缩",
+            "normal": "上唇突度正常",
+            "up": "上唇相对前突"
+        }
+    },
+    {
+        "name": "Li-H&mm",
+        "measure_name": "Li-H(下唇突点至H线距mm)",
+        "measure_value": 0,
+        "standard_value": 1.0,
+        "standard_deviation": 1.7,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "下唇后缩",
+            "normal": "下唇突度正常",
+            "up": "下唇前突"
+        }
+    },
+    {
+        "name": "Si-H&mm",
+        "measure_name": "Si-H(颏唇沟深度mm)",
+        "measure_value": 0,
+        "standard_value": 3.6,
+        "standard_deviation": 1.6,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "颏唇沟浅",
+            "normal": "颏唇沟深度正常",
+            "up": "颏唇沟深"
+        }
+    },
+    {
+        "name": "Pm-Pm'&mm",
+        "measure_name": "Pm-Pm'(软组织颏部厚度mm)",
+        "measure_value": 0,
+        "standard_value": 11.8,
+        "standard_deviation": 1.8,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "软组织颏部偏薄",
+            "normal": "软组织颏部厚度正常",
+            "up": "软组织颏部偏厚"
+        }
+    },
+    {
+        "name": "U1-Ls&mm",
+        "measure_name": "FA(U1)-Ls(上唇紧张度)",
+        "measure_value": 0,
+        "standard_value": 11.6,
+        "standard_deviation": 1.5,
+        "result_desc": "",
+        "flag": 0,
+        "tips": {
+            "down": "上唇紧张",
+            "normal": "上唇紧张度正常",
+            "up": "上唇松弛"
+        }
+    }
+]
