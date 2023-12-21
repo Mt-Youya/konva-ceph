@@ -1,6 +1,8 @@
 import { fileURLToPath, URL } from "node:url"
 import { defineConfig } from "vite"
 import { extname } from "path"
+import { cdns } from "./plugins/cdns"
+// import { cdn as CDNImport } from "vite-plugin-cdn2"
 import react from "@vitejs/plugin-react"
 import Compression from "vite-plugin-compression"
 import Inspect from "vite-plugin-inspect"
@@ -9,32 +11,7 @@ import AutoImport from "unplugin-auto-import/vite"
 const modelExts = [".gltf", ".glb", ".obj", "mtl", ".fbx", "stl", "vtp", "vtk", "ply", "xyz"]
 const cssExts = [".css", ".less", ".scss", "sass", ".stylus"]
 
-const globals = {
-    react: "react",
-    konva: "konva",
-    antd: "antd",
-    axios: "axios",
-    xlsx: "xlsx",
-    jszip: "jszip",
-    "react-router": "react-router",
-    "react-dom": "react-dom",
-    "react-router-dom": "react-router-dom",
-    "styled-components": "styled-components",
-}
-
-function buildStart() {
-    function handleBuildStart(options) {
-        const { external, plugins } = options
-        console.log()
-
-    }
-
-    return {
-        name: "BuildStart",
-        buildStart: handleBuildStart,
-    }
-}
-
+const externals = cdns.filter(cdn => cdn.type === "script").map(cdn => cdn.name)
 export default defineConfig({
         plugins: [
             react(),
@@ -45,7 +22,10 @@ export default defineConfig({
                 dts: true,
                 include: [/\.[tj]sx?$/],
             }),
-            // buildStart(),
+            // CDNImport({
+            //     modules: externals,
+            //     url: "https://cdnjs.cloudflare.com/ajax/libs/",
+            // }),
         ],
         server: {
             open: true,
@@ -55,14 +35,13 @@ export default defineConfig({
             alias: {
                 "@": fileURLToPath(new URL("./src", import.meta.url)),
             },
-            dedupe: Object.keys(globals),
         },
         build: {
             outDir: "dist",
             assetsDir: "assets",
             chunkSizeWarningLimit: 1500,
-
             rollupOptions: {
+                // external,
                 output: {
                     chunkFileNames: "assets/js/[name]-[hash].js",
                     entryFileNames: "assets/js/[name].[hash].js",
@@ -86,7 +65,6 @@ export default defineConfig({
 
                         return `assets/images/[name].[hash].[ext]`
                     },
-                    globals,
                 },
             },
             minify: true,

@@ -1,18 +1,23 @@
 import { Dropdown } from "antd"
+import { useDispatch, useSelector } from "react-redux"
+import { DownOutlined } from "@ant-design/icons"
+import { setAlgorithm } from "@/stores/aside"
 import styled from "styled-components"
-import AsideTable from "@/layout/Aside/components/AsideTable.tsx"
-import AiPicture from "@/layout/Aside/components/AiPicture.tsx"
+import AsideTable from "./components/AsideTable"
+import AiPicture from "./components/AiPicture"
+
+import type { RootState } from "@/stores"
 
 const ScAside = styled.aside`
-    width: 500px;
     height: 100%;
     color: #fff;
     background-color: var(--color-aside-bgColor);
-    padding: 30px;
-    min-width: 300px;
+    padding: 24px;
+    min-width: 500px;
     box-shadow: 0 0 5px #363636;
     border-top-left-radius: 12px;
     border-bottom-left-radius: 12px;
+    overflow-y: auto;
 `
 
 const ScH2 = styled.h2`
@@ -22,30 +27,56 @@ const ScH2 = styled.h2`
     justify-content: space-between;
     align-items: flex-end;
 
-    span {
+    & > span {
         color: #BFD8F3;
         font-weight: 400;
         font-size: 14px;
         line-height: 14px;
+        cursor: pointer;
     }
 `
 
+const menuList = [
+    { label: "华西分析法", key: "WestChina" },
+    { label: "北大分析法", key: "PerkingUniversity" },
+    { label: "Downs分析法", key: "Downs" },
+    { label: "McNamara分析法", key: "McNamara" },
+    { label: "Steiner分析法", key: "Steiner" },
+    { label: "Ricketts分析法", key: "Ricketts" },
+    { label: "Wylie分析法", key: "Wylie" },
+    { label: "Holdaway分析法", key: "Holdaway" },
+    { label: "Burstone分析法", key: "Burstone" },
+    { label: "Jarabak分析法", key: "Jarabak" },
+    { label: "Tweed分析法", key: "Tweed" },
+    { label: "九院分析法", key: "SH9Hospital" },
+    { label: "李博分析法", key: "DoctorLee" },
+]
+
 function Aside() {
-    const menuList = [
-        { label: "华西分析法", key: "0" },
-        { label: "华西西分析法", key: "1" },
-        { label: "华东分析法", key: "2" },
-        { label: "华东东分析法", key: "3" },
-        { label: "华东西分析法", key: "4" },
-    ]
+    const { algorithmWay } = useSelector((state: RootState) => state.algorithm)
+    const dispatch = useDispatch()
+
+    function handleMenuClick(e: any) {
+        const target = menuList.find(item => item.key === e?.key)
+        dispatch(setAlgorithm(target))
+    }
 
     return (
         <ScAside>
             <ScH2>
                 分析数据
-                <Dropdown menu={{ items: menuList }} trigger={["click"]}
-                          arrow={{ pointAtCenter: true }}>
-                    <span>{menuList[0].label}</span>
+                <Dropdown
+                    menu={{
+                        items: menuList,
+                        selectable: true,
+                        defaultSelectedKeys: ["WestChina"],
+                        onClick: handleMenuClick,
+                    }}
+                    trigger={["click"]}
+                    arrow={{ pointAtCenter: true }}
+                    placement="bottomRight"
+                >
+                    <span>{algorithmWay.label} <DownOutlined /></span>
                 </Dropdown>
             </ScH2>
             <AsideTable />
