@@ -36,16 +36,16 @@ function ImageActions() {
         switch (action) {
             case actionKeys.BRIGHTNESS:
                 dispatch(changeBrightness(value))
-                break
+                return
             case actionKeys.CONTRAST:
                 dispatch(changeContrast(value))
-                break
+                return
             case actionKeys.ROTATE:
                 dispatch(changeRotate(rotate + 90))
-                break
+                return
             case actionKeys.MIRROR:
                 dispatch(changeScaleX(scaleX * -1))
-                break
+                return
             default:
                 break
         }

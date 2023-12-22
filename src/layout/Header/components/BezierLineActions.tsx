@@ -1,19 +1,14 @@
 import { useDispatch, useSelector } from "react-redux"
 import { changeLateral, changeMajor, changeNamed, changeOutline, changeSupport } from "@/stores/home/useShowPoint"
+import {
+    lateralActiveIcon, lateralIcon,
+    majorActiveIcon, majorIcon,
+    nameActiveIcon, nameIcon,
+    supportActiveIcon, supportIcon,
+    outlineActiveIcon, outlineIcon,
+} from "@/assets/headers"
 import { actionKeys } from "../data/data"
 import { ScHeaderAction, ScHeaderWrapper } from "./styled"
-import {
-    lateralIcon,
-    lateralActiveIcon,
-    majorIcon,
-    majorActiveIcon,
-    nameIcon,
-    nameActiveIcon,
-    outlineIcon,
-    outlineActiveIcon,
-    supportIcon,
-    supportActiveIcon,
-} from "@/assets/headers"
 
 import type { RootState } from "@/stores"
 import type { ActionType } from "../data/data"
@@ -27,45 +22,40 @@ function BezierLineActions() {
     function handleAction(action: TBezierActionType) {
         switch (action) {
             case actionKeys.OUTLINE:
-                dispatch(changeOutline(!outline))
-                break
+                return dispatch(changeOutline(!outline))
             case actionKeys.LATERAL:
-                dispatch(changeLateral(!lateral))
-                break
+                return dispatch(changeLateral(!lateral))
             case actionKeys.NAME:
-                dispatch(changeNamed(!named))
-                break
+                return dispatch(changeNamed(!named))
             case actionKeys.SUPPORT:
-                dispatch(changeSupport(!support))
-                break
+                return dispatch(changeSupport(!support))
             case actionKeys.MAJOR:
-                dispatch(changeMajor(!major))
-                break
+                return dispatch(changeMajor(!major))
             default:
-                break
+                return
         }
     }
 
     return (
         <ScHeaderWrapper>
-            <ScHeaderAction className={!lateral ? "active" : ""} onClick={() => handleAction("lateral")}>
-                <img src={lateral ? lateralActiveIcon : lateralIcon} alt="lateral" />
+            <ScHeaderAction onClick={() => handleAction("lateral")}>
+                <img src={lateral ? lateralActiveIcon : lateralIcon} />
                 <span> 侧位片 </span>
             </ScHeaderAction>
-            <ScHeaderAction className={!named ? "active" : ""} onClick={() => handleAction("named")}>
-                <img src={named ? nameActiveIcon : nameIcon} alt="named" />
+            <ScHeaderAction onClick={() => handleAction("named")}>
+                <img src={named ? nameActiveIcon : nameIcon} />
                 <span> 名称 </span>
             </ScHeaderAction>
-            <ScHeaderAction className={!major ? "active" : ""} onClick={() => handleAction("major")}>
-                <img src={major ? majorActiveIcon : majorIcon} alt="major" />
+            <ScHeaderAction onClick={() => handleAction("major")}>
+                <img src={major ? majorActiveIcon : majorIcon} />
                 <span> 主点 </span>
             </ScHeaderAction>
-            <ScHeaderAction className={!support ? "active" : ""} onClick={() => handleAction("support")}>
-                <img src={support ? supportActiveIcon : supportIcon} alt="support" />
+            <ScHeaderAction onClick={() => handleAction("support")}>
+                <img src={support ? supportActiveIcon : supportIcon} />
                 <span> 辅助点 </span>
             </ScHeaderAction>
-            <ScHeaderAction className={!outline ? "active" : ""} onClick={() => handleAction("outline")}>
-                <img src={outline ? outlineActiveIcon : outlineIcon} alt="outline" />
+            <ScHeaderAction onClick={() => handleAction("outline")}>
+                <img src={outline ? outlineActiveIcon : outlineIcon} />
                 <span> 轮廓 </span>
             </ScHeaderAction>
         </ScHeaderWrapper>
