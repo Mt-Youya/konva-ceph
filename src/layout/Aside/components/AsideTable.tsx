@@ -8,6 +8,7 @@ import AlgosTableData from "@/constants/algosTableData"
 import WarningInfo from "@/assets/icons/WarningInfo.svg?url"
 
 import type { RootState } from "@/stores"
+import { useEffect } from "react"
 
 interface IIconProps {
     value: number
@@ -63,6 +64,7 @@ function AsideTable() {
 
     useEffect(() => {
         if (!tableData.length || !algorithmsCache) return
+        console.log(!tableData.length, !algorithmsCache)
         const target = AlgosTableData[algorithmWay.key]
         if (rulerScaling !== 0) {
             const data = target.map(item => {

@@ -87,7 +87,7 @@ const MeasureDistance = ({ layerWidth = 1200, layerHeight = 1100, setLayerDragga
                 {pointsGroup.map(([p1, p2], idx) => (
                     <SingleLine
                         key={p1.x + p1.y + (p2 ? p2.x * p2.y : Math.random()) + idx}
-                        points={[p1, p2]} movePoint={move}
+                        points={[p1, p2]} movePoint={move} scale={scale}
                         closeDistance={() => closeDistance(idx)}
                     />
                 ))}

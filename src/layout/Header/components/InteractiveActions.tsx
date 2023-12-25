@@ -6,7 +6,9 @@ import { getTableData } from "@/apis/getList"
 import { dataURLtoBlob } from "@/utils/base64ToBlob"
 import { arrayToExcel } from "@/utils/array2Excel"
 import { imageToFileByCanvas } from "@/utils/image2File"
+import { POINTS_CONSTANTS } from "@/pages/home/constants/common"
 import { ImageFileTypes } from "@/types"
+import { getAllPointMethodMap } from "@/pages/home/data"
 import { changePointList } from "@/stores/home/useDataPoints"
 import { setRulerScaling, setTableData } from "@/stores/home/getTableData"
 import { setCachePoints, setCacheTableData } from "@/stores/cache"
@@ -14,6 +16,7 @@ import { changeAngle, changeDistance, changeImgUrl } from "@/stores/home/useMeas
 import { changeBrightness, changeContrast, changeRotate, changeScaleX } from "@/stores/home/useTransform"
 import { changeLateral, changeMajor, changeNamed, changeOutline, changeSupport } from "@/stores/home/useShowPoint"
 import { getMeasureState, getShowPointState, getTransformState } from "@/stores/utils/getState"
+import { setAlgorithmsCache } from "@/stores/cache/algorithms"
 import { createAlgorithmState, setAlgorithm } from "@/stores/aside"
 import { setReset } from "@/stores/header/reset.ts"
 import {
@@ -30,6 +33,7 @@ import {
 import useInputFileEle from "../hooks/useInputFileEle"
 import randomUUID from "@/utils/randomUUID"
 import algosTableData from "@/constants/algosTableData"
+import algorithmMap, { distanceRates } from "@/pages/home/algorithms"
 import JSZip from "jszip"
 
 import type { DragEvent } from "react"
@@ -50,8 +54,9 @@ function InteractiveActions() {
 
     const { angle, distance } = useSelector((state: RootState) => state.measure)
     const { cachePoints, cacheTableData } = useSelector((state: RootState) => state.cache)
-    const { tableData } = useSelector((state: RootState) => state.tableData)
+    const { tableData, rulerScaling } = useSelector((state: RootState) => state.tableData)
     const { pointList } = useSelector((state: RootState) => state.dataPoint)
+    const { algorithmWay } = useSelector((state: RootState) => state.algorithm)
 
     const dispatch = useDispatch()
 
@@ -144,6 +149,88 @@ function InteractiveActions() {
         }
     }
 
+    function calcAllAlgorithms(pointList: IPointItem[]) {
+        let allAlgorithms = POINTS_CONSTANTS
+        for (const algorithmMapKey in algorithmMap) {
+            allAlgorithms = { ...allAlgorithms, ...algorithmMap[algorithmMapKey].algorithm }
+        }
+        const idxsMap = new Map
+
+        for (const algoKey in allAlgorithms) {
+            const item = allAlgorithms[algoKey]
+            const idxs = []
+            for (const iName of item) {
+
+                const target = pointList.find(p => p.name === iName)
+
+                if (!target) continue
+                const { name, gps: [x, y] } = target
+                if (iName === name) {
+                    idxs.push({ x, y })
+                }
+            }
+            idxsMap.set(algoKey, idxs)
+        }
+
+        type TCalculateValue = { [p: string]: number | string }
+        const cache: { [key: keyof typeof algosTableData]: TCalculateValue } = {}
+
+        let algorithm = algorithmMap[algorithmWay.key].algorithm
+        let instance = algorithmMap[algorithmWay.key]
+        let pointsMethods = getAllPointMethodMap(algorithm, instance)
+
+        for (const algoKey in algosTableData) {
+            algorithm = algorithmMap[algoKey].algorithm
+            instance = algorithmMap[algoKey]
+            pointsMethods = getAllPointMethodMap(algorithm, instance)
+
+            const element = algosTableData[algoKey]
+            const calculatedValue: TCalculateValue = {}
+            for (const ele of element) {
+                const key = ele.name
+                const table = idxsMap.get(key)
+                if (!table) {
+                    // console.log("table: Not Found", key, table, algoKey)
+                    continue
+                }
+                const value = pointsMethods[key]
+                if (!value) {
+                    // console.log("value: Not Found", pointsMethods, key, value, algoKey)
+                    continue
+                }
+                const xyPoints = [...table]
+                if (key.includes("&mm")) {
+                    const distance = instance.handleDistance(xyPoints, value)!
+                    calculatedValue[key] = +Math.round(distance * (rulerScaling || 1) * 100) / 100
+                    if (rulerScaling === 0) {
+                        calculatedValue[key] = "-"
+                    }
+                } else if (key.includes("&deg")) {
+                    const angle = instance.handleAngle(xyPoints, value)!
+                    calculatedValue[key] = !!angle
+                        ? +(Math.round(angle * 100) / 100).toFixed(2)
+                        : (+angle).toFixed(2)
+                } else if (key.includes("&rate")) {
+                    const rate = instance.handleRate(xyPoints, value)!
+                    calculatedValue[key] = +(Math.round(rate * 100) / 100).toFixed(2)
+                    if (rulerScaling === 0 && distanceRates.includes(key)) {
+                        calculatedValue[key] = "-"
+                    }
+                }
+            }
+            cache[algoKey] = calculatedValue
+        }
+
+        const ANBs = [cache.Steiner, cache.Tweed, cache.PerkingUniversity, cache.SH9Hospital, cache.WestChina]
+
+        for (const anb of ANBs) {
+            anb["ANB&deg"] = +(+anb["SNA&deg"] - +anb["SNB&deg"]).toFixed(2)
+        }
+        // console.log(cache)
+
+        dispatch(setAlgorithmsCache(cache))
+    }
+
     function fetchFileData(file: File) {
         const fileData = new FormData()
         fileData.append("file", file)
@@ -156,7 +243,6 @@ function InteractiveActions() {
         getTableData(fileData).then(({ code, data, msg }) => {
             if (code !== 0) return messageApi.error(msg)
             const { point: points, "measure-items": measureData, "ruler-scaling": rulerScaling } = data
-
             const keyFlag = {
                 "-1": "down",
                 "0": "normal",
@@ -168,6 +254,7 @@ function InteractiveActions() {
                     tips: { [keyFlag[item.flag]]: item.result_desc },
                 }
             })
+
             dispatch(changePointList(points))
             dispatch(setTableData(dataList))
             dispatch(setRulerScaling(rulerScaling))
@@ -176,6 +263,7 @@ function InteractiveActions() {
             const timer = setTimeout(() => {
                 dispatch(setCacheTableData(dataList))
                 dispatch(setCachePoints(points))
+                calcAllAlgorithms(points)
                 setRate(0)
                 clearTimeout(timer)
             }, 500)

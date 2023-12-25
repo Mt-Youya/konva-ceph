@@ -1,4 +1,3 @@
-import { memo, forwardRef } from "react"
 import { Circle } from "react-konva"
 import Konva from "konva"
 

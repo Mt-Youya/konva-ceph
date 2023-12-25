@@ -101,7 +101,7 @@ const MeasureAngle = ({ layerWidth = 1200, layerHeight = 1100, setLayerDraggable
                 {angleGroup.map(([p1, p2, p3], idx) => (
                     <SingleAngle
                         key={p1.x + p1.y + (p2 ? p2.x * p2.y : random()) + idx + (p3 ? p3?.x / (p3?.y || 1) : random())}
-                        points={[p1, p2, p3]} movePoint={move}
+                        points={[p1, p2, p3]} movePoint={move} scale={scale}
                         closeAngle={() => closeAngle(idx)}
                     />
                 ))}

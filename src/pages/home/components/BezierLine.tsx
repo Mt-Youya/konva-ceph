@@ -7,14 +7,11 @@ import { DownOutlined } from "@ant-design/icons"
 import { changePointList } from "@/stores/home/useDataPoints"
 import { setTableData, setUnitLength } from "@/stores/home/getTableData"
 import { setSelectPointKey } from "@/stores/home/userInfo"
-import { setAlgorithmsCache } from "@/stores/cache/algorithms"
 import { getAllPointMethodMap, getPurePoints, getRelativePointsGroup } from "../data"
-import { IPointObj, POINTS_CONSTANTS } from "@/pages/home/constants/common"
 import styled from "styled-components"
 import Konva from "konva"
 import algorithmMap, { distanceRates } from "../algorithms"
 import SingleCircle from "@/components/SingleCircle"
-import algosTableData from "@/constants/algosTableData"
 
 import type { IMap, TTargetMap } from "@/pages/home/data"
 import type { RootState } from "@/stores"
@@ -41,7 +38,7 @@ const items = [
     { key: 20, label: "20mm" },
 ]
 
-const BezierLine = (measurePoints: IPointObj) => {
+const BezierLine = () => {
     const { named, major } = useSelector((state: RootState) => state.showPoint)
     const { pointList } = useSelector((state: RootState) => state.dataPoint)
     const { tableData, rulerScaling } = useSelector((state: RootState) => state.tableData)
@@ -175,91 +172,8 @@ const BezierLine = (measurePoints: IPointObj) => {
         }
     }
 
-    function calcAllAlgorithms() {
-        let allAlgorithms = POINTS_CONSTANTS
-        for (const algorithmMapKey in algorithmMap) {
-            allAlgorithms = { ...allAlgorithms, ...algorithmMap[algorithmMapKey].algorithm }
-        }
-
-        const idxsMap = new Map
-
-        for (const algoKey in allAlgorithms) {
-            const item = allAlgorithms[algoKey]
-            const idxs = []
-
-            for (const iName of item) {
-                const target = pointList.find(p => p.name === iName)
-                if (!target) continue
-                const { name, gps: [x, y] } = target
-                if (iName === name) {
-                    idxs.push({ x, y })
-                }
-            }
-            idxsMap.set(algoKey, idxs)
-        }
-
-        // console.log(idxsMap)
-
-        const cache: { [key: keyof typeof algosTableData]: TCalculateValue } = {}
-
-        for (const algoKey in algosTableData) {
-            algorithm = algorithmMap[algoKey].algorithm
-            instance = algorithmMap[algoKey]
-            pointsMethods = getAllPointMethodMap(algorithm, instance)
-
-            const element = algosTableData[algoKey]
-            const calculatedValue: TCalculateValue = {}
-            for (const ele of element) {
-                const key = ele.name
-                const table = idxsMap.get(key)
-                if (!table) {
-                    // console.log("table: Not Found", key, table, algoKey)
-                    continue
-                }
-                const value = pointsMethods[key]
-                if (!value) {
-                    // console.log("value: Not Found", pointsMethods, key, value, algoKey)
-                    continue
-                }
-                const xyPoints = [...table]
-                if (key.includes("&mm")) {
-                    const distance = instance.handleDistance(xyPoints, value)!
-                    calculatedValue[key] = +Math.round(distance * (rulerScaling || 1) * 100) / 100
-                    if (rulerScaling === 0) {
-                        calculatedValue[key] = "-"
-                    }
-                } else if (key.includes("&deg")) {
-                    const angle = instance.handleAngle(xyPoints, value)!
-                    calculatedValue[key] = !!angle
-                        ? +(Math.round(angle * 100) / 100).toFixed(2)
-                        : (+angle).toFixed(2)
-                } else if (key.includes("&rate")) {
-                    const rate = instance.handleRate(xyPoints, value)!
-                    calculatedValue[key] = +(Math.round(rate * 100) / 100).toFixed(2)
-                    if (rulerScaling === 0 && distanceRates.includes(key)) {
-                        calculatedValue[key] = "-"
-                    }
-                }
-            }
-            cache[algoKey] = calculatedValue
-        }
-
-        const ANBs = [cache.Steiner, cache.Tweed, cache.PerkingUniversity, cache.SH9Hospital, cache.WestChina]
-
-        for (const anb of ANBs) {
-            anb["ANB&deg"] = +(+anb["SNA&deg"] - +anb["SNB&deg"]).toFixed(2)
-        }
-        // console.log(cache)
-
-        dispatch(setAlgorithmsCache(cache))
-        algorithm = algorithmMap[algorithmWay.key].algorithm
-        instance = algorithmMap[algorithmWay.key]
-        pointsMethods = getAllPointMethodMap(algorithm, instance)
-    }
-
     useEffect(() => {
         if (pointList?.length > 0) {
-            calcAllAlgorithms()
             const targetGroup = pointList.map(({ name }) => name)
             const targetPoints = getRelativePointsGroup(targetGroup, algorithm)
             setTargetPointsGroup(targetPoints)
@@ -388,7 +302,7 @@ const BezierLine = (measurePoints: IPointObj) => {
             <Group ref={pointListRef}>
                 {pointList?.map(({ name, gps: [x, y] }, index) => {
                     return (
-                        <Fragment key={"point_" + x + y}>
+                        <Fragment key={"point_" + index}>
                             {major && (
                                 <SingleCircle
                                     fill="#fff" name={name} x={x} y={y} stroke={null} radius={4 / scale}

@@ -1,8 +1,8 @@
 import { fileURLToPath, URL } from "node:url"
 import { defineConfig } from "vite"
-import { extname } from "path"
+import { extname, basename } from "path"
 import { cdns } from "./plugins/cdns"
-// import { cdn as CDNImport } from "vite-plugin-cdn2"
+import { cdn as CDNImport } from "vite-plugin-cdn2"
 import react from "@vitejs/plugin-react"
 import Compression from "vite-plugin-compression"
 import Inspect from "vite-plugin-inspect"
@@ -25,6 +25,12 @@ export default defineConfig({
             // CDNImport({
             //     modules: externals,
             //     url: "https://cdnjs.cloudflare.com/ajax/libs/",
+            //     apply: "build",
+            //     resolve(baseURL, { name, version, relativeModule }) {
+            //         const url = new URL(`${name}/${version}/${basename(relativeModule)}`, baseURL).href
+            //         console.log("resolveURL",url)
+            //         return url
+            //     },
             // }),
         ],
         server: {

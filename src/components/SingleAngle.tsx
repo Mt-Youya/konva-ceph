@@ -13,10 +13,11 @@ import type { IPoint, TKDragEvent } from "@/types"
 interface IProps {
     points: IPoint[]
     movePoint: IPoint
+    scale: number
     closeAngle: () => void
 }
 
-function SingleAngle({ points, movePoint: { x: Mx, y: My }, closeAngle }: IProps) {
+function SingleAngle({ points, movePoint: { x: Mx, y: My }, closeAngle, scale = 1 }: IProps) {
     const [p1, setP1] = useState(points[0])
     const [p2, setP2] = useState(points[1])
     const [p3, setP3] = useState(points[2])
@@ -67,20 +68,23 @@ function SingleAngle({ points, movePoint: { x: Mx, y: My }, closeAngle }: IProps
         <Group draggable onDragMove={() => setP3(prev => ({ ...prev }))}>
             <SingleCircle
                 stroke="#FFE400"
-                ref={circle1Ref} point={p1}
+                ref={circle1Ref} point={p1} radius={5 / scale} strokeWidth={2 / scale}
                 onDragMove={(e: TKDragEvent) => handleCircleMove(e, FIRST)}
             />
-            <Line points={p2 ? [p1.x, p1.y, p2.x, p2.y] : [p1.x, p1.y, Mx, My]} stroke="#ffe40080" />
+            <Line
+                stroke="#ffe40080"
+                points={p2 ? [p1.x, p1.y, p2.x, p2.y] : [p1.x, p1.y, Mx, My]} strokeWidth={5 / scale}
+            />
             {p2 && (
                 <>
                     <SingleCircle
                         stroke="#FFE400"
-                        ref={circle2Ref} point={p2}
+                        ref={circle2Ref} point={p2} radius={5 / scale} strokeWidth={2 / scale}
                         onDragMove={(e: TKDragEvent) => handleCircleMove(e, SECOND)}
                     />
                     <Line
                         stroke="#ffe40080"
-                        points={p3 ? [p2.x, p2.y, p3.x, p3.y] : [p2.x, p2.y, Mx, My]}
+                        strokeWidth={5 / scale} points={p3 ? [p2.x, p2.y, p3.x, p3.y] : [p2.x, p2.y, Mx, My]}
                     />
                 </>
             )}
@@ -88,7 +92,7 @@ function SingleAngle({ points, movePoint: { x: Mx, y: My }, closeAngle }: IProps
                 <>
                     <SingleCircle
                         stroke="#FFE400"
-                        ref={circle3Ref} point={p3}
+                        ref={circle3Ref} point={p3} radius={5 / scale} strokeWidth={2 / scale}
                         onDragMove={(e: TKDragEvent) => handleCircleMove(e, END)}
                     />
                     <Html divProps={{ style, id: labelId }}>

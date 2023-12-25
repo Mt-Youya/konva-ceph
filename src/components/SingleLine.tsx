@@ -12,10 +12,13 @@ import type { RootState } from "@/stores"
 interface IProps {
     points: [IPoint, IPoint]
     movePoint: IPoint
+    scale: number
     closeDistance: () => void
 }
 
-function SingleLine({ points = [{ x: 0, y: 0 }, { x: 0, y: 0 }], movePoint: { x: Mx, y: My }, closeDistance }: IProps) {
+const initialPoints: [IPoint, IPoint] = [{ x: 0, y: 0 }, { x: 0, y: 0 }]
+
+function SingleLine({ points = initialPoints, movePoint: { x: Mx, y: My }, closeDistance, scale = 1 }: IProps) {
     const [p1, setP1] = useState(points[0])
     const [p2, setP2] = useState(points[1])
     const { rulerScaling, unitLength } = useSelector((state: RootState) => state.tableData)
@@ -61,19 +64,20 @@ function SingleLine({ points = [{ x: 0, y: 0 }, { x: 0, y: 0 }], movePoint: { x:
 
     const style = useCircleStyle()!
 
-    const scale = circle1Ref.current?.getStage()?.scaleX() ?? 1
-
     return (
         <Group draggable onDragMove={() => setP2(prev => ({ ...prev }))}>
             <Line
-                stroke="#83ECCB" strokeWidth={3 / scale}
-                points={p2 ? [p1.x, p1.y, p2.x, p2.y] : [p1.x, p1.y, Mx, My]}
+                stroke="#83ECCB"
+                points={p2 ? [p1.x, p1.y, p2.x, p2.y] : [p1.x, p1.y, Mx, My]} strokeWidth={5 / scale}
             />
-            <SingleCircle ref={circle1Ref} point={p1} onDragMove={(e: TKDragEvent) => handleCircleMove(e, START)} />
+            <SingleCircle
+                ref={circle1Ref} point={p1} radius={5 / scale} strokeWidth={2 / scale}
+                onDragMove={(e: TKDragEvent) => handleCircleMove(e, START)}
+            />
             {p2 && (
                 <>
                     <SingleCircle
-                        ref={circle2Ref} point={p2} pointRadius={5 / scale}
+                        ref={circle2Ref} point={p2} radius={5 / scale} strokeWidth={2 / scale}
                         onDragMove={(e: TKDragEvent) => handleCircleMove(e, END)}
                     />
                     {/*<Label  {...p2} >*/}
