@@ -47,7 +47,7 @@ export const POINTS_CONSTANTS: IPointObj = {
     "ANS-Me/N-Me&rate": ["ANS", "Me", ...Points_Names.NME, ...Points_Names.FH],
     "U1-L1&deg": [...Points_Names.U1Line, ...Points_Names.L1Line],
     "U1-SN&deg": ["U1A", "U1", ...Points_Names.NS],
-    "U1-NA&mm": ["U1", ...Points_Names.NA],
+    "U1-NA&mm": ["U1", ...Points_Names.AN],
     "U1-NA&deg": [...Points_Names.AN, ...Points_Names.U1Line],
     "L1-NB&mm": ["L1", ...Points_Names.BN],
     "L1-NB&deg": [...Points_Names.L1Line, ...Points_Names.NB],

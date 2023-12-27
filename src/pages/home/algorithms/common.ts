@@ -142,8 +142,8 @@ class CommonAlgo {
     }
 
     #handleNormal3(xyPoints: IPoint[]) {
-        const [dync1, f1, f2] = xyPoints
-        return f1.y < f2.y ? point2LineDistance(dync1, f1, f2) : point2LineDistance(dync1, f2, f1)
+        const [dync, f1, f2] = xyPoints
+        return point2LineDistance(dync, f1, f2)
     }
 
     #handleNormal4(xyPoints: IPoint[]) {

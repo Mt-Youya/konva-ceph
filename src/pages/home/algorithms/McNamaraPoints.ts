@@ -51,7 +51,8 @@ export class McNamaraAlgo extends CommonAlgo {
         const [p1, p2, f1, f2] = xyPoints
         const rP1 = getRotatedPointByAngle(p1, f1, f2)
         const rP2 = getRotatedPointByAngle(p2, f1, f2)
-        return rP2.x - rP1.x
+        // console.log("rP1", rP1, "rP2", rP2)
+        return rP1.x - rP2.x
     }
 }
 

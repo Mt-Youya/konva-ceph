@@ -59,10 +59,11 @@ class JarabakAlgo extends BurstoneAlgo {
     }
 
     #handleRateRingSummation(xyPoints: IPoint[]) {
-        const [p1, p2, p3, p4, p5] = xyPoints
-        const angle1 = measureAngle(p5, p4, p4, p3)
-        const angle2 = measureAngle(p4, p3, p3, p2)
-        const angle3 = measureAngle(p3, p2, p2, p1)
+        const [p1, p2, p3, p4, p5, p6] = xyPoints
+
+        const angle1 = measureAngle(p5, p6, p4, p3)
+        const angle2 = measureAngle(p3, p4, p3, p2)
+        const angle3 = measureAngle(p2, p3, p2, p1)
 
         return angle1 + angle2 + angle3
     }

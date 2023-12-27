@@ -7,25 +7,18 @@ import type { IPointItem } from "@/stores/home/useDataPoints"
 export interface CacheState {
     cacheTableData: ITableData[]
     cachePoints: IPointItem[]
-    cacheStage: { x: number, y: number, scale: number }
 }
-
 
 export function createTableState() {
     return {
-        rulerScaling: 1,
-        tableData: [],
+        cacheTableData: [] as ITableData[],
+        cachePoints: [] as IPointItem[],
     }
 }
 
-
 export const cacheSlice: Slice<CacheState> = createSlice({
     name: "cacheData",
-    initialState: {
-        cacheTableData: [] as ITableData[],
-        cachePoints: [] as IPointItem[],
-        cacheStage: { x: 0, y: 0, scale: 1 },
-    },
+    initialState: createTableState(),
     reducers: {
         setCacheTableData(state, action) {
             state.cacheTableData = action.payload
@@ -33,12 +26,9 @@ export const cacheSlice: Slice<CacheState> = createSlice({
         setCachePoints(state, action) {
             state.cachePoints = action.payload
         },
-        setCacheStage(state, action) {
-            state.cacheStage = action.payload
-        },
     },
 })
 
-export const { setCacheTableData, setCachePoints, setCacheStage } = cacheSlice.actions
+export const { setCacheTableData, setCachePoints } = cacheSlice.actions
 
 export default cacheSlice.reducer

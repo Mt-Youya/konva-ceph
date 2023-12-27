@@ -1,8 +1,6 @@
 import { fileURLToPath, URL } from "node:url"
 import { defineConfig } from "vite"
-import { extname, basename } from "path"
-import { cdns } from "./plugins/cdns"
-import { cdn as CDNImport } from "vite-plugin-cdn2"
+import { extname } from "path"
 import react from "@vitejs/plugin-react"
 import Compression from "vite-plugin-compression"
 import Inspect from "vite-plugin-inspect"
@@ -11,7 +9,6 @@ import AutoImport from "unplugin-auto-import/vite"
 const modelExts = [".gltf", ".glb", ".obj", "mtl", ".fbx", "stl", "vtp", "vtk", "ply", "xyz"]
 const cssExts = [".css", ".less", ".scss", "sass", ".stylus"]
 
-const externals = cdns.filter(cdn => cdn.type === "script").map(cdn => cdn.name)
 export default defineConfig({
         plugins: [
             react(),
@@ -22,16 +19,6 @@ export default defineConfig({
                 dts: true,
                 include: [/\.[tj]sx?$/],
             }),
-            // CDNImport({
-            //     modules: externals,
-            //     url: "https://cdnjs.cloudflare.com/ajax/libs/",
-            //     apply: "build",
-            //     resolve(baseURL, { name, version, relativeModule }) {
-            //         const url = new URL(`${name}/${version}/${basename(relativeModule)}`, baseURL).href
-            //         console.log("resolveURL",url)
-            //         return url
-            //     },
-            // }),
         ],
         server: {
             open: true,

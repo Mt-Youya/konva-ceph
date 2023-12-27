@@ -1,10 +1,7 @@
 import { McNamaraAlgo } from "./McNamaraPoints"
 import {
-    getOriginPointIncludeAngle,
-    getRotatedPoint,
-    getRotatedPointByAngle,
-    getRotatedPointByPoint,
-    measureAngle, point2PointDistance,
+    getRotatedPointByAngle, getRotatedPointByPoint, measureAngle,
+    point2LineDistance, point2LineIntersection, point2PointDistance,
 } from "@/features"
 import { Points_Names } from "@/pages/home/constants/common"
 
@@ -23,7 +20,7 @@ export class BurstoneAlgo extends McNamaraAlgo {
             "G-Pg'&mm": ["G", "Pogprime", "S", "N"],
             "Sn-Gn'-C&deg": ["Meprime", "C", "Pogprime", "Sn"],
             "G-Sn/Sn-Me'&rate": ["G", "Sn", "Sn", "Meprime", "S", "N", ...Points_Names.FH],
-            "Sn-Gn'/C-Gn'&rate": ["Me", "C", "Pogprime", "Sn", ...Points_Names.FH],
+            "Sn-Gn'/C-Gn'&rate": ["Sn", "Gnprime", "C", "Gnprime"],
             "Cm-Sn-Ls&deg": ["Sn", "Cm", "Sn", "ULprime"],
             "Ls-SnPg'&mm": ["ULprime", "Sn", "Pogprime"],
             "Li-SnPg'&mm": ["LLprime", "Sn", "Pogprime"],
@@ -45,33 +42,34 @@ export class BurstoneAlgo extends McNamaraAlgo {
             distanceLeftSideMinus: [...this.distanceAlgo.distanceLeftSideMinus, "Sn-H&mm", "Si-H&mm", "Li-H&mm"],
             normal2: [...this.distanceAlgo.normal2, "Pm-Pm'&mm", "Stms-Stmi&mm", "Stms-U1&mm"],
             normal3: [...this.distanceAlgo.normal3, "UL-SnPog'&mm", "LL-SnPog'&mm", "Ls-SnPg'&mm", "Li-SnPg'&mm", "Si-LiPg'&mm"],
-            hpNormal3VerticalLeftMinus: ["G-Sn&mm", "G-Pg'&mm"],
+            hpNormalVerticalLeftMinus: ["G-Sn&mm", "G-Pg'&mm"],
         }
 
         this.rateAlgo = {
             ...this.rateAlgo,
-            rateNormal: ["Sn-Stms/Stmi-Me'&rate"],
+            rateNormal: ["Sn-Stms/Stmi-Me'&rate", "Sn-Gn'/C-Gn'&rate"],
             baseNormalVertical: [...this.rateAlgo.baseNormalVertical, "G-Sn/Sn-Me'&rate"],
-            hpVertical: ["Sn-Gn'/C-Gn'&rate"],
         }
     }
 
-    handleAngle(points: IPoint[], key: string): number | undefined {
+    handleAngle(points: IPoint[], key: string) {
         const data = super.handleAngle(points, key)
         if (data) return data
         switch (key) {
             case "rightSidePoint2Point":
                 return this.#handleRightSidePoint2Point(points)
+            default:
+                return
         }
     }
 
-    handleDistance(points: IPoint[], key: string): any {
+    handleDistance(points: IPoint[], key: string) {
         const data = super.handleDistance(points, key)
         if (data) return data
 
         switch (key) {
-            case "hpNormal3VerticalLeftMinus":
-                return this.#handleRateNormal3VerticalLeftMinusByHp(points)
+            case "hpNormalVerticalLeftMinus":
+                return this.#handleRateNormal4VerticalLeftMinusByHp(points)
             case "Wits":
                 return this.#handleWits(points)
             default:
@@ -79,13 +77,13 @@ export class BurstoneAlgo extends McNamaraAlgo {
         }
     }
 
-    public handleRate(points: IPoint[], key: string): number | undefined {
+    handleRate(points: IPoint[], key: string) {
         const data = super.handleRate(points, key)
         if (data) return data
 
         switch (key) {
-            case "hpVertical":
-                return this.#handleRateVerticalByHp(points)
+            // case "hpVertical":
+            //     return this.#handleRateVerticalByHp(points)
             case "rateNormal":
                 return this.#handleRateNormal(points)
             default:
@@ -112,28 +110,26 @@ export class BurstoneAlgo extends McNamaraAlgo {
         return rSn.x - rG.x > 0 ? -angle : angle
     }
 
-    #handleRateVerticalByHp(xyPoints: IPoint[]) {
-        const [Pa, Pb, Pc, Pd, S, N] = xyPoints
-        const rS = getRotatedPointByPoint(S, N)
-        const includeAngle = getOriginPointIncludeAngle(rS, N)
+    // #handleRateVerticalByHp(xyPoints: IPoint[]) {
+    //     const [Pa, Pb, Pc, Pd, S, N] = xyPoints
+    //     const rS = getRotatedPointByPoint(S, N)
+    //     const includeAngle = getOriginPointIncludeAngle(rS, N)
+    //
+    //     const rPa = getRotatedPoint(Pa.x, Pa.y, includeAngle)
+    //     const rPb = getRotatedPoint(Pb.x, Pb.y, includeAngle)
+    //     const rPc = getRotatedPoint(Pc.x, Pc.y, includeAngle)
+    //     const rPd = getRotatedPoint(Pd.x, Pd.y, includeAngle)
+    //
+    //     return Math.abs(rPb.y - rPa.y) / Math.abs(rPd.y - rPc.y)
+    // }
 
-        const rPa = getRotatedPoint(Pa.x, Pa.y, includeAngle)
-        const rPb = getRotatedPoint(Pb.x, Pb.y, includeAngle)
-        const rPc = getRotatedPoint(Pc.x, Pc.y, includeAngle)
-        const rPd = getRotatedPoint(Pd.x, Pd.y, includeAngle)
-
-        return Math.abs(rPb.y - rPa.y) / Math.abs(rPd.y - rPc.y)
-    }
-
-    #handleRateNormal3VerticalLeftMinusByHp(xyPoints: IPoint[]) {
+    #handleRateNormal4VerticalLeftMinusByHp(xyPoints: IPoint[]) {
         const [Pa, Pb, S, N] = xyPoints
-        const rS = getRotatedPointByPoint(S, N)
-        const includeAngle = getOriginPointIncludeAngle(rS, N)
 
-        const rPa = getRotatedPoint(Pa.x, Pa.y, includeAngle)
-        const rPb = getRotatedPoint(Pb.x, Pb.y, includeAngle)
+        const rS = getRotatedPointByPoint(S, N, 7)
+        const Pi = point2LineIntersection(Pa, rS, N)
 
-        return Math.abs(rPb.x - rPa.x)
+        return point2LineDistance(Pb, Pi, Pa)
     }
 
     #handleRateNormal(xyPoints: IPoint[]) {

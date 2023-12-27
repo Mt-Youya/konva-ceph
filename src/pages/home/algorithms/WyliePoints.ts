@@ -33,7 +33,7 @@ export class WylieAlgo extends BurstoneAlgo {
         }
     }
 
-    public handleDistance(points: IPoint[], key: string): any | undefined {
+    handleDistance(points: IPoint[], key: string) {
         const data = super.handleDistance(points, key)
         if (data) return data
         switch (key) {
@@ -44,7 +44,7 @@ export class WylieAlgo extends BurstoneAlgo {
         }
     }
 
-    public handleRate(points: IPoint[], key: string): number | undefined {
+    handleRate(points: IPoint[], key: string) {
         const data = super.handleRate(points, key)
         if (data) return data
         switch (key) {
@@ -69,7 +69,7 @@ export class WylieAlgo extends BurstoneAlgo {
         const rANS = getRotatedPointByAngle(ANS, Po, Or)
         const rMe = getRotatedPointByAngle(Me, Po, Or)
 
-        return Math.abs(rANS.y - rN.y) / Math.abs(rMe.y - rN.y)
+        return Math.abs(rANS.y - rN.y) * 100 / Math.abs(rMe.y - rN.y)
     }
 }
 

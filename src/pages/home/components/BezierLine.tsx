@@ -299,6 +299,23 @@ const BezierLine = () => {
             {/*    </>*/}
             {/*)}*/}
             {/*#endregion*/}
+            {rulerPoint?.ruler1 && rulerPoint?.ruler2 && (
+                <>
+                    <Html>
+                        <ScRatioSpace style={ratioStyle}>
+                            <AntdDrop
+                                autoFocus
+                                menu={{ items, selectable: true, defaultSelectedKeys: ["10"], onClick: onMenuClick }}
+                            >
+                                <span>
+                                    {menuLabel} <DownOutlined />
+                                </span>
+                            </AntdDrop>
+                        </ScRatioSpace>
+                    </Html>
+                    <Line points={[...rulerPoint?.ruler1, ...rulerPoint?.ruler2]} stroke="#FF005C" />
+                </>
+            )}
             <Group ref={pointListRef}>
                 {pointList?.map(({ name, gps: [x, y] }, index) => {
                     return (
@@ -321,23 +338,6 @@ const BezierLine = () => {
                     )
                 })}
             </Group>
-            {rulerPoint?.ruler1 && rulerPoint?.ruler2 && (
-                <>
-                    <Html>
-                        <ScRatioSpace style={ratioStyle}>
-                            <AntdDrop
-                                autoFocus
-                                menu={{ items, selectable: true, defaultSelectedKeys: ["10"], onClick: onMenuClick }}
-                            >
-                                <span>
-                                    {menuLabel} <DownOutlined />
-                                </span>
-                            </AntdDrop>
-                        </ScRatioSpace>
-                    </Html>
-                    <Line points={[...rulerPoint?.ruler1, ...rulerPoint?.ruler2]} stroke="#FF005C" />
-                </>
-            )}
         </Group>
     )
 }

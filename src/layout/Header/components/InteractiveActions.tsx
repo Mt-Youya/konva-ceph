@@ -18,7 +18,7 @@ import { changeLateral, changeMajor, changeNamed, changeOutline, changeSupport }
 import { getMeasureState, getShowPointState, getTransformState } from "@/stores/utils/getState"
 import { setAlgorithmsCache } from "@/stores/cache/algorithms"
 import { createAlgorithmState, setAlgorithm } from "@/stores/aside"
-import { setReset } from "@/stores/header/reset.ts"
+import { setReset } from "@/stores/header/reset"
 import {
     AntdScDivider,
     AntdScMask,

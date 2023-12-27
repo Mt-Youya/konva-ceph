@@ -47,7 +47,6 @@ export function measureAngle(p1: IPoint, p2: IPoint, p3: IPoint, p4: IPoint) {
  * @return distance 距离
  */
 export function point2LineDistance(P: IPoint, Pa: IPoint, Pb: IPoint) {
-
     const { x: x0, y: y0 } = P
     const { x: x1, y: y1 } = Pa
     const { x: x2, y: y2 } = Pb
@@ -68,33 +67,13 @@ export function point2LineDistance(P: IPoint, Pa: IPoint, Pb: IPoint) {
  * @return Pi 垂足坐标
  */
 export function point2LineIntersection(P: IPoint, Pa: IPoint, Pb: IPoint) {
-
     const { x: x0, y: y0 } = P
-    const { x: x1, y: y1 } = Pa
+    const { A, B, C } = calculateLineEquation(Pa, Pb)
 
-    const k = getSlope(Pb, Pa)
-    // const b = y1 - k! * x1
-    if (k === 0) {
-        return {
-            x: x0,
-            y: 0,
-        }
-    }
+    const Dx = (B * B * x0 - A * B * y0 - A * C) / (A * A + B * B)
+    const Dy = (-A * B * x0 + A * A * y0 - B * C) / (A * A + B * B)
 
-    if (k === null) {
-        return {
-            x: x1,
-            y: y0,
-        }
-    }
-
-    const xi = (x0 + k * y0 - k * x1 + y1) / (k ** 2 + 1)
-    const yi = y1 + k * (xi - x1)
-
-    return {
-        x: xi,
-        y: yi,
-    }
+    return { x: Dx, y: Dy }
 }
 
 /**
@@ -104,7 +83,6 @@ export function point2LineIntersection(P: IPoint, Pa: IPoint, Pb: IPoint) {
  * @return distance 距离
  */
 export function point2PointDistance(Pa: IPoint, Pb: IPoint) {
-
     const { x: x1, y: y1 } = Pa
     const { x: x2, y: y2 } = Pb
 
@@ -236,7 +214,8 @@ export function calculateLineEquation(Pa: IPoint, Pb: IPoint) {
     const { x: x2, y: y2 } = Pb
     const A = y2 - y1
     const B = x1 - x2
-    const C = x1 * y2 - x2 * y1
+    // const C = x1 * y2 - x2 * y1
+    const C = x2 * y1 - x1 * y2
     return { A, B, C }
 }
 
@@ -267,18 +246,18 @@ export function getLine2LineIntersection(p1: IPoint, p2: IPoint, p3: IPoint, p4:
 
 // 根据Pa Pb 与水平线的夹角获取 P 经过旋转 夹角度数 后的坐标
 export function getRotatedPointByAngle(P: IPoint, Pa: IPoint, Pb: IPoint) {
-    const { x: x0, y: y0 } = P
     const includeAngle = getOriginPointIncludeAngle(Pa, Pb)
-    return getRotatedPoint(x0, y0, includeAngle)
+    return getRotatedPoint(P.x, P.y, includeAngle)
 }
 
 // 以 Po为原点旋转theta 角度后的坐标
-export function getRotatedPointByPoint(P: IPoint, Po: IPoint, theta = -7) {
-    const { x: x0, y: y0 } = P
-    const { x: x1, y: y1 } = Po
-    const x = x0 - x1
-    const y = y0 - y1
-    return getRotatedPoint(x, y, theta)
+export function getRotatedPointByPoint(P: IPoint, Po: IPoint, theta: number) {
+    const { x: x0, y: y0 } = Po
+    const { x: x1, y: y1 } = P
+    const x = x1 - x0
+    const y = y1 - y0
+    const { x: rx, y: ry } = getRotatedPoint(x, y, theta)
+    return { x: rx + x0, y: ry + y0 }
 }
 
 // 以 Po为原点旋转theta 角度后的直线一般式方程

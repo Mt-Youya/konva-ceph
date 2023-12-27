@@ -1,13 +1,16 @@
 import { useDispatch, useSelector } from "react-redux"
 import { Stage, Layer, Group, Image } from "react-konva"
-import { setCacheStage } from "@/stores/cache"
+import { Button, notification, Space } from "antd"
+import { WarningOutlined } from "@ant-design/icons"
 import { setReset } from "@/stores/header/reset"
+import { changePointList } from "@/stores/home/useDataPoints"
 import styled from "styled-components"
 import Konva from "konva"
 import useImage from "use-image"
 import MeasureDistance from "./MeasureDistance"
 import MeasureAngle from "./MeasureAngle"
 import BezierLine from "./BezierLine"
+import randomUUID from "@/utils/randomUUID"
 
 import type { KonvaEventObject } from "konva/lib/Node"
 import type { RootState } from "@/stores"
@@ -16,13 +19,14 @@ const ScStage = styled(Stage)`
     width: 100%;
     height: calc(100% - 100px);
     overflow: hidden;
-    @media (max-width: 1980px) {
+    @media (max-width: 1300px) {
         height: calc(100% - 180px);
     }
 `
 
 const StageContainer = () => {
     const { imgUrl } = useSelector((state: RootState) => state.measure)
+    const { pointList } = useSelector((state: RootState) => state.dataPoint)
     const { lateral } = useSelector((state: RootState) => state.showPoint)
     const { rotate, scaleX, contrast, brightness } = useSelector((state: RootState) => state.transform)
     const { isReset } = useSelector((state: RootState) => state.reset)
@@ -35,10 +39,12 @@ const StageContainer = () => {
     const [stageY, setStageY] = useState(0)
     const [_, setTemp] = useState(0)
     const [image] = useImage(imgUrl, "anonymous")
+    const [api, contextHolder] = notification.useNotification()
 
     const stageRef = useRef<Konva.Stage | null>(null)
     const layerRef = useRef<Konva.Layer | null>(null)
     const imageRef = useRef<Konva.Image | null>(null)
+    const imageGroupRef = useRef<Konva.Group | null>(null)
 
     const dispatch = useDispatch()
 
@@ -74,6 +80,73 @@ const StageContainer = () => {
         setStageY(newStageY)
     }
 
+    const notifyKey = randomUUID()
+
+    function openNotification() {
+        function close() {
+            imageRef.current?.cache()
+            api.destroy(notifyKey)
+        }
+
+        api.open({
+            message: "图片过大提示",
+            description: "检测到图片大小超出容器大小! 是否自适应画布容器大小?",
+            duration: null,
+            icon: <WarningOutlined style={{ color: "red" }} />,
+            btn: <Space>
+                <Button type="link" size="small" onClick={close}>不设置自适应 </Button>
+                <Button type="primary" size="small" onClick={setAdaption}>
+                    设置自适应
+                </Button>
+            </Space>,
+            key: notifyKey,
+            style: { zIndex: 200 },
+        })
+    }
+
+    function setAdaption() {
+        const img = imageRef.current!
+        const imgWidth = img.width()!
+        const imgHeight = img.height()!
+        const imgRatio = imgWidth / imgHeight
+
+        if (imgWidth >= width) {
+            img.width(width)
+            img.height(img.width() / imgRatio)
+            const ratio = imgWidth / width
+            const list = pointList.map(item => {
+                const { gps: [x, y] } = item
+                return {
+                    ...item,
+                    gps: [x / ratio, y / ratio],
+                }
+            })
+            dispatch(changePointList(list))
+        } else if (imgHeight > height) {
+            img.height(height)
+            img.width(img.height() * imgRatio)
+            const ratio = imgHeight / height
+            const list = pointList.map(item => {
+                const { gps: [x, y] } = item
+                return {
+                    ...item,
+                    gps: [x / ratio, y / ratio],
+                }
+            })
+            dispatch(changePointList(list))
+        }
+
+        const newImgWidth = img.width()
+        const newImgHeight = img.height()
+        const resWidth = imgWidth - newImgWidth
+        const resHeight = imgHeight - newImgHeight
+        imageGroupRef.current?.x(width / 2 + resWidth / 2)
+        imageGroupRef.current?.y(height / 2 + resHeight / 2)
+
+        imageRef.current?.cache()
+        api.destroy(notifyKey)
+    }
+
     useEffect(() => {
         const stage = stageRef.current!
         const stageWrapper = stage?.attrs.container
@@ -92,23 +165,24 @@ const StageContainer = () => {
 
     useEffect(() => {
         if (image) {
-            imageRef.current?.cache()
-            const imgWidth = image.width
-            const imgHeight = image.height
+            const img = imageRef.current!
+            const imgWidth = img.width()
+            const imgHeight = img.height()
+
             const scaleW = imgWidth / width
             const scaleH = imgHeight / height
 
-            if (scaleW > 1 || scaleH > 1) {
-                const newScale = scaleW > scaleH ? 1 / scaleW : 1 / scaleH
-                setStageX(width * (1 - newScale) / 2)
-                setStageY(height * (1 - newScale) / 2)
-                setStageScale(newScale)
-                setCacheStage({ x: width * (1 - newScale) / 2, y: height * (1 - newScale) / 2, scale: newScale })
+            const overWidth = scaleW > 1 ? scaleH !== 1 : false
+            const overHeight = scaleH > 1 ? scaleW !== 1 : false
+            if (overWidth || overHeight) {
+                if (pointList.length) {
+                    openNotification()
+                }
             } else {
-                setStageScale(1)
+                imageRef.current?.cache()
             }
         }
-    }, [image])
+    }, [image, pointList])
 
     function reset() {
         setStageScale(1)
@@ -134,26 +208,28 @@ const StageContainer = () => {
     }
 
     return (
-        <ScStage ref={stageRef} scaleX={stageScale} scaleY={stageScale} x={stageX} y={stageY} onWheel={handleWheel}>
-            <Layer draggable={layerDraggable} ref={layerRef} onDragMove={handleDragMove}>
-                <Group
-                    x={width / 2} y={height / 2} scaleX={scaleX} rotation={rotate}
-                    offset={{ x: image?.width! / 2, y: image?.height! / 2 }}
-                >
-                    {lateral && (
+        <>
+            {contextHolder}
+            <ScStage ref={stageRef} scaleX={stageScale} scaleY={stageScale} x={stageX} y={stageY} onWheel={handleWheel}>
+                <Layer draggable={layerDraggable} ref={layerRef} onDragMove={handleDragMove}>
+                    <Group
+                        x={width / 2} y={height / 2} scaleX={scaleX} rotation={rotate} ref={imageGroupRef}
+                        offset={{ x: image?.width! / 2, y: image?.height! / 2 }}
+                    >
                         <Image
-                            ref={imageRef} image={image} contrast={contrast} brightness={brightness}
+                            ref={imageRef} image={image}
+                            contrast={contrast} brightness={brightness} opacity={lateral ? 1 : 0}
                             filters={[Konva.Filters.Brighten, Konva.Filters.Contrast]}
                         />
-                    )}
-                    <BezierLine />
-                </Group>
-                <Group>
-                    <MeasureDistance {...measureProps} />
-                    <MeasureAngle {...measureProps} />
-                </Group>
-            </Layer>
-        </ScStage>
+                        <BezierLine />
+                    </Group>
+                    <Group>
+                        <MeasureDistance {...measureProps} />
+                        <MeasureAngle {...measureProps} />
+                    </Group>
+                </Layer>
+            </ScStage>
+        </>
     )
 }
 

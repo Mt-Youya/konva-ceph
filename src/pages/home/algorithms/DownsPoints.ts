@@ -37,9 +37,9 @@ class DownsAlgo extends PerkingUniversityAlgo {
 
     #handleNormalCenter(xyPoints: IPoint[]) {
         const [p1, p2, p3, p4, p5, p6] = xyPoints
-        const c1 = { x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2 }
-        const c2 = { x: (p3.x + p4.x) / 2, y: (p3.y + p4.y) / 2 }
-        return measureAngle(c1, c2, p5, p6)
+        const c1 = { x: (p3.x + p4.x) / 2, y: (p3.y + p4.y) / 2 }
+        const c2 = { x: (p5.x + p6.x) / 2, y: (p5.y + p6.y) / 2 }
+        return measureAngle(c1, c2, p1, p2)
     }
 }
 

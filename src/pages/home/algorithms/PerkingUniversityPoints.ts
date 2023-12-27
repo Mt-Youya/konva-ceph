@@ -13,8 +13,9 @@ export class PerkingUniversityAlgo extends CommonAlgo {
             "FH-NPo&deg": [...Points_Names.HF, ...Points_Names.NPo],
             "NA-APo&deg": [...Points_Names.AN, ...Points_Names.Apo],
             "Po-NB&mm": ["Pog", ...Points_Names.BN],
-            "L1-MP&deg": [...Points_Names.L1Line, "Go", "Me"],
+            "L1-MP&deg": [...Points_Names.L1Line, "Go1", "Me"],
         }
+
         this.angleAlgo = {
             ...this.angleAlgo,
             angleLeftSideMinus: ["NA-APo&deg"],
