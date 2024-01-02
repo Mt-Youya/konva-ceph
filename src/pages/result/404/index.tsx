@@ -1,6 +1,3 @@
-import { Link } from "react-router-dom"
-import styled from "styled-components"
-
 const ScNotFound = styled.div`
     height: 100%;
     display: flex;
@@ -23,8 +20,8 @@ const ScLink = styled(Link)`
         background-size: 100% 2px;
         background-position: left bottom;
     }
-
 `
+
 const ScLinkContainer = styled.div`
     border-radius: 8px;
     padding: 8px;

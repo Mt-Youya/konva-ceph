@@ -1,7 +1,5 @@
-import { useSelector } from "react-redux"
 import { Group, Line } from "react-konva"
 import { Html } from "react-konva-utils"
-import { CloseOutlined } from "@ant-design/icons"
 import { createLabelStyle } from "@/features"
 import Konva from "konva"
 import SingleCircle from "./SingleCircle"

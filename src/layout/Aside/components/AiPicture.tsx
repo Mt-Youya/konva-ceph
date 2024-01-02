@@ -1,7 +1,5 @@
-import { useSelector } from "react-redux"
 import { Stage, Layer, Image, Circle, Text } from "react-konva"
 import constants from "../data/constMap.json"
-import styled from "styled-components"
 import Konva from "konva"
 import useImage from "use-image"
 

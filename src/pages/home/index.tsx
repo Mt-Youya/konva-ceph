@@ -1,5 +1,3 @@
-import { Provider } from "react-redux"
-import styled from "styled-components"
 import store from "@/stores"
 import Header from "@/layout/Header"
 import UserInfo from "@/layout/UserInfo"

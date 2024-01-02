@@ -1,10 +1,7 @@
-import { useDispatch, useSelector } from "react-redux"
-import { Slider } from "antd"
 import { mirrorIcon, rotateIcon, brightnessIcon, contrastRatioIcon } from "@/assets/headers"
 import { ScHeaderAction, ScHeaderWrapper } from "./styled"
 import { actionKeys } from "../data/data"
-import { changeBrightness, changeContrast, changeRotate, changeScaleX } from "@/stores/home/useTransform.ts"
-import styled from "styled-components"
+import { changeBrightness, changeContrast, changeRotate, changeScaleX } from "@/stores/home/useTransform"
 
 import type { RootState } from "@/stores"
 import type { ActionType } from "../data/data"

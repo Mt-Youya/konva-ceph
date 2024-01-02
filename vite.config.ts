@@ -15,7 +15,13 @@ export default defineConfig({
             Inspect({ build: true, outputDir: ".vite-inspect" }),
             Compression({ threshold: 1024 * 1024 * 2 }), // gzip : over 2Mb compression
             AutoImport({
-                imports: ["react", "react-router", "react-router-dom"],
+                imports: [
+                    "react", "react-router", "react-router-dom",
+                    { "react-redux": ["useDispatch", "useSelector", "Provider"] },
+                    { "antd": ["Button", "notification", "Space", "Dropdown", "Tooltip", "message", "Popconfirm", "Progress", "Slider", "Avatar"] },
+                    { "styled-components": ["styled"] },
+                    { "@ant-design/icons": ["WarningOutlined", "DownOutlined", "ArrowDownOutlined", "ArrowUpOutlined", "UserOutlined", "CloseOutlined"] },
+                ],
                 dts: true,
                 include: [/\.[tj]sx?$/],
             }),

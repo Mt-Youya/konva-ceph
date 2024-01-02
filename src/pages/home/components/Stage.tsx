@@ -1,10 +1,5 @@
-import { useDispatch, useSelector } from "react-redux"
 import { Stage, Layer, Group, Image } from "react-konva"
-import { Button, notification, Space } from "antd"
-import { WarningOutlined } from "@ant-design/icons"
 import { setReset } from "@/stores/header/reset"
-import { changePointList } from "@/stores/home/useDataPoints"
-import styled from "styled-components"
 import Konva from "konva"
 import useImage from "use-image"
 import MeasureDistance from "./MeasureDistance"
@@ -26,7 +21,7 @@ const ScStage = styled(Stage)`
 
 const StageContainer = () => {
     const { imgUrl } = useSelector((state: RootState) => state.measure)
-    const { pointList } = useSelector((state: RootState) => state.dataPoint)
+    // const { pointList } = useSelector((state: RootState) => state.dataPoint)
     const { lateral } = useSelector((state: RootState) => state.showPoint)
     const { rotate, scaleX, contrast, brightness } = useSelector((state: RootState) => state.transform)
     const { isReset } = useSelector((state: RootState) => state.reset)
@@ -40,7 +35,9 @@ const StageContainer = () => {
     const [_, setTemp] = useState(0)
     const [image] = useImage(imgUrl, "anonymous")
     const [api, contextHolder] = notification.useNotification()
+    // const [scale, setScale] = useState({ MinScale: 1, MaxScale: 4 })
 
+    const ScaleRef = useRef({ MinScale: 1, MaxScale: 4 })
     const stageRef = useRef<Konva.Stage | null>(null)
     const layerRef = useRef<Konva.Layer | null>(null)
     const imageRef = useRef<Konva.Image | null>(null)
@@ -49,8 +46,8 @@ const StageContainer = () => {
     const dispatch = useDispatch()
 
     const ScaleBy = 1.03
-    const MaxScale = 4
-    const MinScale = 1
+    // let MaxScale = 4
+    // let MinScale = 1
 
     function handleWheel(e: KonvaEventObject<WheelEvent>) {
         if (e.evt.ctrlKey) return
@@ -64,6 +61,7 @@ const StageContainer = () => {
             x: pointer.x / oldScale - stage.x() / oldScale,
             y: pointer.y / oldScale - stage.y() / oldScale,
         }
+        const { MaxScale, MinScale } = ScaleRef.current
         const newScale =
                   direction > 0
                       ? oldScale > MaxScale
@@ -84,7 +82,11 @@ const StageContainer = () => {
 
     function openNotification() {
         function close() {
-            imageRef.current?.cache()
+            api.destroy(notifyKey)
+        }
+
+        function confirm() {
+            setAdaption()
             api.destroy(notifyKey)
         }
 
@@ -95,7 +97,7 @@ const StageContainer = () => {
             icon: <WarningOutlined style={{ color: "red" }} />,
             btn: <Space>
                 <Button type="link" size="small" onClick={close}>不设置自适应 </Button>
-                <Button type="primary" size="small" onClick={setAdaption}>
+                <Button type="primary" size="small" onClick={confirm}>
                     设置自适应
                 </Button>
             </Space>,
@@ -105,50 +107,52 @@ const StageContainer = () => {
     }
 
     function setAdaption() {
-        const img = imageRef.current!
-        const imgWidth = img.width()!
-        const imgHeight = img.height()!
-        const imgRatio = imgWidth / imgHeight
+        const imgWidth = image?.naturalWidth!
+        const imgHeight = image?.naturalHeight!
 
-        if (imgWidth >= width) {
-            img.width(width)
-            img.height(img.width() / imgRatio)
-            const ratio = imgWidth / width
-            const list = pointList.map(item => {
-                const { gps: [x, y] } = item
-                return {
-                    ...item,
-                    gps: [x / ratio, y / ratio],
-                }
-            })
-            dispatch(changePointList(list))
-        } else if (imgHeight > height) {
-            img.height(height)
-            img.width(img.height() * imgRatio)
-            const ratio = imgHeight / height
-            const list = pointList.map(item => {
-                const { gps: [x, y] } = item
-                return {
-                    ...item,
-                    gps: [x / ratio, y / ratio],
-                }
-            })
-            dispatch(changePointList(list))
+        const scaleW = imgWidth / width
+        const scaleH = imgHeight / height
+
+        const newScale = scaleW > scaleH ? 1 / scaleW : 1 / scaleH
+        const scalex = width * (1 - newScale) / 2
+        const scaley = height * (1 - newScale) / 2
+
+        ScaleRef.current = {
+            MinScale: newScale,
+            MaxScale: newScale * 4,
         }
 
-        const newImgWidth = img.width()
-        const newImgHeight = img.height()
-        const resWidth = imgWidth - newImgWidth
-        const resHeight = imgHeight - newImgHeight
-        imageGroupRef.current?.x(width / 2 + resWidth / 2)
-        imageGroupRef.current?.y(height / 2 + resHeight / 2)
+        setStageX(scalex)
+        setStageY(scaley)
+        setStageScale(newScale)
+    }
 
-        imageRef.current?.cache()
-        api.destroy(notifyKey)
+    function isImageOverContent() {
+        const imgWidth = image?.naturalWidth!
+        const imgHeight = image?.naturalHeight!
+        const imgRatio = imgWidth / imgHeight
+        if (imgHeight > height) {
+            return {
+                over: true,
+                ratio: imgRatio,
+                size: "height",
+            }
+        }
+        if (imgWidth >= width) {
+            return {
+                over: true,
+                ratio: imgRatio,
+                size: "width",
+            }
+        }
+        return {
+            over: false,
+            ratio: imgRatio,
+        }
     }
 
     useEffect(() => {
-        const stage = stageRef.current!
+        const stage = stageRef!.current!
         const stageWrapper = stage?.attrs.container
         setStageSize()
 
@@ -160,42 +164,41 @@ const StageContainer = () => {
         }
 
         window.addEventListener("resize", setStageSize)
-        return () => window.removeEventListener("resize", setStageSize)
+        return () => {
+            imageRef.current?.destroy()
+            window.removeEventListener("resize", setStageSize)
+        }
     }, [])
 
-    useEffect(() => {
-        if (image) {
-            const img = imageRef.current!
-            const imgWidth = img.width()
-            const imgHeight = img.height()
-
-            const scaleW = imgWidth / width
-            const scaleH = imgHeight / height
-
-            const overWidth = scaleW > 1 ? scaleH !== 1 : false
-            const overHeight = scaleH > 1 ? scaleW !== 1 : false
-            if (overWidth || overHeight) {
-                if (pointList.length) {
-                    openNotification()
-                }
-            } else {
-                imageRef.current?.cache()
-            }
-        }
-    }, [image, pointList])
-
     function reset() {
-        setStageScale(1)
         setStageX(0)
         setStageY(0)
+        setStageScale(1)
     }
+
+    useEffect(() => {
+        const img = imageRef.current
+        if (img) {
+            const { over } = isImageOverContent()
+            over && openNotification()
+        }
+        return () => {
+            img?.destroy()
+        }
+    }, [imageRef])
 
     useEffect(() => {
         if (isReset) {
             reset()
             dispatch(setReset(false))
+            const { over } = isImageOverContent()
+            over && setAdaption()
         }
     }, [isReset])
+
+    useEffect(() => {
+        handleDragMove()
+    }, [imgUrl])
 
     function handleDragMove() {
         setTemp(prevState => prevState + 1)

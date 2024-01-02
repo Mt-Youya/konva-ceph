@@ -1,4 +1,3 @@
-import { useDispatch, useSelector } from "react-redux"
 import { changeLateral, changeMajor, changeNamed, changeOutline, changeSupport } from "@/stores/home/useShowPoint"
 import {
     lateralActiveIcon, lateralIcon,

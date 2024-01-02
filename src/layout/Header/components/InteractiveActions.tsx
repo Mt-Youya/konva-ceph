@@ -1,23 +1,20 @@
-import { useDispatch, useSelector } from "react-redux"
-import { message, Popconfirm, Progress } from "antd"
 import { actionKeys } from "../data/data"
 import { angleIcon, distanceIcon, resetIcon } from "@/assets/headers"
 import { getTableData } from "@/apis/getList"
 import { dataURLtoBlob } from "@/utils/base64ToBlob"
 import { arrayToExcel } from "@/utils/array2Excel"
-import { imageToFileByCanvas } from "@/utils/image2File"
-import { POINTS_CONSTANTS } from "@/pages/home/constants/common"
 import { ImageFileTypes } from "@/types"
+import { POINTS_CONSTANTS } from "@/pages/home/constants/common"
 import { getAllPointMethodMap } from "@/pages/home/data"
+import { setCalcAlgorithmsMap } from "@/stores/cache/algorithms"
 import { changePointList } from "@/stores/home/useDataPoints"
 import { setRulerScaling, setTableData } from "@/stores/home/getTableData"
 import { setCachePoints, setCacheTableData } from "@/stores/cache"
 import { changeAngle, changeDistance, changeImgUrl } from "@/stores/home/useMeasure"
 import { changeBrightness, changeContrast, changeRotate, changeScaleX } from "@/stores/home/useTransform"
 import { changeLateral, changeMajor, changeNamed, changeOutline, changeSupport } from "@/stores/home/useShowPoint"
-import { getMeasureState, getShowPointState, getTransformState } from "@/stores/utils/getState"
-import { setAlgorithmsCache } from "@/stores/cache/algorithms"
-import { createAlgorithmState, setAlgorithm } from "@/stores/aside"
+import { getAlgorithmState, getMeasureState, getShowPointState, getTransformState } from "@/stores/utils/getState"
+import { setAlgorithm } from "@/stores/aside"
 import { setReset } from "@/stores/header/reset"
 import {
     AntdScDivider,
@@ -36,7 +33,6 @@ import algosTableData from "@/constants/algosTableData"
 import algorithmMap, { distanceRates } from "@/pages/home/algorithms"
 import JSZip from "jszip"
 
-import type { DragEvent } from "react"
 import type { ActionType } from "../data/data"
 import type { RootState } from "@/stores"
 import type { ImageExcAll } from "@/types"
@@ -51,12 +47,12 @@ function InteractiveActions() {
     const [imgType, setImgType] = useState("jpeg")
     const [markImgBlob, setMarkImgBlob] = useState("")
     const [messageApi] = message.useMessage()
-
     const { angle, distance } = useSelector((state: RootState) => state.measure)
     const { cachePoints, cacheTableData } = useSelector((state: RootState) => state.cache)
-    const { tableData, rulerScaling } = useSelector((state: RootState) => state.tableData)
+    const { tableData, unitLength } = useSelector((state: RootState) => state.tableData)
     const { pointList } = useSelector((state: RootState) => state.dataPoint)
     const { algorithmWay } = useSelector((state: RootState) => state.algorithm)
+    const { calcAlgorithmsMap } = useSelector((state: RootState) => state.algorithmsCache)
 
     const dispatch = useDispatch()
 
@@ -66,6 +62,7 @@ function InteractiveActions() {
         transform: getTransformState(),
         showPoint: getShowPointState(),
         measure: getMeasureState(),
+        algorithms: getAlgorithmState(),
     }
 
     type TInteractiveActionType = Extract<ActionType, "angle" | "distance" | "reset">
@@ -106,74 +103,64 @@ function InteractiveActions() {
         dispatch(changeScaleX(transform.scaleX))
         dispatch(changeBrightness(transform.brightness))
 
+        dispatch(setAlgorithm(storeState.algorithms.algorithmWay))
     }
 
     function handleAnalysisFetch() {
         inputRef.current?.click()
     }
 
-    async function handleDrop(e: DragEvent) {
-        const src = e.dataTransfer?.getData("text/plain")!
-        const image = new Image()
-        image.src = src
-        try {
-            const file = await imageToFileByCanvas(image, "image.jpg")
-            const imgUrl = URL.createObjectURL(file)
-            dispatch(changeImgUrl(imgUrl))
-            fetchFileData(file)
-        } catch (err: any) {
-            messageApi.error(err)
-        }
-    }
-
-    function handleUpload(e: Event) {
+    async function handleUpload(e: Event) {
         const target = e.target as HTMLInputElement
         if (!target) return
 
         const file = target.files![0]
         if (!file) return
-        getFileUrl(file)
 
         const type = file.type as ImageExcAll
         if (!ImageFileTypes.includes(type)) return
+
         setImgType(type.split("/")[1])
-        fetchFileData(file)
+        await getFileUrl(file)
+        await fetchFileData(file)
     }
 
     function getFileUrl(file: File) {
         const reader = new FileReader()
         reader.readAsDataURL(file)
-        reader.onload = () => {
-            setImgUrl(reader.result)
-            dispatch(changeImgUrl(reader.result))
-        }
+        return new Promise(resolve => {
+            reader.onload = () => {
+                setImgUrl(reader.result)
+                dispatch(changeImgUrl(reader.result))
+                resolve(true)
+            }
+        })
     }
 
-    function calcAllAlgorithms(pointList: IPointItem[]) {
+    function calcAllAlgorithms(pointList: IPointItem[], rulerScaling: number = 1) {
         let allAlgorithms = POINTS_CONSTANTS
         for (const algorithmMapKey in algorithmMap) {
             allAlgorithms = { ...allAlgorithms, ...algorithmMap[algorithmMapKey].algorithm }
         }
         const idxsMap = new Map
 
+        const pointsMap = new Map
+        for (const iPointItem of pointList) {
+            pointsMap.set(iPointItem.name, iPointItem.gps)
+        }
+
         for (const algoKey in allAlgorithms) {
             const item = allAlgorithms[algoKey]
             const idxs = []
             for (const iName of item) {
-
-                const target = pointList.find(p => p.name === iName)
-
-                if (!target) continue
-                const { name, gps: [x, y] } = target
-                if (iName === name) {
-                    idxs.push({ x, y })
-                }
+                const [x, y] = pointsMap.get(iName)
+                idxs.push({ x, y })
             }
             idxsMap.set(algoKey, idxs)
         }
 
         type TCalculateValue = { [p: string]: number | string }
-        const cache: { [key: keyof typeof algosTableData]: TCalculateValue } = {}
+        let cache: TCalculateValue = {}
 
         let algorithm = algorithmMap[algorithmWay.key].algorithm
         let instance = algorithmMap[algorithmWay.key]
@@ -201,15 +188,13 @@ function InteractiveActions() {
                 const xyPoints = [...table]
                 if (key.includes("&mm")) {
                     const distance = instance.handleDistance(xyPoints, value)!
-                    calculatedValue[key] = +Math.round(distance * (rulerScaling || 1) * 100) / 100
+                    calculatedValue[key] = +Math.round(distance * (rulerScaling || 1) * 100 * unitLength) / 100
                     if (rulerScaling === 0) {
                         calculatedValue[key] = "-"
                     }
                 } else if (key.includes("&deg")) {
                     const angle = instance.handleAngle(xyPoints, value)!
-                    calculatedValue[key] = !!angle
-                        ? +(Math.round(angle * 100) / 100).toFixed(2)
-                        : (+angle).toFixed(2)
+                    calculatedValue[key] = !!angle ? +(Math.round(angle * 100) / 100).toFixed(2) : (+angle).toFixed(2)
                 } else if (key.includes("&rate")) {
                     const rate = instance.handleRate(xyPoints, value)!
                     calculatedValue[key] = +(Math.round(rate * 100) / 100).toFixed(2)
@@ -218,20 +203,35 @@ function InteractiveActions() {
                     }
                 }
             }
-            cache[algoKey] = calculatedValue
+            cache = { ...cache, ...calculatedValue }
+        }
+        const cacheMap: any = {}
+        for (const cacheKey in cache) {
+            const value = cache[cacheKey]
+            if (cacheMap[cacheKey]) continue
+            cacheMap[cacheKey] = value
         }
 
-        const ANBs = [cache.Steiner, cache.Tweed, cache.PerkingUniversity, cache.SH9Hospital, cache.WestChina]
+        cacheMap["ANB&deg"] = +(+cacheMap["SNA&deg"] - +cacheMap["SNB&deg"]).toFixed(2)
 
-        for (const anb of ANBs) {
-            anb["ANB&deg"] = +(+anb["SNA&deg"] - +anb["SNB&deg"]).toFixed(2)
-        }
-        // console.log(cache)
-
-        dispatch(setAlgorithmsCache(cache))
+        dispatch(setCalcAlgorithmsMap(cacheMap))
     }
 
-    function fetchFileData(file: File) {
+    const delay = (function() {
+        const VITE_MODE = import.meta.env.VITE_MODE
+        switch (VITE_MODE) {
+            case "development":
+                return 40
+            case "qa":
+            case "qa2":
+            case "production":
+                return 80
+            default:
+                return 40
+        }
+    })()
+
+    async function fetchFileData(file: File) {
         const fileData = new FormData()
         fileData.append("file", file)
         dispatch(changeLateral(true))
@@ -239,8 +239,8 @@ function InteractiveActions() {
         setLoading(true)
         const intervalId = setInterval(() => {
             setRate(prev => prev < 99 ? prev + 1 : prev)
-        }, 40)
-        getTableData(fileData).then(({ code, data, msg }) => {
+        }, delay)
+        return getTableData(fileData).then(({ code, data, msg }) => {
             if (code !== 0) return messageApi.error(msg)
             const { point: points, "measure-items": measureData, "ruler-scaling": rulerScaling } = data
             const keyFlag = {
@@ -258,12 +258,12 @@ function InteractiveActions() {
             dispatch(changePointList(points))
             dispatch(setTableData(dataList))
             dispatch(setRulerScaling(rulerScaling))
-            dispatch(setAlgorithm(createAlgorithmState().algorithmWay))
+            dispatch(setAlgorithm(storeState.algorithms.algorithmWay))
 
             const timer = setTimeout(() => {
                 dispatch(setCacheTableData(dataList))
                 dispatch(setCachePoints(points))
-                calcAllAlgorithms(points)
+                calcAllAlgorithms(points, rulerScaling)
                 setRate(0)
                 clearTimeout(timer)
             }, 500)
@@ -308,6 +308,7 @@ function InteractiveActions() {
             ctx.drawImage(img, 0, 0)
 
             function addCircleAndText(pointItem: IPointItem) {
+                ctx.save()
                 ctx.beginPath()
                 ctx.arc(pointItem.gps[0], pointItem.gps[1], 3, 0, 2 * Math.PI, true)
                 ctx.fillStyle = "#fff"
@@ -318,6 +319,7 @@ function InteractiveActions() {
                 ctx.font = "14px Arial"
                 ctx.fillStyle = "red"
                 ctx.fillText(pointItem.name, pointItem.gps[0] + 5, pointItem.gps[1] - 5)
+                ctx.restore()
             }
 
             for (let i = 0; i < pointList.length; i++) {
@@ -334,7 +336,7 @@ function InteractiveActions() {
 
     const algosName: { [key: string]: string } = {
         Burstone: "Burstone分析法",
-        DoctorLee: "自定义分析法",
+        DoctorLee: "李博分析法",
         Downs: "Downs分析法",
         Jarabak: "Jarabak分析法",
         McNamara: "McNamara分析法",
@@ -351,14 +353,14 @@ function InteractiveActions() {
     function translate2NOriginPoint(point: [number, number], Pn: [number, number]) {
         const [x0, y0] = Pn
         const [x, y] = point
-        return [x - x0, y - y0]
+        return [(x - x0).toFixed(2), (y - y0).toFixed(2)]
     }
 
     function downloadAll() {
         const zip = new JSZip
         const xlsxList = []
         for (const algosTableDataKey in algosTableData) {
-            const table = algosTableData[algosTableDataKey].map((item, index) => {
+            const table = algosTableData[algosTableDataKey].map(item => {
                 const up = +item.standard_value + +item.standard_deviation
                 const down = +item.standard_value - +item.standard_deviation
                 const key = +item.measure_value > up ? "up" : +item.measure_value < down ? "down" : "normal"
@@ -367,7 +369,7 @@ function InteractiveActions() {
                     "测量项目": item.measure_name,
                     "标准值": item.standard_value,
                     "标准差": item.standard_deviation,
-                    "测量值": tableData[index]?.measure_value ?? item.measure_value ?? "",
+                    "测量值": calcAlgorithmsMap?.[item.name] ?? "-",
                     "测量结果描述": desc,
                 }
             })
@@ -424,17 +426,19 @@ function InteractiveActions() {
                             <span> 重置 </span>
                         </ScHeaderResetButton>
                     </Popconfirm>
-                    <div onClick={handleAnalysisFetch} onDrop={handleDrop} onDragOver={e => e.preventDefault()}>
-                        <ScHeaderNormalButton className="upload">
-                            <span> 上传图片 </span>
-                        </ScHeaderNormalButton>
-                    </div>
+                    {/*<div onClick={handleUploadClick} onDrop={handleDrop} onDragOver={e => e.preventDefault()}>*/}
+                    {/*    <ScHeaderNormalButton className="upload">*/}
+                    {/*        <span> 上传图片 </span>*/}
+                    {/*    </ScHeaderNormalButton>*/}
+                    {/*</div>*/}
+                    <ScHeaderNormalButton onClick={handleAnalysisFetch}>
+                        <span> 上传 </span>
+                    </ScHeaderNormalButton>
                     <ScHeaderNormalButton onClick={downloadZip}>
                         <span> 下载 </span>
                     </ScHeaderNormalButton>
                 </ScHeaderBtnContainer>
             </ScHeaderWrapper>
-
 
             <AntdScMask
                 centered keyboard key="loading" open={loading} footer={null} closeIcon={null}
@@ -456,4 +460,4 @@ function InteractiveActions() {
     )
 }
 
-export default memo(InteractiveActions)
+export default InteractiveActions

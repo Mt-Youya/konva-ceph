@@ -1,8 +1,3 @@
-import { Avatar } from "antd"
-import { UserOutlined } from "@ant-design/icons"
-import React from "react"
-import styled from "styled-components"
-
 const ScAside = styled.aside`
     width: 140px;
     height: 100%;
@@ -37,7 +32,7 @@ interface IProps {
     sex?: string
 }
 
-const UserInfo: React.FC<IProps> = ({ src, username, age, sex }) => {
+const UserInfo = ({ src, username, age, sex }: IProps) => {
     return (
         <ScAside>
             <Avatar size={80} src={src} icon={!src && <UserOutlined />} />

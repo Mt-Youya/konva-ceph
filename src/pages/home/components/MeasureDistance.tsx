@@ -1,4 +1,3 @@
-import { useDispatch, useSelector } from "react-redux"
 import { Group, Label, Rect, Tag, Text } from "react-konva"
 import { changeDistance } from "@/stores/home/useMeasure"
 import SingleLine from "@/components/SingleLine"

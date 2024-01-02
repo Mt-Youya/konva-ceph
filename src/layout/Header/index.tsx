@@ -1,7 +1,6 @@
 import ImageActions from "./components/ImageActions"
 import BezierLineActions from "./components/BezierLineActions"
 import InteractiveActions from "./components/InteractiveActions"
-import styled from "styled-components"
 
 const ScHeader = styled.header`
     height: 100px;
@@ -16,7 +15,7 @@ const ScHeader = styled.header`
     box-shadow: 0 0 4px #292e33;
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
-    
+
     @media screen  and (max-width: 1980px) {
         gap: 20px;
         padding: 15px 3%;

@@ -1,6 +1,3 @@
-import { useDispatch, useSelector } from "react-redux"
-import { Tooltip } from "antd"
-import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons"
 import { AntdScEmpty, ScContainer, ScSpace, ScTable, ScTbody, ScThead, ScTr } from "./styled"
 import { setTableData } from "@/stores/home/getTableData"
 import { distanceRates } from "@/pages/home/algorithms"
@@ -8,7 +5,6 @@ import AlgosTableData from "@/constants/algosTableData"
 import WarningInfo from "@/assets/icons/WarningInfo.svg?url"
 
 import type { RootState } from "@/stores"
-import { useEffect } from "react"
 
 interface IIconProps {
     value: number
@@ -48,7 +44,7 @@ function Icon({ value, standardValue, deviation, errorTips }: IIconProps) {
 function AsideTable() {
     const { tableData, unitLength, rulerScaling } = useSelector((state: RootState) => state.tableData)
     const { algorithmWay } = useSelector((state: RootState) => state.algorithm)
-    const { algorithmsCache } = useSelector((state: RootState) => state.algorithmsCache)
+    const { calcAlgorithmsMap } = useSelector((state: RootState) => state.algorithmsCache)
 
     const dispatch = useDispatch()
 
@@ -63,13 +59,13 @@ function AsideTable() {
     ]
 
     useEffect(() => {
-        if (!tableData.length || !algorithmsCache) return
+        if (!tableData.length || !calcAlgorithmsMap) return
         const target = AlgosTableData[algorithmWay.key]
         if (rulerScaling !== 0) {
             const data = target.map(item => {
                 return {
                     ...item,
-                    measure_value: +(algorithmsCache[algorithmWay?.key]?.[item.name] * unitLength).toFixed(2),
+                    measure_value: +(calcAlgorithmsMap![item.name]! * unitLength).toFixed(2),
                 }
             })
             dispatch(setTableData(data))
@@ -83,12 +79,12 @@ function AsideTable() {
                 }
                 return {
                     ...item,
-                    measure_value: algorithmsCache[algorithmWay.key]?.[item.name],
+                    measure_value: calcAlgorithmsMap![item.name],
                 }
             })
             dispatch(setTableData(data))
         }
-    }, [algorithmWay, unitLength])
+    }, [algorithmWay, unitLength, calcAlgorithmsMap])
 
     return (
         <ScContainer>

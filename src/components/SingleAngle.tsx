@@ -1,7 +1,5 @@
-import { memo, useEffect, useRef, useState } from "react"
 import { Group, Line } from "react-konva"
 import { Html } from "react-konva-utils"
-import { CloseOutlined } from "@ant-design/icons"
 import { createLabelStyle, measureAngle } from "@/features"
 import { useLabelId } from "./useHooks"
 import Konva from "konva"

@@ -1,8 +1,4 @@
-import { Dropdown } from "antd"
-import { useDispatch, useSelector } from "react-redux"
-import { DownOutlined } from "@ant-design/icons"
 import { setAlgorithm } from "@/stores/aside"
-import styled from "styled-components"
 import AsideTable from "./components/AsideTable"
 import AiPicture from "./components/AiPicture"
 
