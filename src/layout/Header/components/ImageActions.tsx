@@ -3,7 +3,6 @@ import { ScHeaderAction, ScHeaderWrapper } from "./styled"
 import { actionKeys } from "../data/data"
 import { changeBrightness, changeContrast, changeRotate, changeScaleX } from "@/stores/home/useTransform"
 
-import type { RootState } from "@/stores"
 import type { ActionType } from "../data/data"
 
 const AntdScSlider = styled(Slider)`

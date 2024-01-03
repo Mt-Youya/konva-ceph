@@ -9,7 +9,6 @@ import {
 import { actionKeys } from "../data/data"
 import { ScHeaderAction, ScHeaderWrapper } from "./styled"
 
-import type { RootState } from "@/stores"
 import type { ActionType } from "../data/data"
 
 function BezierLineActions() {

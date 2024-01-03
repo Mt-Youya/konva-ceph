@@ -4,7 +4,6 @@ import Konva from "konva"
 import SingleAngle from "@/components/SingleAngle"
 
 import type { IPoint } from "@/types/canvasCtx"
-import type { RootState } from "@/stores"
 
 interface IProps {
     layerWidth?: number

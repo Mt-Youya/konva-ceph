@@ -21,6 +21,7 @@ export default defineConfig({
                     { "antd": ["Button", "notification", "Space", "Dropdown", "Tooltip", "message", "Popconfirm", "Progress", "Slider", "Avatar"] },
                     { "styled-components": ["styled"] },
                     { "@ant-design/icons": ["WarningOutlined", "DownOutlined", "ArrowDownOutlined", "ArrowUpOutlined", "UserOutlined", "CloseOutlined"] },
+                    { from: "@/stores", imports: ["RootState"], type: true },
                 ],
                 dts: true,
                 include: [/\.[tj]sx?$/],

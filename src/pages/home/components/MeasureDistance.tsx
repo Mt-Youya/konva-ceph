@@ -3,7 +3,6 @@ import { changeDistance } from "@/stores/home/useMeasure"
 import SingleLine from "@/components/SingleLine"
 import Konva from "konva"
 
-import type { RootState } from "@/stores"
 import type { IPoint } from "@/types"
 
 interface IProps {

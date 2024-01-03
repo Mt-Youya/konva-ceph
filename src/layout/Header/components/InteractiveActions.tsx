@@ -34,7 +34,6 @@ import algorithmMap, { distanceRates } from "@/pages/home/algorithms"
 import JSZip from "jszip"
 
 import type { ActionType } from "../data/data"
-import type { RootState } from "@/stores"
 import type { ImageExcAll } from "@/types"
 import type { IPointItem } from "@/stores/home/useDataPoints"
 

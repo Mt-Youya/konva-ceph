@@ -2,8 +2,6 @@ import { setAlgorithm } from "@/stores/aside"
 import AsideTable from "./components/AsideTable"
 import AiPicture from "./components/AiPicture"
 
-import type { RootState } from "@/stores"
-
 const ScAside = styled.aside`
     height: 100%;
     color: #fff;

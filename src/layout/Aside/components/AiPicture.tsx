@@ -3,8 +3,6 @@ import constants from "../data/constMap.json"
 import Konva from "konva"
 import useImage from "use-image"
 
-import type { RootState } from "@/stores"
-
 const ScContainer = styled.div`
     display: flex;
     flex-direction: column;

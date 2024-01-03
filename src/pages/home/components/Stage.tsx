@@ -7,8 +7,7 @@ import MeasureAngle from "./MeasureAngle"
 import BezierLine from "./BezierLine"
 import randomUUID from "@/utils/randomUUID"
 
-import type { KonvaEventObject } from "konva/lib/Node"
-import type { RootState } from "@/stores"
+import type { TKWheelEvent } from "@/types"
 
 const ScStage = styled(Stage)`
     width: 100%;
@@ -49,7 +48,7 @@ const StageContainer = () => {
     // let MaxScale = 4
     // let MinScale = 1
 
-    function handleWheel(e: KonvaEventObject<WheelEvent>) {
+    function handleWheel(e: TKWheelEvent) {
         if (e.evt.ctrlKey) return
         e.evt.preventDefault()
         const direction = e.evt.deltaY > 0 ? -1 : 1

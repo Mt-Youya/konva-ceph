@@ -10,7 +10,6 @@ import algorithmMap, { distanceRates } from "../algorithms"
 import SingleCircle from "@/components/SingleCircle"
 
 import type { IMap, TTargetMap } from "@/pages/home/data"
-import type { RootState } from "@/stores"
 import type { IPointItem } from "@/stores/home/useDataPoints"
 import type { ITableData } from "@/apis/getList"
 import type { TKDragEvent, TKMouseEvent } from "@/types"

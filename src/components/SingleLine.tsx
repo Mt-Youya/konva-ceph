@@ -5,7 +5,6 @@ import Konva from "konva"
 import SingleCircle from "./SingleCircle"
 
 import type { IPoint, TKDragEvent } from "@/types"
-import type { RootState } from "@/stores"
 
 interface IProps {
     points: [IPoint, IPoint]

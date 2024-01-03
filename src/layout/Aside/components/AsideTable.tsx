@@ -4,8 +4,6 @@ import { distanceRates } from "@/pages/home/algorithms"
 import AlgosTableData from "@/constants/algosTableData"
 import WarningInfo from "@/assets/icons/WarningInfo.svg?url"
 
-import type { RootState } from "@/stores"
-
 interface IIconProps {
     value: number
     standardValue: number
