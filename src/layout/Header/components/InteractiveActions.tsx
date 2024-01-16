@@ -9,7 +9,7 @@ import { getAllPointMethodMap } from "@/pages/home/data"
 import { setCalcAlgorithmsMap } from "@/stores/cache/algorithms"
 import { changePointList } from "@/stores/home/useDataPoints"
 import { setRulerScaling, setTableData } from "@/stores/home/getTableData"
-import { setCachePoints, setCacheTableData } from "@/stores/cache"
+import { setCacheAlgorithmsMap, setCachePoints, setCacheTableData } from "@/stores/cache"
 import { changeAngle, changeDistance, changeImgUrl } from "@/stores/home/useMeasure"
 import { changeBrightness, changeContrast, changeRotate, changeScaleX } from "@/stores/home/useTransform"
 import { changeLateral, changeMajor, changeNamed, changeOutline, changeSupport } from "@/stores/home/useShowPoint"
@@ -36,6 +36,7 @@ import JSZip from "jszip"
 import type { ActionType } from "../data/data"
 import type { ImageExcAll } from "@/types"
 import type { IPointItem } from "@/stores/home/useDataPoints"
+import { RootState } from "@/stores"
 
 function InteractiveActions() {
     const [open, setOpen] = useState(false)
@@ -47,7 +48,7 @@ function InteractiveActions() {
     const [markImgBlob, setMarkImgBlob] = useState("")
     const [messageApi] = message.useMessage()
     const { angle, distance } = useSelector((state: RootState) => state.measure)
-    const { cachePoints, cacheTableData } = useSelector((state: RootState) => state.cache)
+    const { cachePoints, cacheTableData, cacheAlgorithmsMap } = useSelector((state: RootState) => state.cache)
     const { tableData, unitLength } = useSelector((state: RootState) => state.tableData)
     const { pointList } = useSelector((state: RootState) => state.dataPoint)
     const { algorithmWay } = useSelector((state: RootState) => state.algorithm)
@@ -83,6 +84,7 @@ function InteractiveActions() {
 
     function resetData() {
         dispatch(setReset(true))
+        dispatch(setCalcAlgorithmsMap(cacheAlgorithmsMap))
         dispatch(setTableData(cacheTableData))
         dispatch(changePointList(cachePoints))
 
@@ -214,6 +216,7 @@ function InteractiveActions() {
         cacheMap["ANB&deg"] = +(+cacheMap["SNA&deg"] - +cacheMap["SNB&deg"]).toFixed(2)
 
         dispatch(setCalcAlgorithmsMap(cacheMap))
+        dispatch(setCacheAlgorithmsMap(cacheMap))
     }
 
     const delay = (function() {

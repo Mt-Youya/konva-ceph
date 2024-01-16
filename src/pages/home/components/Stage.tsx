@@ -8,6 +8,7 @@ import BezierLine from "./BezierLine"
 import randomUUID from "@/utils/randomUUID"
 
 import type { TKWheelEvent } from "@/types"
+import type { TKGroup, TKImage, TKLayer, TKStage } from "@/types/KonvaElement"
 
 const ScStage = styled(Stage)`
     width: 100%;
@@ -37,10 +38,10 @@ const StageContainer = () => {
     // const [scale, setScale] = useState({ MinScale: 1, MaxScale: 4 })
 
     const ScaleRef = useRef({ MinScale: 1, MaxScale: 4 })
-    const stageRef = useRef<Konva.Stage | null>(null)
-    const layerRef = useRef<Konva.Layer | null>(null)
-    const imageRef = useRef<Konva.Image | null>(null)
-    const imageGroupRef = useRef<Konva.Group | null>(null)
+    const stageRef = useRef<TKStage>(null)
+    const layerRef = useRef<TKLayer>(null)
+    const imageRef = useRef<TKImage>(null)
+    const imageGroupRef = useRef<TKGroup>(null)
 
     const dispatch = useDispatch()
 
@@ -177,10 +178,6 @@ const StageContainer = () => {
 
     useEffect(() => {
         const img = imageRef.current
-        if (img) {
-            const { over } = isImageOverContent()
-            over && openNotification()
-        }
         return () => {
             img?.destroy()
         }

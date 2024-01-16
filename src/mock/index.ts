@@ -11,6 +11,7 @@ interface MockTableRes extends Omit<TTableRes, "ruler-scaling"> {
 export default (function() {
     const mode = import.meta.env.VITE_MODE
     if (mode === "development" || mode === "production") {
+        Mock.setup({ timeout: 3000 })
         Mock.mock("/ceph/measure", (): IAxiosResponse<MockTableRes> => {
             return {
                 code: 0,

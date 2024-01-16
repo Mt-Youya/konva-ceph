@@ -1,0 +1,1 @@
+console.log("%cWelcome to Konva Ceph!", "color: #00f; font-size: 24px; font-weight: 800;")

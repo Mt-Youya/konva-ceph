@@ -1,8 +1,13 @@
+import { useDispatch, useSelector } from "react-redux"
+import { Tooltip } from "antd"
+import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons"
 import { AntdScEmpty, ScContainer, ScSpace, ScTable, ScTbody, ScThead, ScTr } from "./styled"
 import { setTableData } from "@/stores/home/getTableData"
 import { distanceRates } from "@/pages/home/algorithms"
 import AlgosTableData from "@/constants/algosTableData"
 import WarningInfo from "@/assets/icons/WarningInfo.svg?url"
+
+import type { RootState } from "@/stores"
 
 interface IIconProps {
     value: number
@@ -44,6 +49,10 @@ function AsideTable() {
     const { algorithmWay } = useSelector((state: RootState) => state.algorithm)
     const { calcAlgorithmsMap } = useSelector((state: RootState) => state.algorithmsCache)
 
+    const wayKey = useMemo(() => algorithmWay.key, [algorithmWay])
+    const unit = useMemo(() => unitLength, [unitLength])
+    const algorithmMap = useMemo(() => calcAlgorithmsMap, [calcAlgorithmsMap])!
+
     const dispatch = useDispatch()
 
     const measureValue = "measure_value"
@@ -57,13 +66,13 @@ function AsideTable() {
     ]
 
     useEffect(() => {
-        if (!tableData.length || !calcAlgorithmsMap) return
-        const target = AlgosTableData[algorithmWay.key]
+        if (!tableData.length || !algorithmMap) return
+        const target = AlgosTableData[wayKey]
         if (rulerScaling !== 0) {
             const data = target.map(item => {
                 return {
                     ...item,
-                    measure_value: +(calcAlgorithmsMap![item.name]! * unitLength).toFixed(2),
+                    measure_value: +(algorithmMap[item.name] * unit).toFixed(2),
                 }
             })
             dispatch(setTableData(data))
@@ -77,12 +86,12 @@ function AsideTable() {
                 }
                 return {
                     ...item,
-                    measure_value: calcAlgorithmsMap![item.name],
+                    measure_value: algorithmMap[item.name],
                 }
             })
             dispatch(setTableData(data))
         }
-    }, [algorithmWay, unitLength, calcAlgorithmsMap])
+    }, [wayKey, unit, algorithmMap])
 
     return (
         <ScContainer>

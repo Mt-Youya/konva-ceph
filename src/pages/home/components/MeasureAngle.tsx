@@ -1,9 +1,9 @@
 import { Group, Label, Rect, Tag, Text } from "react-konva"
 import { changeAngle } from "@/stores/home/useMeasure"
-import Konva from "konva"
 import SingleAngle from "@/components/SingleAngle"
 
 import type { IPoint } from "@/types/canvasCtx"
+import type { TKGroup } from "@/types/KonvaElement"
 
 interface IProps {
     layerWidth?: number
@@ -19,7 +19,7 @@ const MeasureAngle = ({ layerWidth = 1200, layerHeight = 1100, setLayerDraggable
 
     const { isReset } = useSelector((state: RootState) => state.reset)
 
-    const angleGroupRef = useRef<Konva.Group>(null)
+    const angleGroupRef = useRef<TKGroup>(null)
     const dispatch = useDispatch()
 
     function onMeasureClick() {

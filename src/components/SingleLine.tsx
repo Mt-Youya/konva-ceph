@@ -1,10 +1,10 @@
 import { Group, Line } from "react-konva"
 import { Html } from "react-konva-utils"
 import { createLabelStyle } from "@/features"
-import Konva from "konva"
 import SingleCircle from "./SingleCircle"
 
 import type { IPoint, TKDragEvent } from "@/types"
+import type { TKCircle } from "@/types/KonvaElement"
 
 interface IProps {
     points: [IPoint, IPoint]
@@ -20,8 +20,8 @@ function SingleLine({ points = initialPoints, movePoint: { x: Mx, y: My }, close
     const [p2, setP2] = useState(points[1])
     const { rulerScaling, unitLength } = useSelector((state: RootState) => state.tableData)
 
-    const circle1Ref = useRef<Konva.Circle>(null)
-    const circle2Ref = useRef<Konva.Circle>(null)
+    const circle1Ref = useRef<TKCircle>(null)
+    const circle2Ref = useRef<TKCircle>(null)
     const START = "start", END = "end"
 
     function getDistance(points: [IPoint, IPoint], unit = rulerScaling || 1, unitSize = unitLength) {

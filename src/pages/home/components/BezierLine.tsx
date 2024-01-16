@@ -9,7 +9,7 @@ import Konva from "konva"
 import algorithmMap, { distanceRates } from "../algorithms"
 import SingleCircle from "@/components/SingleCircle"
 
-import type { IMap, TTargetMap } from "@/pages/home/data"
+import type { IMap } from "@/pages/home/data"
 import type { IPointItem } from "@/stores/home/useDataPoints"
 import type { ITableData } from "@/apis/getList"
 import type { TKDragEvent, TKMouseEvent } from "@/types"
@@ -42,7 +42,6 @@ const BezierLine = () => {
     const { isReset } = useSelector((state: RootState) => state.reset)
 
     const [menuLabel, setMenuLabel] = useState(items[1].label)
-    const [targetPointsGroup, setTargetPointsGroup] = useState<TTargetMap>(new Map)
     // const [linePos, setLinePos] = useState({ p1: 33, p2: 36, p3: 34, p4: 1 })
     const [rulerPoint, setRulerPoint] = useState<IMap>()
 
@@ -65,7 +64,9 @@ const BezierLine = () => {
     }
 
     function onDrop(name: string) {
-        const target = targetPointsGroup.get(name)!
+        const targetGroup = pointList.map(({ name }) => name)
+        const targetPoints = getRelativePointsGroup(targetGroup, algorithm)
+        const target = targetPoints.get(name)!
         const calcValue = getCalculateValue(target)
         const list = computedTableData(calcValue)
         dispatch(setTableData(list))
@@ -112,10 +113,9 @@ const BezierLine = () => {
         return list.map(({ gps: [x, y] }) => ({ x, y }))
     }
 
-    type TGroupsType = ReturnType<typeof targetPointsGroup.get>
     type TCalculateValue = { [p: string]: number | string }
 
-    function getCalculateValue(groups: TGroupsType) {
+    function getCalculateValue(groups: IMap) {
         const calculatedValue: TCalculateValue = {}
         for (const key in groups) {
             const idxs = groups[key]
@@ -167,13 +167,20 @@ const BezierLine = () => {
         }
     }
 
+    function arrayEqual(arr1: number[], arr2: number[]) {
+        return arr1.every((item, index) => item === arr2[index])
+    }
+
+    const psRef = useRef<[number, number][]>([])
     useEffect(() => {
-        if (pointList?.length > 0) {
-            const targetGroup = pointList.map(({ name }) => name)
-            const targetPoints = getRelativePointsGroup(targetGroup, algorithm)
-            setTargetPointsGroup(targetPoints)
-            const RPoints = getPurePoints(pointList)
-            setRulerPoint(RPoints)
+        if (!!pointList.length) {
+            // @ts-ignore
+            const [r1, r2] = pointList.toReversed()
+            const eq1 = arrayEqual(r1.gps, psRef.current?.[0] ?? [])
+            const eq2 = arrayEqual(r2.gps, psRef.current?.[1] ?? [])
+            if (eq1 && eq2) return
+            psRef.current = [r1.gps, r2.gps]
+            setRulerPoint(getPurePoints(pointList))
         }
     }, [pointList])
 
