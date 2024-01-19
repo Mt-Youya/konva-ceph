@@ -68,29 +68,27 @@ function AsideTable() {
     useEffect(() => {
         if (!tableData.length || !algorithmMap) return
         const target = AlgosTableData[wayKey]
-        if (rulerScaling !== 0) {
-            const data = target.map(item => {
+        const anb = algorithmMap["SNA&deg"] - algorithmMap["SNB&deg"]
+        const data = target.map(item => {
+            const value = (item.name.includes("&mm") || distanceRates.includes(item.name))
+            if (item.name === "ANB&deg") {
                 return {
                     ...item,
-                    measure_value: +(algorithmMap[item.name] * unit).toFixed(2),
+                    measure_value: value ? +(anb * unit).toFixed(2) : anb.toFixed(2),
                 }
-            })
-            dispatch(setTableData(data))
-        } else {
-            const data = target.map(item => {
-                if (item.name.includes("&mm") || distanceRates.includes(item.name)) {
-                    return {
-                        ...item,
-                        measure_value: "-",
-                    }
-                }
+            }
+            if (rulerScaling !== 0) {
                 return {
                     ...item,
-                    measure_value: algorithmMap[item.name],
+                    measure_value: +(value ? +algorithmMap[item.name] * unit * rulerScaling : +algorithmMap[item.name]).toFixed(2),
                 }
-            })
-            dispatch(setTableData(data))
-        }
+            }
+            return {
+                ...item,
+                measure_value: value ? "-" : algorithmMap[item.name],
+            }
+        })
+        dispatch(setTableData(data))
     }, [wayKey, unit, algorithmMap])
 
     return (

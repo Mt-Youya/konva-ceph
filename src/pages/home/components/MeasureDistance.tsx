@@ -13,7 +13,7 @@ interface IProps {
 
 const MeasureDistance = ({ layerWidth = 1200, layerHeight = 1100, setLayerDraggable }: IProps) => {
     const [clickCount, setClickCount] = useState(0)
-    const [move, setMove] = useState({ x: 0, y: 0 })
+    const [move, setMove] = useState({ x: -100, y: -100 })
     const [pointsGroup, setPointsGroup] = useState<IPoint[][]>([])
     const { distance } = useSelector((state: RootState) => state.measure)
     const { isReset } = useSelector((state: RootState) => state.reset)
@@ -33,6 +33,7 @@ const MeasureDistance = ({ layerWidth = 1200, layerHeight = 1100, setLayerDragga
                 const points = [...lastPoints!, point]
                 const renderGroup = pointsGroup.slice(0, pointsGroup.length - 1)
                 setPointsGroup([...renderGroup, points])
+                setMove({ x: -100, y: -100 })
             }
             return count
         })

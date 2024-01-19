@@ -24,8 +24,6 @@ function SingleAngle({ points, movePoint: { x: Mx, y: My }, closeAngle, scale = 
     const circle2Ref = useRef<Konva.Circle>(null)
     const circle3Ref = useRef<Konva.Circle>(null)
 
-    const color = "#FFE400"
-    const bgColor = "#32393F"
     const FIRST = "first", SECOND = "second", END = "end"
 
     function handleCircleMove(e: KonvaEventObject<DragEvent>, order: string) {
@@ -45,8 +43,11 @@ function SingleAngle({ points, movePoint: { x: Mx, y: My }, closeAngle, scale = 
     }
 
     function useCircleStyle() {
-        const [circleLabelStyle, setCircleLabelStyle] = useState<ReturnType<typeof createLabelStyle> | null>(null)
+        type TStyle = Partial<ReturnType<typeof createLabelStyle>> | null
+        const [circleLabelStyle, setCircleLabelStyle] = useState<TStyle>({ left: -100 + "px", top: -200 + "px" })
 
+        const color = "#FFE400"
+        const bgColor = "#32393F"
         useEffect(() => {
             if (circle3Ref.current) {
                 const circle2Pos = circle2Ref.current!.getAbsolutePosition()!

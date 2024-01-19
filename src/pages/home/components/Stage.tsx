@@ -178,6 +178,8 @@ const StageContainer = () => {
 
     useEffect(() => {
         const img = imageRef.current
+        const { over } = isImageOverContent()
+        over && openNotification()
         return () => {
             img?.destroy()
         }
@@ -188,7 +190,7 @@ const StageContainer = () => {
             reset()
             dispatch(setReset(false))
             const { over } = isImageOverContent()
-            over && setAdaption()
+            over && openNotification()
         }
     }, [isReset])
 
@@ -233,3 +235,4 @@ const StageContainer = () => {
 }
 
 export default StageContainer
+

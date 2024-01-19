@@ -45,7 +45,8 @@ function SingleLine({ points = initialPoints, movePoint: { x: Mx, y: My }, close
     }
 
     function useCircleStyle() {
-        const [circleLabelStyle, setCircleLabelStyle] = useState<ReturnType<typeof createLabelStyle> | null>(null)
+        type TStyle = Partial<ReturnType<typeof createLabelStyle>> | null
+        const [circleLabelStyle, setCircleLabelStyle] = useState<TStyle>({ left: -100 + "px", top: -200 + "px" })
 
         useEffect(() => {
             if (circle2Ref.current) {
@@ -58,6 +59,7 @@ function SingleLine({ points = initialPoints, movePoint: { x: Mx, y: My }, close
 
         return circleLabelStyle
     }
+
 
     const style = useCircleStyle()!
 

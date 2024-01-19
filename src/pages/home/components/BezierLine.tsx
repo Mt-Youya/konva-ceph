@@ -4,7 +4,7 @@ import { Html } from "react-konva-utils"
 import { changePointList } from "@/stores/home/useDataPoints"
 import { setTableData, setUnitLength } from "@/stores/home/getTableData"
 import { setSelectPointKey } from "@/stores/home/userInfo"
-import { getAllPointMethodMap, getPurePoints, getRelativePointsGroup } from "../data"
+import { getAllPointMethodMap, getRelativePointsGroup } from "../data"
 import Konva from "konva"
 import algorithmMap, { distanceRates } from "../algorithms"
 import SingleCircle from "@/components/SingleCircle"
@@ -94,18 +94,6 @@ const BezierLine = () => {
                 item.measure_value = +(+item.measure_value).toFixed(2)
             }
         }
-        const [SNA, SNB] = list.map(item => {
-            if (item.name === "SNA&deg" || item.name === "SNB&deg") {
-                return +item.measure_value
-            }
-        })
-
-        for (const iMeasureDatum of list) {
-            if (iMeasureDatum.name === "ANB&deg") {
-                iMeasureDatum.measure_value = +(SNA! - SNB!).toFixed(2)
-                break
-            }
-        }
         return list
     }
 
@@ -132,8 +120,14 @@ const BezierLine = () => {
                     continue
                 }
                 const distance = instance.handleDistance(xyPoints, value)!
-                calculatedValue[key] = +Math.round(distance * (rulerScaling || 1) * 100) / 100
+                calculatedValue[key] = +Math.round(distance * 100) / 100
             } else if (key.includes("&deg")) {
+                if (key.includes("ANB")) {
+                    const [sna, snb] = [+calculatedValue["SNA&deg"], +calculatedValue["SNB&deg"]]
+                    const anb = sna - snb
+                    calculatedValue[key] = +(Math.round(anb * 100) / 100).toFixed(2)
+                    continue
+                }
                 const angle = instance.handleAngle(xyPoints, value)!
                 calculatedValue[key] = !!angle ? +(Math.round(angle * 100) / 100).toFixed(2) : (+angle).toFixed(2)
             } else if (key.includes("&rate")) {
@@ -171,18 +165,16 @@ const BezierLine = () => {
         return arr1.every((item, index) => item === arr2[index])
     }
 
-    const psRef = useRef<[number, number][]>([])
-    useEffect(() => {
-        if (!!pointList.length) {
-            // @ts-ignore
-            const [r1, r2] = pointList.toReversed()
-            const eq1 = arrayEqual(r1.gps, psRef.current?.[0] ?? [])
-            const eq2 = arrayEqual(r2.gps, psRef.current?.[1] ?? [])
-            if (eq1 && eq2) return
-            psRef.current = [r1.gps, r2.gps]
-            setRulerPoint(getPurePoints(pointList))
-        }
-    }, [pointList])
+    const rulers = useMemo(() => pointList.filter(item => item.name === "ruler1" || item.name === "ruler2"), [pointList])
+    useLayoutEffect(() => {
+        if (!rulers.length) return
+        const [r1, r2] = rulers
+        if (!r1 || !r2) return
+        const eq1 = arrayEqual(r1.gps, rulerPoint?.ruler1 ?? [])
+        const eq2 = arrayEqual(r2.gps, rulerPoint?.ruler2 ?? [])
+        if (eq1 && eq2) return
+        setRulerPoint({ ruler1: r1.gps, ruler2: r2.gps })
+    }, [rulerPoint])
 
     useEffect(() => {
         if (tableData?.length !== 0) {

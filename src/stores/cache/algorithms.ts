@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit"
 import type { Slice } from "@reduxjs/toolkit"
 
 export interface AlgorithmItem {
-    [key: string]: number
+    [key: string]: number | string
 
     "A-FH&mm": number
     "A-N&mm": number

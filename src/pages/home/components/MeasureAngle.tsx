@@ -39,6 +39,7 @@ const MeasureAngle = ({ layerWidth = 1200, layerHeight = 1100, setLayerDraggable
                 const points = [...lastPoints!, point]
                 const renderGroup = angleGroup.slice(0, angleGroup.length - 1)
                 setAngleGroup([...renderGroup, points])
+                setMove({ x: -100, y: -100 })
             }
             return count
         })

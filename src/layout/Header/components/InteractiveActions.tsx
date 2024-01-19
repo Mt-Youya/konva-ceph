@@ -33,10 +33,11 @@ import algosTableData from "@/constants/algosTableData"
 import algorithmMap, { distanceRates } from "@/pages/home/algorithms"
 import JSZip from "jszip"
 
+import type { RootState } from "@/stores"
 import type { ActionType } from "../data/data"
 import type { ImageExcAll } from "@/types"
 import type { IPointItem } from "@/stores/home/useDataPoints"
-import { RootState } from "@/stores"
+import type { AlgorithmItem } from "@/stores/cache/algorithms"
 
 function InteractiveActions() {
     const [open, setOpen] = useState(false)
@@ -49,7 +50,7 @@ function InteractiveActions() {
     const [messageApi] = message.useMessage()
     const { angle, distance } = useSelector((state: RootState) => state.measure)
     const { cachePoints, cacheTableData, cacheAlgorithmsMap } = useSelector((state: RootState) => state.cache)
-    const { tableData, unitLength } = useSelector((state: RootState) => state.tableData)
+    const { tableData } = useSelector((state: RootState) => state.tableData)
     const { pointList } = useSelector((state: RootState) => state.dataPoint)
     const { algorithmWay } = useSelector((state: RootState) => state.algorithm)
     const { calcAlgorithmsMap } = useSelector((state: RootState) => state.algorithmsCache)
@@ -138,7 +139,7 @@ function InteractiveActions() {
         })
     }
 
-    function calcAllAlgorithms(pointList: IPointItem[], rulerScaling: number = 1) {
+    function calcAllAlgorithms(pointList: IPointItem[], rulerScaling = 1) {
         let allAlgorithms = POINTS_CONSTANTS
         for (const algorithmMapKey in algorithmMap) {
             allAlgorithms = { ...allAlgorithms, ...algorithmMap[algorithmMapKey].algorithm }
@@ -160,8 +161,7 @@ function InteractiveActions() {
             idxsMap.set(algoKey, idxs)
         }
 
-        type TCalculateValue = { [p: string]: number | string }
-        let cache: TCalculateValue = {}
+        let cache = {} as AlgorithmItem
 
         let algorithm = algorithmMap[algorithmWay.key].algorithm
         let instance = algorithmMap[algorithmWay.key]
@@ -173,7 +173,7 @@ function InteractiveActions() {
             pointsMethods = getAllPointMethodMap(algorithm, instance)
 
             const element = algosTableData[algoKey]
-            const calculatedValue: TCalculateValue = {}
+            const calculatedValue = {} as AlgorithmItem
             for (const ele of element) {
                 const key = ele.name
                 const table = idxsMap.get(key)
@@ -188,20 +188,22 @@ function InteractiveActions() {
                 }
                 const xyPoints = [...table]
                 if (key.includes("&mm")) {
-                    const distance = instance.handleDistance(xyPoints, value)!
-                    calculatedValue[key] = +Math.round(distance * (rulerScaling || 1) * 100 * unitLength) / 100
                     if (rulerScaling === 0) {
                         calculatedValue[key] = "-"
+                        continue
                     }
+                    const distance = instance.handleDistance(xyPoints, value)!
+                    calculatedValue[key] = +Math.round(distance * 100) / 100
                 } else if (key.includes("&deg")) {
                     const angle = instance.handleAngle(xyPoints, value)!
                     calculatedValue[key] = !!angle ? +(Math.round(angle * 100) / 100).toFixed(2) : (+angle).toFixed(2)
                 } else if (key.includes("&rate")) {
-                    const rate = instance.handleRate(xyPoints, value)!
-                    calculatedValue[key] = +(Math.round(rate * 100) / 100).toFixed(2)
                     if (rulerScaling === 0 && distanceRates.includes(key)) {
                         calculatedValue[key] = "-"
+                        continue
                     }
+                    const rate = instance.handleRate(xyPoints, value)!
+                    calculatedValue[key] = +(Math.round(rate * 100) / 100).toFixed(2)
                 }
             }
             cache = { ...cache, ...calculatedValue }
