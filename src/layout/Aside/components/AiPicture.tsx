@@ -2,6 +2,7 @@ import { Stage, Layer, Image, Circle, Text } from "react-konva"
 import constants from "../data/constMap.json"
 import Konva from "konva"
 import useImage from "use-image"
+import XRay from "@/assets/XRays/ai-exp.png?url"
 
 const ScContainer = styled.div`
     display: flex;
@@ -43,7 +44,7 @@ interface PointProps {
 const pointConstants: PointProps = { ...constants }
 
 const AiPicture = () => {
-    const [image] = useImage("http://yayan-dev.oss-cn-shanghai.aliyuncs.com/935a277347b3454fafcb46e69a3caf73.png")
+    const [image] = useImage(XRay)
     const [pointData, setPointData] = useState<PointData | null>(null)
     const [pointX, setPointX] = useState<number>(0)
     const [pointY, setPointY] = useState<number>(0)
