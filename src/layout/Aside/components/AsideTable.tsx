@@ -74,13 +74,22 @@ function AsideTable() {
             if (item.name === "ANB&deg") {
                 return {
                     ...item,
-                    measure_value: value ? +(anb * unit).toFixed(2) : anb.toFixed(2),
+                    measure_value: +anb.toFixed(2),
                 }
             }
+
             if (rulerScaling !== 0) {
+                const mv = value ? +algorithmMap[item.name] * unit * rulerScaling : algorithmMap[item.name]
+                if (!mv) {
+                    console.log(value, algorithmMap, item.name, unit)
+                    return {
+                        ...item,
+                        measure_value: "-",
+                    }
+                }
                 return {
                     ...item,
-                    measure_value: +(value ? +algorithmMap[item.name] * unit * rulerScaling : +algorithmMap[item.name]).toFixed(2),
+                    measure_value: +(+mv).toFixed(2),
                 }
             }
             return {
@@ -89,7 +98,7 @@ function AsideTable() {
             }
         })
         dispatch(setTableData(data))
-    }, [wayKey, unit, algorithmMap])
+    }, [wayKey, unit, algorithmMap, rulerScaling])
 
     return (
         <ScContainer>

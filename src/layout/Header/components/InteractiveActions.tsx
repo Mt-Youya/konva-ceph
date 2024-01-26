@@ -16,6 +16,7 @@ import { changeLateral, changeMajor, changeNamed, changeOutline, changeSupport }
 import { getAlgorithmState, getMeasureState, getShowPointState, getTransformState } from "@/stores/utils/getState"
 import { setAlgorithm } from "@/stores/aside"
 import { setReset } from "@/stores/header/reset"
+import { setLoadCount } from "@/stores/header/reload"
 import {
     AntdScDivider,
     AntdScMask,
@@ -37,20 +38,15 @@ import type { RootState } from "@/stores"
 import type { ActionType } from "../data/data"
 import type { ImageExcAll } from "@/types"
 import type { IPointItem } from "@/stores/home/useDataPoints"
-import type { AlgorithmItem } from "@/stores/cache/algorithms"
 
 function InteractiveActions() {
     const [open, setOpen] = useState(false)
     const [loading, setLoading] = useState(false)
-    const [isDownload, setIsDownload] = useState(false)
     const [rate, setRate] = useState(1)
     const [imgUrl, setImgUrl] = useState<string | ArrayBuffer | null>(null)
     const [imgType, setImgType] = useState("jpeg")
-    const [markImgBlob, setMarkImgBlob] = useState("")
-    const [messageApi] = message.useMessage()
     const { angle, distance } = useSelector((state: RootState) => state.measure)
     const { cachePoints, cacheTableData, cacheAlgorithmsMap } = useSelector((state: RootState) => state.cache)
-    const { tableData } = useSelector((state: RootState) => state.tableData)
     const { pointList } = useSelector((state: RootState) => state.dataPoint)
     const { algorithmWay } = useSelector((state: RootState) => state.algorithm)
     const { calcAlgorithmsMap } = useSelector((state: RootState) => state.algorithmsCache)
@@ -123,21 +119,15 @@ function InteractiveActions() {
         if (!ImageFileTypes.includes(type)) return
 
         setImgType(type.split("/")[1])
-        await getFileUrl(file)
+        const url = URL.createObjectURL(file)
+        setImgUrl(url)
+        dispatch(changeImgUrl(url))
+        count++
         await fetchFileData(file)
+        dispatch(setLoadCount(count))
     }
 
-    function getFileUrl(file: File) {
-        const reader = new FileReader()
-        reader.readAsDataURL(file)
-        return new Promise(resolve => {
-            reader.onload = () => {
-                setImgUrl(reader.result)
-                dispatch(changeImgUrl(reader.result))
-                resolve(true)
-            }
-        })
-    }
+    let count = 0
 
     function calcAllAlgorithms(pointList: IPointItem[], rulerScaling = 1) {
         let allAlgorithms = POINTS_CONSTANTS
@@ -161,7 +151,8 @@ function InteractiveActions() {
             idxsMap.set(algoKey, idxs)
         }
 
-        let cache = {} as AlgorithmItem
+        type TCalculateValue = { [p: string]: number | string }
+        let cache: TCalculateValue = {}
 
         let algorithm = algorithmMap[algorithmWay.key].algorithm
         let instance = algorithmMap[algorithmWay.key]
@@ -173,7 +164,7 @@ function InteractiveActions() {
             pointsMethods = getAllPointMethodMap(algorithm, instance)
 
             const element = algosTableData[algoKey]
-            const calculatedValue = {} as AlgorithmItem
+            const calculatedValue: TCalculateValue = {}
             for (const ele of element) {
                 const key = ele.name
                 const table = idxsMap.get(key)
@@ -188,22 +179,20 @@ function InteractiveActions() {
                 }
                 const xyPoints = [...table]
                 if (key.includes("&mm")) {
-                    if (rulerScaling === 0) {
-                        calculatedValue[key] = "-"
-                        continue
-                    }
                     const distance = instance.handleDistance(xyPoints, value)!
                     calculatedValue[key] = +Math.round(distance * 100) / 100
+                    if (rulerScaling === 0) {
+                        calculatedValue[key] = "-"
+                    }
                 } else if (key.includes("&deg")) {
                     const angle = instance.handleAngle(xyPoints, value)!
                     calculatedValue[key] = !!angle ? +(Math.round(angle * 100) / 100).toFixed(2) : (+angle).toFixed(2)
                 } else if (key.includes("&rate")) {
-                    if (rulerScaling === 0 && distanceRates.includes(key)) {
-                        calculatedValue[key] = "-"
-                        continue
-                    }
                     const rate = instance.handleRate(xyPoints, value)!
                     calculatedValue[key] = +(Math.round(rate * 100) / 100).toFixed(2)
+                    if (rulerScaling === 0 && distanceRates.includes(key)) {
+                        calculatedValue[key] = "-"
+                    }
                 }
             }
             cache = { ...cache, ...calculatedValue }
@@ -229,7 +218,7 @@ function InteractiveActions() {
             case "qa":
             case "qa2":
             case "production":
-                return 80
+                return 120
             default:
                 return 40
         }
@@ -245,7 +234,7 @@ function InteractiveActions() {
             setRate(prev => prev < 99 ? prev + 1 : prev)
         }, delay)
         return getTableData(fileData).then(({ code, data, msg }) => {
-            if (code !== 0) return messageApi.error(msg)
+            if (code !== 0) return message.error(msg)
             const { point: points, "measure-items": measureData, "ruler-scaling": rulerScaling } = data
             const keyFlag = {
                 "-1": "down",
@@ -259,7 +248,8 @@ function InteractiveActions() {
                 }
             })
 
-            dispatch(changePointList(points))
+            const floorPoints = points.map(({ name, gps }) => ({ name, gps: [Math.floor(gps[0]), Math.floor(gps[1])] }))
+            dispatch(changePointList(floorPoints))
             dispatch(setTableData(dataList))
             dispatch(setRulerScaling(rulerScaling))
             dispatch(setAlgorithm(storeState.algorithms.algorithmWay))
@@ -282,60 +272,57 @@ function InteractiveActions() {
         })
     }
 
-    function downloadZip() {
-        if (isDownload) return
-        if (tableData.length > 0) {
-            setIsDownload(true)
-            getMarkImageBlob()
+    async function downloadZip() {
+        if (!pointList.length) {
+            return message.warning("暂无头测点相关信息,请先上传头影图片!")
         }
+        const src = await getMarkImageBlob()
+        downloadAll(src)
     }
 
-    function openDownloadDialog(url: Blob, saveName: string) {
+    function downloadHandler(url: Blob, saveName: string) {
         const src = url instanceof Blob ? URL.createObjectURL(url) : ""
         const aLink = document.createElement("a")
         aLink.href = src
         aLink.download = saveName || "" // HTML5新增的属性，指定保存文件名，可以不要后缀，注意，file:///模式下不会生效
         aLink.click()
-        setIsDownload(false)
-        setMarkImgBlob("")
     }
 
-    function getMarkImageBlob() {
-        if (pointList.length === 0) return
+    async function getMarkImageBlob(): Promise<string> {
         const img = new Image
         const canvas = document.createElement("canvas")
         const ctx = canvas.getContext("2d")!
         img.src = imgUrl + ""
-        img.onload = () => {
-            canvas.width = img.naturalWidth
-            canvas.height = img.naturalHeight
-            ctx.drawImage(img, 0, 0)
+        return new Promise(resolve => {
+            img.onload = () => {
+                canvas.width = img.naturalWidth
+                canvas.height = img.naturalHeight
+                ctx.drawImage(img, 0, 0)
 
-            function addCircleAndText(pointItem: IPointItem) {
-                ctx.save()
-                ctx.beginPath()
-                ctx.arc(pointItem.gps[0], pointItem.gps[1], 3, 0, 2 * Math.PI, true)
-                ctx.fillStyle = "#fff"
-                ctx.fill()
-                ctx.strokeStyle = "#fff"
-                ctx.stroke()
-                ctx.closePath()
-                ctx.font = "14px Arial"
-                ctx.fillStyle = "red"
-                ctx.fillText(pointItem.name, pointItem.gps[0] + 5, pointItem.gps[1] - 5)
-                ctx.restore()
-            }
+                function addCircleAndText(pointItem: IPointItem) {
+                    ctx.save()
+                    ctx.beginPath()
+                    ctx.arc(pointItem.gps[0], pointItem.gps[1], 3, 0, 2 * Math.PI, true)
+                    ctx.fillStyle = "#fff"
+                    ctx.fill()
+                    ctx.strokeStyle = "#fff"
+                    ctx.stroke()
+                    ctx.closePath()
+                    ctx.font = "14px Arial"
+                    ctx.fillStyle = "red"
+                    ctx.fillText(pointItem.name, pointItem.gps[0] + 5, pointItem.gps[1] - 5)
+                    ctx.restore()
+                }
 
-            for (let i = 0; i < pointList.length; i++) {
-                addCircleAndText(pointList[i])
+                for (const iPointItem of pointList) {
+                    addCircleAndText(iPointItem)
+                }
+
+                const src = canvas.toDataURL()
+                resolve(src.substring(src.indexOf(",") + 1))
+                canvas.remove()
             }
-            const image = new Image
-            image.src = canvas.toDataURL()
-            const src = image.src
-            setMarkImgBlob(src.substring(src.indexOf(",") + 1))
-            img.remove()
-            canvas.remove()
-        }
+        })
     }
 
     const algosName: { [key: string]: string } = {
@@ -360,7 +347,7 @@ function InteractiveActions() {
         return [(x - x0).toFixed(2), (y - y0).toFixed(2)]
     }
 
-    function downloadAll() {
+    async function downloadAll(str: string) {
         const zip = new JSZip
         const xlsxList = []
         for (const algosTableDataKey in algosTableData) {
@@ -391,21 +378,17 @@ function InteractiveActions() {
             }
         })
 
+        const src = await dataURLtoBlob(imgUrl as string)
         xlsxList.push({ name: "坐标版", table })
         zip.file("分析法.xlsx", arrayToExcel(xlsxList))
-        zip.file(`xray_头颅侧位定位片.${imgType}`, dataURLtoBlob(imgUrl as string))
-        zip.file(`xray_头颅侧位定位片_Landmark.${imgType}`, markImgBlob!, { base64: true })
-        zip.generateAsync({ type: "blob" }).then(function(content) {
-            // 通过文件流下载压缩后文件
-            openDownloadDialog(content, `头影测量_${randomUUID()}.zip`)
-        })
+        zip.file(`xray_头颅侧位定位片.${imgType}`, src)
+        zip.file(`xray_头颅侧位定位片_Landmark.${imgType}`, str!, { base64: true })
+        zip.generateAsync({ type: "blob" }).then(content => downloadHandler(content, `头影测量_${randomUUID()}.zip`))
     }
 
     useEffect(() => {
-        if (markImgBlob) {
-            downloadAll()
-        }
-    }, [markImgBlob])
+        return () => URL.revokeObjectURL(imgUrl as string)
+    }, [])
 
     return (
         <>

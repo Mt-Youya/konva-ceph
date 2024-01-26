@@ -1,9 +1,12 @@
+import { useDispatch, useSelector } from "react-redux"
 import { Group, Label, Rect, Tag, Text } from "react-konva"
 import { changeAngle } from "@/stores/home/useMeasure"
+import Konva from "konva"
 import SingleAngle from "@/components/SingleAngle"
 
 import type { IPoint } from "@/types/canvasCtx"
-import type { TKGroup } from "@/types/KonvaElement"
+import type { RootState } from "@/stores"
+import { useState } from "react"
 
 interface IProps {
     layerWidth?: number
@@ -13,13 +16,13 @@ interface IProps {
 
 const MeasureAngle = ({ layerWidth = 1200, layerHeight = 1100, setLayerDraggable }: IProps) => {
     const { angle } = useSelector((state: RootState) => state.measure)
+    const { isReset } = useSelector((state: RootState) => state.reset)
     const [clickCount, setClickCount] = useState(0)
     const [move, setMove] = useState({ x: 200, y: 200 })
     const [angleGroup, setAngleGroup] = useState<IPoint[][]>([])
+    const [offset, setOffset] = useState({ x: 0, y: 0 })
 
-    const { isReset } = useSelector((state: RootState) => state.reset)
-
-    const angleGroupRef = useRef<TKGroup>(null)
+    const angleGroupRef = useRef<Konva.Group>(null)
     const dispatch = useDispatch()
 
     function onMeasureClick() {
@@ -39,7 +42,7 @@ const MeasureAngle = ({ layerWidth = 1200, layerHeight = 1100, setLayerDraggable
                 const points = [...lastPoints!, point]
                 const renderGroup = angleGroup.slice(0, angleGroup.length - 1)
                 setAngleGroup([...renderGroup, points])
-                setMove({ x: -100, y: -100 })
+                setMove({ x: -100000, y: -10000000 })
             }
             return count
         })
@@ -51,6 +54,9 @@ const MeasureAngle = ({ layerWidth = 1200, layerHeight = 1100, setLayerDraggable
     }
 
     function onMouseMove() {
+        const stage = angleGroupRef.current?.getStage()!
+        const offset = { x: stage.x() / scale, y: stage.y() / scale }
+        setOffset(offset)
         const layer = angleGroupRef.current?.getLayer()!
         const moveTarget = layer?.getRelativePointerPosition()!
         setMove(moveTarget)
@@ -114,7 +120,7 @@ const MeasureAngle = ({ layerWidth = 1200, layerHeight = 1100, setLayerDraggable
                             {clickCount % 3 === 2 && <Text text="单击确定夹角位置" {...textProps} />}
                         </Label>
                         <Rect
-                            width={layerWidth} height={layerHeight}
+                            width={layerWidth / scale} height={layerHeight / scale} offset={offset}
                             onMouseMove={onMouseMove} onClick={onMeasureClick}
                         />
                     </>
@@ -124,4 +130,4 @@ const MeasureAngle = ({ layerWidth = 1200, layerHeight = 1100, setLayerDraggable
     )
 }
 
-export default MeasureAngle
+export default memo(MeasureAngle)

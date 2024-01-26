@@ -1,15 +1,21 @@
-import { Fragment } from "react"
+import { Fragment, useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import { Group, Line, Text } from "react-konva"
 import { Html } from "react-konva-utils"
+import { Dropdown } from "antd"
+import { DownOutlined } from "@ant-design/icons"
 import { changePointList } from "@/stores/home/useDataPoints"
-import { setTableData, setUnitLength } from "@/stores/home/getTableData"
+import { setRulerScaling, setTableData, setUnitLength } from "@/stores/home/getTableData"
 import { setSelectPointKey } from "@/stores/home/userInfo"
+import { setCalcAlgorithmsMap } from "@/stores/cache/algorithms"
 import { getAllPointMethodMap, getRelativePointsGroup } from "../data"
+import styled from "styled-components"
 import Konva from "konva"
 import algorithmMap, { distanceRates } from "../algorithms"
 import SingleCircle from "@/components/SingleCircle"
 
 import type { IMap } from "@/pages/home/data"
+import type { RootState } from "@/stores"
 import type { IPointItem } from "@/stores/home/useDataPoints"
 import type { ITableData } from "@/apis/getList"
 import type { TKDragEvent, TKMouseEvent } from "@/types"
@@ -36,46 +42,62 @@ const items = [
 const BezierLine = () => {
     const { named, major } = useSelector((state: RootState) => state.showPoint)
     const { pointList } = useSelector((state: RootState) => state.dataPoint)
-    const { tableData, rulerScaling } = useSelector((state: RootState) => state.tableData)
+    const { tableData, rulerScaling, unitLength } = useSelector((state: RootState) => state.tableData)
     const { algorithmWay } = useSelector((state: RootState) => state.algorithm)
+    const { calcAlgorithmsMap } = useSelector((state: RootState) => state.algorithmsCache)
     const { scaleX } = useSelector((state: RootState) => state.transform)
     const { isReset } = useSelector((state: RootState) => state.reset)
 
     const [menuLabel, setMenuLabel] = useState(items[1].label)
-    // const [linePos, setLinePos] = useState({ p1: 33, p2: 36, p3: 34, p4: 1 })
     const [rulerPoint, setRulerPoint] = useState<IMap>()
 
-    // const [intersection, setIntersection] = useState({ x: 0, y: 0 })
-    // const [intersectionKey, setIntersectionKey] = useState("")
+    const stateRef = useRef({ stateAlgorithms: calcAlgorithmsMap, points: pointList })
 
     const pointListRef = useRef<Konva.Group | null>(null)
     const dispatch = useDispatch()
+
+    function onDragMove(e: TKMouseEvent, index: number) {
+        const newPoints = [...pointList]
+        // newPoints[index] = { name: pointList[index].name, gps: [e.target.attrs.x, e.target.attrs.y] }
+        newPoints[index] = {
+            name: pointList[index].name,
+            gps: [Math.floor(e.target.attrs.x), Math.floor(e.target.attrs.y)],
+        }
+        dispatch(changePointList(newPoints))
+    }
 
     let algorithm = algorithmMap[algorithmWay.key].algorithm
     let instance = algorithmMap[algorithmWay.key]
     let pointsMethods = getAllPointMethodMap(algorithm, instance)
 
-    // console.log(instance)
-
-    function onDragMove(e: TKMouseEvent, index: number) {
-        const newPoints = [...pointList]
-        newPoints[index] = { name: newPoints[index].name, gps: [e.target.attrs.x, e.target.attrs.y] }
-        dispatch(changePointList(newPoints))
-    }
+    useEffect(() => {
+        stateRef.current.stateAlgorithms = calcAlgorithmsMap
+        stateRef.current.points = pointList
+    }, [calcAlgorithmsMap, pointList])
 
     function onDrop(name: string) {
+        const pointList = stateRef.current.points
+        if (name === "ruler1" || name === "ruler2") {
+            const [r1, r2] = pointList.filter(item => item.name === "ruler1" || item.name === "ruler2")
+            const rulerScale = r1.gps[1] - r2.gps[1]
+            const unit = unitLength * 10
+            const result = unit / rulerScale
+            dispatch(setRulerScaling(result))
+            return
+        }
+
         const targetGroup = pointList.map(({ name }) => name)
         const targetPoints = getRelativePointsGroup(targetGroup, algorithm)
         const target = targetPoints.get(name)!
+
         const calcValue = getCalculateValue(target)
         const list = computedTableData(calcValue)
-        dispatch(setTableData(list))
-    }
 
-    function onCircleEnter(index: number) {
-        const circleName = pointList[index].name
-        if (circleName === "ruler1" || circleName === "ruler2") return
-        dispatch(setSelectPointKey(circleName))
+        // console.log("stateRef.current.stateAlgorithms", stateRef.current.stateAlgorithms)
+        const algoCacheMap = { ...stateRef.current.stateAlgorithms, ...calcValue }
+        // const algoCacheMap = { ...calcAlgorithmsMap, ...calcValue }
+        dispatch(setCalcAlgorithmsMap(algoCacheMap))
+        dispatch(setTableData(list))
     }
 
     interface IMeasureData extends Omit<ITableData, "measure_value"> {
@@ -92,6 +114,17 @@ const BezierLine = () => {
                 }
                 if (item.measure_value === "-" || item.measure_value === "—") continue
                 item.measure_value = +(+item.measure_value).toFixed(2)
+            }
+        }
+        const [SNA, SNB] = list.filter(item => {
+            return item.name === "SNA&deg" || item.name === "SNB&deg"
+        })
+
+        for (const iMeasureDatum of list) {
+            if (iMeasureDatum.name === "ANB&deg") {
+                const value = +SNA.measure_value! - +SNB.measure_value!
+                iMeasureDatum.measure_value = +value.toFixed(2)
+                break
             }
         }
         return list
@@ -161,21 +194,6 @@ const BezierLine = () => {
         }
     }
 
-    function arrayEqual(arr1: number[], arr2: number[]) {
-        return arr1.every((item, index) => item === arr2[index])
-    }
-
-    const rulers = useMemo(() => pointList.filter(item => item.name === "ruler1" || item.name === "ruler2"), [pointList])
-    useLayoutEffect(() => {
-        if (!rulers.length) return
-        const [r1, r2] = rulers
-        if (!r1 || !r2) return
-        const eq1 = arrayEqual(r1.gps, rulerPoint?.ruler1 ?? [])
-        const eq2 = arrayEqual(r2.gps, rulerPoint?.ruler2 ?? [])
-        if (eq1 && eq2) return
-        setRulerPoint({ ruler1: r1.gps, ruler2: r2.gps })
-    }, [rulerPoint])
-
     useEffect(() => {
         if (tableData?.length !== 0) {
             sessionStorage.setItem("tempTableData", JSON.stringify(tableData))
@@ -188,11 +206,26 @@ const BezierLine = () => {
         }
     }, [isReset])
 
+    function arrayEqual(arr1: number[], arr2: number[]) {
+        return arr1.every((item, index) => item === arr2[index])
+    }
+
+    const rulers = useMemo(() => pointList.filter(item => item.name === "ruler1" || item.name === "ruler2"), [pointList])
+    useEffect(() => {
+        if (!rulers.length) return
+        const [r1, r2] = rulers
+        if (!r1 || !r2) return
+        const eq1 = arrayEqual(r1.gps, rulerPoint?.ruler1 ?? [])
+        const eq2 = arrayEqual(r2.gps, rulerPoint?.ruler2 ?? [])
+        if (eq1 && eq2) return
+        setRulerPoint({ ruler1: r1.gps, ruler2: r2.gps })
+    }, [rulerPoint, rulers])
+
     const scale = pointListRef.current?.getStage()?.scaleX() ?? 1
 
     const ratioStyle = {
         left: `${rulerPoint?.ruler1?.[0]! + (scaleX === 1 ? 40 / scale : 0)}px`,
-        top: `${Math.ceil((rulerPoint?.ruler1?.[1]! + rulerPoint?.ruler2?.[1]!) / 2) - 14 / scale}px`,
+        top: `${Math.ceil((rulerPoint?.ruler1?.[1]! + rulerPoint?.ruler2?.[1]!) / 2) + 10 / scale}px`,
         transform: `scaleX(${scaleX / scale}) scaleY(${1 / scale})`,
     }
 
@@ -205,30 +238,6 @@ const BezierLine = () => {
             }))
             console.table(points)
         }
-
-        // function nList([x, y]: [number, number]) {
-        //     return { x, y }
-        // }
-
-        // function setShowLinePosFn(p1: number, p2: number, p3: number, p4: number, keyIdx: number) {
-        //     setLinePos({ p1, p2, p3, p4 })
-        //
-        //     const pos1 = nList(pointList[p1].gps)1
-        //     const pos2 = nList(pointList[p2].gps)
-        //     const pos3 = nList(pointList[p3].gps)
-        //     const pos4 = nList(pointList[p4].gps)
-        //
-        //     const Pi = getLine2LineIntersection(pos1, pos2, pos3, pos4)!
-        //
-        //     setIntersection({ x: Pi.x, y: Pi.y })
-        //     setIntersectionKeyFn(keyIdx)
-        // }
-
-        // function setIntersectionKeyFn(idx: number) {
-        //     const measureList = JSON.parse(sessionStorage.getItem("tableData")!) as ITableData[]
-        //     const key = measureList[idx].name
-        //     setIntersectionKey(key)
-        // }
 
         function setPointFn(name: string, x: number, y: number) {
             const idx = pointList.findIndex(item => item.name === name)
@@ -256,43 +265,11 @@ const BezierLine = () => {
             window.__ceph_getAllPoint = getAllPointInfoFn
             // @ts-ignore
             window.__ceph_setPoint = setPointFn
-            // @ts-ignore
-            // window.__ceph_setLinePosFn = setShowLinePosFn
-            // @ts-ignore
-            // window.__ceph_setIntersectionNull = () => setIntersection(null)
         }, [pointList])
     }
 
     return (
         <Group>
-            {/*#region*/}
-            {/*{lineList.map((item, index) => (*/}
-            {/*    <Fragment key={"line_" + index}>*/}
-            {/*        {outline && <Line points={item} stroke="#00b6ff" strokeWidth={2} tension={.5} bezier={true} />}*/}
-            {/*    </Fragment>*/}
-            {/*))}*/}
-
-            {/*{!!intersection.x && !!intersection.y && !!pointList.length && (*/}
-            {/*    <>*/}
-            {/*        <Line*/}
-            {/*            points={[...pointList[linePos.p1].gps, ...pointList[linePos.p2].gps]}*/}
-            {/*            stroke="rgb(100,0,255)" strokeWidth={2}*/}
-            {/*        />*/}
-            {/*        <Line points={[...pointList[linePos.p3].gps, ...pointList[linePos.p4].gps]}*/}
-            {/*              stroke="rgb(220,120,0)" strokeWidth={2}*/}
-            {/*        />*/}
-
-            {/*        <Line*/}
-            {/*            points={[intersection.x - 20, intersection.y, intersection.x + 20, intersection.y]}*/}
-            {/*            stroke="rgb(0,182,255)" strokeWidth={2}*/}
-            {/*        />*/}
-            {/*        <Line*/}
-            {/*            points={[intersection.x, intersection.y - 20, intersection.x, intersection.y + 20]}*/}
-            {/*            stroke="rgb(0,182,255)" strokeWidth={2}*/}
-            {/*        />*/}
-            {/*    </>*/}
-            {/*)}*/}
-            {/*#endregion*/}
             {rulerPoint?.ruler1 && rulerPoint?.ruler2 && (
                 <>
                     <Html>
@@ -316,18 +293,18 @@ const BezierLine = () => {
                         <Fragment key={"point_" + index}>
                             {major && (
                                 <SingleCircle
-                                    fill="#fff" name={name} x={x} y={y} stroke={null} radius={4 / scale}
+                                    name={name} x={x} y={y} radius={4 / scale} stroke={null}
                                     onDragEnd={() => onDrop(name)}
                                     onDragMove={(e: TKDragEvent) => onDragMove(e, index)}
-                                    onMouseOver={() => onCircleEnter(index)}
+                                    onMouseOver={() => dispatch(setSelectPointKey(name))}
                                 />
                             )}
-                            {named &&
+                            {named && (
                                 <Text
                                     fill="#f00" text={name} fontSize={20 / scale} scaleX={scaleX}
                                     x={(scaleX === 1 ? 5 : -8) / scale + x} y={(scaleX === 1 ? 5 : 0) / scale + y}
                                 />
-                            }
+                            )}
                         </Fragment>
                     )
                 })}

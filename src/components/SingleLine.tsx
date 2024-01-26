@@ -1,10 +1,14 @@
-import { Group, Line } from "react-konva"
-import { Html } from "react-konva-utils"
-import { createLabelStyle } from "@/features"
+import { useSelector } from "react-redux"
+import { Group, Label, Line, Tag, Text } from "react-konva"
+import { useLog10 } from "@/components/useHooks"
+// import { Html } from "react-konva-utils"
+// import { CloseOutlined } from "@ant-design/icons"
+// import { createLabelStyle } from "@/features"
+import Konva from "konva"
 import SingleCircle from "./SingleCircle"
 
 import type { IPoint, TKDragEvent } from "@/types"
-import type { TKCircle } from "@/types/KonvaElement"
+import type { RootState } from "@/stores"
 
 interface IProps {
     points: [IPoint, IPoint]
@@ -20,14 +24,14 @@ function SingleLine({ points = initialPoints, movePoint: { x: Mx, y: My }, close
     const [p2, setP2] = useState(points[1])
     const { rulerScaling, unitLength } = useSelector((state: RootState) => state.tableData)
 
-    const circle1Ref = useRef<TKCircle>(null)
-    const circle2Ref = useRef<TKCircle>(null)
+    const circle1Ref = useRef<Konva.Circle>(null)
+    const circle2Ref = useRef<Konva.Circle>(null)
     const START = "start", END = "end"
 
-    function getDistance(points: [IPoint, IPoint], unit = rulerScaling || 1, unitSize = unitLength) {
+    function getDistance(points: [IPoint, IPoint], rulerScale = rulerScaling, unitSize = unitLength) {
         const [{ x: x1, y: y1 }, { x: x2, y: y2 }] = points
         const distance = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2))
-        return Math.round(distance * unit * unitSize)
+        return Math.round(distance * rulerScale * unitSize)
     }
 
     function handleCircleMove(e: TKDragEvent, order: string) {
@@ -44,27 +48,10 @@ function SingleLine({ points = initialPoints, movePoint: { x: Mx, y: My }, close
         }
     }
 
-    function useCircleStyle() {
-        type TStyle = Partial<ReturnType<typeof createLabelStyle>> | null
-        const [circleLabelStyle, setCircleLabelStyle] = useState<TStyle>({ left: -100 + "px", top: -200 + "px" })
-
-        useEffect(() => {
-            if (circle2Ref.current) {
-                const { x: x1, y: y1 } = circle1Ref.current?.getAbsolutePosition()!
-                const { x: x2, y: y2 } = circle2Ref.current?.getAbsolutePosition()!
-                const labelStyle = x2 > x1 ? createLabelStyle(x2, y2) : createLabelStyle(x1, y1)
-                setCircleLabelStyle(labelStyle)
-            }
-        }, [points, p1, p2])
-
-        return circleLabelStyle
-    }
-
-
-    const style = useCircleStyle()!
+    const distance = p2 ? getDistance([p1, p2]) : 10
 
     return (
-        <Group draggable onDragMove={() => setP2(prev => ({ ...prev }))}>
+        <Group draggable>
             <Line
                 stroke="#83ECCB"
                 points={p2 ? [p1.x, p1.y, p2.x, p2.y] : [p1.x, p1.y, Mx, My]} strokeWidth={5 / scale}
@@ -79,21 +66,19 @@ function SingleLine({ points = initialPoints, movePoint: { x: Mx, y: My }, close
                         ref={circle2Ref} point={p2} radius={5 / scale} strokeWidth={2 / scale}
                         onDragMove={(e: TKDragEvent) => handleCircleMove(e, END)}
                     />
-                    {/*<Label  {...p2} >*/}
-                    {/*    <Tag fill="#414141" cornerRadius={4}>*/}
-                    {/*    </Tag>*/}
-                    {/*    <Text padding={10} fill="#83eccb"*/}
-                    {/*          text={`${getDistance([p1, p2])} mm`}*/}
-                    {/*    />*/}
-                    {/*    <Text padding={10} fill="#fff" text=" X" x={60} onClick={() => closeDistance()}/>*/}
-                    {/*</Label>*/}
-                    <Html divProps={{ style }}>
-                        {getDistance([p1, p2])}&nbsp;
-                        <span style={{ color: "#fff" }}>
-                                            mm &nbsp;
-                            <CloseOutlined onClick={() => closeDistance()} style={{ cursor: "pointer" }} />
-                        </span>
-                    </Html>
+                    <Group scale={{ x: 1 / scale, y: 1 / scale }}>
+                        <Label x={(p2.x > p1.x ? p2.x : p1.x) * scale + 10} y={(p2.x > p1.x ? p2.y : p1.y) * scale}>
+                            <Tag fill="#414141" cornerRadius={4} />
+                            <Text padding={10} fill="#83eccb" text={`${distance} mm`} />
+                        </Label>
+                        <Label
+                            x={(p2.x > p1.x ? p2.x : p1.x) * scale + useLog10(distance)}
+                            y={(p2.x > p1.x ? p2.y : p1.y) * scale}
+                        >
+                            <Tag fill="#414141" cornerRadius={4} />
+                            <Text padding={10} fill="#fff" text="X" onClick={() => closeDistance()} />
+                        </Label>
+                    </Group>
                 </>
             )}
         </Group>

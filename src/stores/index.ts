@@ -9,6 +9,7 @@ import cacheReducer, { type CacheState } from "./cache"
 import AlgorithmReducer, { type AlgorithmState } from "./aside"
 import AlgorithmsCacheReducer, { type AlgorithmsCacheState } from "./cache/algorithms"
 import ResetReducer, { type ResetState } from "./header/reset"
+import ReloadReducer, { type ReloadState } from "./header/reload.ts"
 
 import type { ToolkitStore } from "@reduxjs/toolkit/dist/configureStore"
 
@@ -23,6 +24,7 @@ interface StoreState {
     algorithm: AlgorithmState
     algorithmsCache: AlgorithmsCacheState
     reset: ResetState
+    reload: ReloadState
 }
 
 const store: ToolkitStore<StoreState> = configureStore({
@@ -37,6 +39,7 @@ const store: ToolkitStore<StoreState> = configureStore({
         algorithm: AlgorithmReducer,
         algorithmsCache: AlgorithmsCacheReducer,
         reset: ResetReducer,
+        reload: ReloadReducer,
     },
 })
 

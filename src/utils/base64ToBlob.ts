@@ -1,12 +1,29 @@
-export function dataURLtoBlob(dataUrl: string) {
-    const arr = dataUrl.split(",")! //分割为数组，分割到第一个逗号
-    const mime = arr[0].match(/:(.*?);/)?.[1] //获取分割后的base64前缀中的类型
-    const bstr = window.atob(arr[1])
-    let n = bstr.length
-    const u8arr = new Uint8Array(n)
+export async function dataURLtoBlob(dataUrl: string) {
+    const base64 = await convertImgToBase64(dataUrl)
+    const arr = base64.split(",")
+    const mime = arr[0].match(/:(.*?);/)![1]
+    const binaryData = atob(arr[1])
+    const arrayBuffer = new ArrayBuffer(binaryData.length)
+    const uint8Array = new Uint8Array(arrayBuffer)
 
-    while (n--) {
-        u8arr[n] = bstr.charCodeAt(n)
+    for (let i = 0; i < binaryData.length; i++) {
+        uint8Array[i] = binaryData.charCodeAt(i)
     }
-    return new Blob([u8arr], { type: mime })//文件类型格式
+    return new Blob([uint8Array], { type: mime })
+}
+
+function convertImgToBase64(src: string): Promise<string> {
+    const img = new Image
+    img.src = src
+    return new Promise((resolve) => {
+        img.onload = function() {
+            const canvas = document.createElement("canvas")
+            canvas.width = img.width
+            canvas.height = img.height
+            const ctx = canvas.getContext("2d")!
+            ctx.drawImage(img, 0, 0, img.width, img.height)
+            const base64URL = canvas.toDataURL("image/png")
+            resolve(base64URL)
+        }
+    })
 }

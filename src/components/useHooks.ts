@@ -1,5 +1,3 @@
-import { useEffect } from "react"
-
 import type { IPoint } from "@/types"
 
 export function useLabelId(deps: IPoint[], targetDepIdx: number) {
@@ -14,4 +12,21 @@ export function useLabelId(deps: IPoint[], targetDepIdx: number) {
     }, [])
 
     return id
+}
+
+export function useLog10(num: number, append = 35) {
+    const pow = Math.log10(num)
+    if (pow == -Infinity || pow === 0) {
+        return 15 + append
+    }
+    if (pow % 1 === 0) {
+        return 20 + 5 * pow + append
+    }
+    if (pow < 1) {
+        return Math.ceil(pow) * 15 + append
+    }
+    if (pow < 2) {
+        return Math.ceil(pow) * 11 + append
+    }
+    return Math.ceil(pow) * 10 + append
 }

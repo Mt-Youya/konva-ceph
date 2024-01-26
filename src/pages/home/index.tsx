@@ -18,7 +18,6 @@ const ScMain = styled.main`
 `
 
 function Home() {
-
     return (
         <Provider store={store}>
             <ScDiv>

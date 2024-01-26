@@ -1,14 +1,15 @@
+import { useDispatch, useSelector } from "react-redux"
 import { Stage, Layer, Group, Image } from "react-konva"
 import { setReset } from "@/stores/header/reset"
+import styled from "styled-components"
 import Konva from "konva"
 import useImage from "use-image"
 import MeasureDistance from "./MeasureDistance"
 import MeasureAngle from "./MeasureAngle"
 import BezierLine from "./BezierLine"
-import randomUUID from "@/utils/randomUUID"
 
+import type { RootState } from "@/stores"
 import type { TKWheelEvent } from "@/types"
-import type { TKGroup, TKImage, TKLayer, TKStage } from "@/types/KonvaElement"
 
 const ScStage = styled(Stage)`
     width: 100%;
@@ -25,6 +26,7 @@ const StageContainer = () => {
     const { lateral } = useSelector((state: RootState) => state.showPoint)
     const { rotate, scaleX, contrast, brightness } = useSelector((state: RootState) => state.transform)
     const { isReset } = useSelector((state: RootState) => state.reset)
+    const { loadCount } = useSelector((state: RootState) => state.reload)
 
     const [layerDraggable, setLayerDraggable] = useState(true)
     const [width, setWidth] = useState(1000)
@@ -32,16 +34,14 @@ const StageContainer = () => {
     const [stageScale, setStageScale] = useState(1)
     const [stageX, setStageX] = useState(0)
     const [stageY, setStageY] = useState(0)
-    const [_, setTemp] = useState(0)
     const [image] = useImage(imgUrl, "anonymous")
-    const [api, contextHolder] = notification.useNotification()
     // const [scale, setScale] = useState({ MinScale: 1, MaxScale: 4 })
 
     const ScaleRef = useRef({ MinScale: 1, MaxScale: 4 })
-    const stageRef = useRef<TKStage>(null)
-    const layerRef = useRef<TKLayer>(null)
-    const imageRef = useRef<TKImage>(null)
-    const imageGroupRef = useRef<TKGroup>(null)
+    const stageRef = useRef<Konva.Stage>(null)
+    const layerRef = useRef<Konva.Layer>(null)
+    const imageRef = useRef<Konva.Image>(null)
+    const imageGroupRef = useRef<Konva.Group>(null)
 
     const dispatch = useDispatch()
 
@@ -74,36 +74,8 @@ const StageContainer = () => {
 
         const newStageX = -(mousePointTo.x - pointer.x / newScale) * newScale
         const newStageY = -(mousePointTo.y - pointer.y / newScale) * newScale
-        setStageX(newStageX)
-        setStageY(newStageY)
-    }
-
-    const notifyKey = randomUUID()
-
-    function openNotification() {
-        function close() {
-            api.destroy(notifyKey)
-        }
-
-        function confirm() {
-            setAdaption()
-            api.destroy(notifyKey)
-        }
-
-        api.open({
-            message: "图片过大提示",
-            description: "检测到图片大小超出容器大小! 是否自适应画布容器大小?",
-            duration: null,
-            icon: <WarningOutlined style={{ color: "red" }} />,
-            btn: <Space>
-                <Button type="link" size="small" onClick={close}>不设置自适应 </Button>
-                <Button type="primary" size="small" onClick={confirm}>
-                    设置自适应
-                </Button>
-            </Space>,
-            key: notifyKey,
-            style: { zIndex: 200 },
-        })
+        setStageX(Math.floor(newStageX))
+        setStageY(Math.floor(newStageY))
     }
 
     function setAdaption() {
@@ -122,8 +94,8 @@ const StageContainer = () => {
             MaxScale: newScale * 4,
         }
 
-        setStageX(scalex)
-        setStageY(scaley)
+        setStageX(Math.floor(scalex))
+        setStageY(Math.floor(scaley))
         setStageScale(newScale)
     }
 
@@ -176,31 +148,22 @@ const StageContainer = () => {
         setStageScale(1)
     }
 
-    useEffect(() => {
-        const img = imageRef.current
-        const { over } = isImageOverContent()
-        over && openNotification()
-        return () => {
-            img?.destroy()
-        }
-    }, [imageRef])
-
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (isReset) {
             reset()
             dispatch(setReset(false))
             const { over } = isImageOverContent()
-            over && openNotification()
+            over && setAdaption()
         }
     }, [isReset])
 
-    useEffect(() => {
-        handleDragMove()
-    }, [imgUrl])
-
-    function handleDragMove() {
-        setTemp(prevState => prevState + 1)
-    }
+    useLayoutEffect(() => {
+        if (loadCount > 0) {
+            imageRef.current?.cache()
+            const { over } = isImageOverContent()
+            over && setAdaption()
+        }
+    }, [loadCount])
 
     const measureProps = {
         setLayerDraggable,
@@ -210,9 +173,8 @@ const StageContainer = () => {
 
     return (
         <>
-            {contextHolder}
             <ScStage ref={stageRef} scaleX={stageScale} scaleY={stageScale} x={stageX} y={stageY} onWheel={handleWheel}>
-                <Layer draggable={layerDraggable} ref={layerRef} onDragMove={handleDragMove}>
+                <Layer draggable={layerDraggable} ref={layerRef}>
                     <Group
                         x={width / 2} y={height / 2} scaleX={scaleX} rotation={rotate} ref={imageGroupRef}
                         offset={{ x: image?.width! / 2, y: image?.height! / 2 }}
@@ -235,4 +197,3 @@ const StageContainer = () => {
 }
 
 export default StageContainer
-
