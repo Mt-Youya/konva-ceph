@@ -31,9 +31,6 @@ const StageContainer = () => {
     const [layerDraggable, setLayerDraggable] = useState(true)
     const [width, setWidth] = useState(1000)
     const [height, setHeight] = useState(1000)
-    const [stageScale, setStageScale] = useState(1)
-    const [stageX, setStageX] = useState(0)
-    const [stageY, setStageY] = useState(0)
     const [image] = useImage(imgUrl, "anonymous")
     // const [scale, setScale] = useState({ MinScale: 1, MaxScale: 4 })
 
@@ -70,12 +67,29 @@ const StageContainer = () => {
                       : oldScale < MinScale
                           ? oldScale
                           : oldScale / ScaleBy
-        setStageScale(newScale)
+        stage.scale({ x: newScale, y: newScale })
 
+        setChildScale()
         const newStageX = -(mousePointTo.x - pointer.x / newScale) * newScale
         const newStageY = -(mousePointTo.y - pointer.y / newScale) * newScale
-        setStageX(Math.floor(newStageX))
-        setStageY(Math.floor(newStageY))
+        stage.x(newStageX)
+        stage.y(newStageY)
+    }
+
+    function setChildScale() {
+        const stage = stageRef.current?.getStage()!
+        const scale = stage.scaleX()
+        const layer = layerRef.current!
+
+        // @ts-ignore
+        const children = layer.children[0].children[1].children[2].children
+        for (const child of children) {
+            if (child.className === "Text") {
+                child.fontSize(20 / scale)
+                continue
+            }
+            child.radius(4 / scale)
+        }
     }
 
     function setAdaption() {
@@ -94,9 +108,10 @@ const StageContainer = () => {
             MaxScale: newScale * 4,
         }
 
-        setStageX(Math.floor(scalex))
-        setStageY(Math.floor(scaley))
-        setStageScale(newScale)
+        const stage = stageRef.current?.getStage()!
+        stage.scale({ x: newScale, y: newScale })
+        stage.x(scalex)
+        stage.y(scaley)
     }
 
     function isImageOverContent() {
@@ -143,9 +158,10 @@ const StageContainer = () => {
     }, [])
 
     function reset() {
-        setStageX(0)
-        setStageY(0)
-        setStageScale(1)
+        const stage = stageRef!.current!.getStage()
+        stage.x(0)
+        stage.y(0)
+        stage.scale({ x: 1, y: 1 })
     }
 
     useLayoutEffect(() => {
@@ -173,7 +189,7 @@ const StageContainer = () => {
 
     return (
         <>
-            <ScStage ref={stageRef} scaleX={stageScale} scaleY={stageScale} x={stageX} y={stageY} onWheel={handleWheel}>
+            <ScStage ref={stageRef} onWheel={handleWheel}>
                 <Layer draggable={layerDraggable} ref={layerRef}>
                     <Group
                         x={width / 2} y={height / 2} scaleX={scaleX} rotation={rotate} ref={imageGroupRef}
