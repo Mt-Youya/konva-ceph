@@ -34,7 +34,7 @@ const StageContainer = () => {
     const [image] = useImage(imgUrl, "anonymous")
     // const [scale, setScale] = useState({ MinScale: 1, MaxScale: 4 })
 
-    const ScaleRef = useRef({ MinScale: 1, MaxScale: 4 })
+    const ScaleRef = useRef({ MinScale: 0.001, MaxScale: Number.MAX_SAFE_INTEGER })
     const stageRef = useRef<Konva.Stage>(null)
     const layerRef = useRef<Konva.Layer>(null)
     const imageRef = useRef<Konva.Image>(null)

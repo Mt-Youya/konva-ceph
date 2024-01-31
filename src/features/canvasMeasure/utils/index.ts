@@ -3,19 +3,16 @@ import randomUUID from "@/utils/randomUUID"
 import type { IPoint } from "@/types"
 import type { TReturnI2VPos } from "@/pages/home/algorithms/common"
 
-const { ceil, sqrt, cos, sin, acos, abs, PI } = Math
+const { floor, sqrt, cos, sin, acos, abs, PI } = Math
 
 export function createLabelStyle(leftX: number, topY: number, color = "#83ECCB", bgColor = "#32393F") {
     return {
-        left: ceil(leftX) + 10 + "px",
-        top: ceil(topY) + "px",
         color,
         backgroundColor: bgColor,
         borderRadius: "2px",
         padding: "6px",
         border: "1px solid #414141",
-        transform: "none",
-        zIndex: 99999999999999,
+        transform: `translate(${floor(leftX) + 20}px, ${floor(topY)}px)`,
     }
 }
 
@@ -235,8 +232,8 @@ export function getLine2LineIntersection(p1: IPoint, p2: IPoint, p3: IPoint, p4:
         throw Error("Two Lines Parallel!")
     }
 
-    const x = (l1.C * l2.B - l2.C * l1.B) / (l1.A * l2.B - l2.A * l1.B)
-    const y = (l1.A * l2.C - l2.A * l1.C) / (l1.A * l2.B - l2.A * l1.B)
+    const x = (l2.C * l1.B - l1.C * l2.B) / (l1.A * l2.B - l2.A * l1.B)
+    const y = (l2.A * l1.C - l1.A * l2.C) / (l1.A * l2.B - l2.A * l1.B)
 
     return {
         x,

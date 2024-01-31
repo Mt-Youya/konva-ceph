@@ -22,16 +22,28 @@ const initialPoints: [IPoint, IPoint] = [{ x: 0, y: 0 }, { x: 0, y: 0 }]
 function SingleLine({ points = initialPoints, movePoint: { x: Mx, y: My }, closeDistance, scale = 1 }: IProps) {
     const [p1, setP1] = useState(points[0])
     const [p2, setP2] = useState(points[1])
-    const { rulerScaling, unitLength } = useSelector((state: RootState) => state.tableData)
+    const { unitLength } = useSelector((state: RootState) => state.tableData)
+    const { pointList } = useSelector((state: RootState) => state.dataPoint)
 
     const circle1Ref = useRef<Konva.Circle>(null)
     const circle2Ref = useRef<Konva.Circle>(null)
     const START = "start", END = "end"
 
-    function getDistance(points: [IPoint, IPoint], rulerScale = rulerScaling, unitSize = unitLength) {
+    const rulers = useMemo(() => {
+        const pointMap = new Map
+        for (const iPointItem of pointList) {
+            if (pointMap.has(iPointItem.name)) continue
+            pointMap.set(iPointItem.name, iPointItem)
+        }
+        return pointMap
+    }, [pointList])
+
+    function getDistance(points: [IPoint, IPoint], unitSize = unitLength) {
         const [{ x: x1, y: y1 }, { x: x2, y: y2 }] = points
+        const [r1, r2] = [rulers.get("ruler1"), rulers.get("ruler2")]
         const distance = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2))
-        return Math.round(distance * rulerScale * unitSize)
+        const lR = Math.abs(r1.gps[1] - r2.gps[1])
+        return Math.round(distance / lR * unitSize * 10)
     }
 
     function handleCircleMove(e: TKDragEvent, order: string) {
@@ -48,7 +60,7 @@ function SingleLine({ points = initialPoints, movePoint: { x: Mx, y: My }, close
         }
     }
 
-    const distance = p2 ? getDistance([p1, p2]) : 10
+    const distance = p2 ? getDistance([p1, p2]) : 0
 
     return (
         <Group draggable>

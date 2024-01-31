@@ -3,7 +3,6 @@ import { Tooltip } from "antd"
 import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons"
 import { AntdScEmpty, ScContainer, ScSpace, ScTable, ScTbody, ScThead, ScTr } from "./styled"
 import { setTableData } from "@/stores/home/getTableData"
-import { distanceRates } from "@/pages/home/algorithms"
 import AlgosTableData from "@/constants/algosTableData"
 import WarningInfo from "@/assets/icons/WarningInfo.svg?url"
 
@@ -70,7 +69,7 @@ function AsideTable() {
         const target = AlgosTableData[wayKey]
         const anb = algorithmMap["SNA&deg"] - algorithmMap["SNB&deg"]
         const data = target.map(item => {
-            const value = (item.name.includes("&mm") || distanceRates.includes(item.name))
+            const isMM = item.name.includes("&mm")
             if (item.name === "ANB&deg") {
                 return {
                     ...item,
@@ -79,9 +78,9 @@ function AsideTable() {
             }
 
             if (rulerScaling !== 0) {
-                const mv = value ? +algorithmMap[item.name] * unit * rulerScaling : algorithmMap[item.name]
+                const mv = isMM ? algorithmMap[item.name] * unit * rulerScaling : algorithmMap[item.name]
                 if (!mv) {
-                    console.log(value, algorithmMap, item.name, unit)
+                    console.log("!mv", isMM, algorithmMap, item.name, unit, rulerScaling)
                     return {
                         ...item,
                         measure_value: "-",
@@ -89,12 +88,12 @@ function AsideTable() {
                 }
                 return {
                     ...item,
-                    measure_value: +(+mv).toFixed(2),
+                    measure_value: +mv.toFixed(2),
                 }
             }
             return {
                 ...item,
-                measure_value: value ? "-" : algorithmMap[item.name],
+                measure_value: isMM ? "-" : algorithmMap[item.name],
             }
         })
         dispatch(setTableData(data))

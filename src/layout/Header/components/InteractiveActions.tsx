@@ -18,13 +18,12 @@ import { setAlgorithm } from "@/stores/aside"
 import { setReset } from "@/stores/header/reset"
 import { setLoadCount } from "@/stores/header/reload"
 import {
-    AntdScDivider,
+    AntdScDivider, AntdScHeaderButton,
     AntdScMask,
     AntdScModal,
     ScHeaderAction,
     ScHeaderBtnContainer,
     ScHeaderMeasureContainer,
-    ScHeaderNormalButton,
     ScHeaderResetButton,
     ScHeaderWrapper,
 } from "./styled"
@@ -45,10 +44,13 @@ function InteractiveActions() {
     const [rate, setRate] = useState(1)
     const [imgUrl, setImgUrl] = useState<string | ArrayBuffer | null>(null)
     const [imgType, setImgType] = useState("jpeg")
+    const [downloading, setDownloading] = useState(false)
+
     const { angle, distance } = useSelector((state: RootState) => state.measure)
     const { cachePoints, cacheTableData, cacheAlgorithmsMap } = useSelector((state: RootState) => state.cache)
     const { pointList } = useSelector((state: RootState) => state.dataPoint)
     const { algorithmWay } = useSelector((state: RootState) => state.algorithm)
+    const { unitLength, rulerScaling } = useSelector((state: RootState) => state.tableData)
     const { calcAlgorithmsMap } = useSelector((state: RootState) => state.algorithmsCache)
 
     const dispatch = useDispatch()
@@ -102,10 +104,6 @@ function InteractiveActions() {
         dispatch(changeBrightness(transform.brightness))
 
         dispatch(setAlgorithm(storeState.algorithms.algorithmWay))
-    }
-
-    function handleAnalysisFetch() {
-        inputRef.current?.click()
     }
 
     async function handleUpload(e: Event) {
@@ -236,11 +234,7 @@ function InteractiveActions() {
         return getTableData(fileData).then(({ code, data, msg }) => {
             if (code !== 0) return message.error(msg)
             const { point: points, "measure-items": measureData, "ruler-scaling": rulerScaling } = data
-            const keyFlag = {
-                "-1": "down",
-                "0": "normal",
-                "1": "up",
-            }
+            const keyFlag = { "-1": "down", "0": "normal", "1": "up" }
             const dataList = measureData.map(item => {
                 return {
                     ...item,
@@ -251,13 +245,13 @@ function InteractiveActions() {
             const floorPoints = points.map(({ name, gps }) => ({ name, gps: [Math.floor(gps[0]), Math.floor(gps[1])] }))
             dispatch(changePointList(floorPoints))
             dispatch(setTableData(dataList))
-            dispatch(setRulerScaling(rulerScaling))
+            dispatch(setRulerScaling(Math.abs(rulerScaling)))
             dispatch(setAlgorithm(storeState.algorithms.algorithmWay))
 
             const timer = setTimeout(() => {
                 dispatch(setCacheTableData(dataList))
                 dispatch(setCachePoints(points))
-                calcAllAlgorithms(points, rulerScaling)
+                calcAllAlgorithms(points, Math.abs(rulerScaling))
                 setRate(0)
                 clearTimeout(timer)
             }, 500)
@@ -276,8 +270,48 @@ function InteractiveActions() {
         if (!pointList.length) {
             return message.warning("暂无头测点相关信息,请先上传头影图片!")
         }
-        const src = await getMarkImageBlob()
-        downloadAll(src)
+        setDownloading(true)
+        const str = await getMarkImageBlob()
+
+        const zip = new JSZip
+        const xlsxList = []
+
+        for (const algosTableDataKey in algosTableData) {
+            const table = algosTableData[algosTableDataKey].map(item => {
+                const up = +item.standard_value + +item.standard_deviation
+                const down = +item.standard_value - +item.standard_deviation
+                const key = +item.measure_value > up ? "up" : +item.measure_value < down ? "down" : "normal"
+                const desc = item.tips?.[key] || ""
+                const value = calcAlgorithmsMap?.[item.name] ? calcAlgorithmsMap?.[item.name] * unitLength * rulerScaling : "-"
+                return {
+                    "测量项目": item.measure_name,
+                    "标准值": item.standard_value,
+                    "标准差": item.standard_deviation,
+                    "测量值": value,
+                    "测量结果描述": desc,
+                }
+            })
+
+            xlsxList.push({ name: algosName[algosTableDataKey], table })
+        }
+
+        const Pn = pointList.find(p => p.name === "N")!.gps
+
+        const table = pointList.map((p, index) => {
+            return {
+                "序号": index + 1,
+                "点简写": p.name,
+                "点坐标": translate2NOriginPoint(p.gps, Pn).join(","),
+            }
+        })
+
+        const src = await dataURLtoBlob(imgUrl as string)
+        xlsxList.push({ name: "坐标版", table })
+        zip.file("分析法.xlsx", arrayToExcel(xlsxList))
+        zip.file(`xray_头颅侧位定位片.${imgType}`, src)
+        zip.file(`xray_头颅侧位定位片_Landmark.${imgType}`, str!, { base64: true })
+        zip.generateAsync({ type: "blob" }).then(content => downloadHandler(content, `头影测量_${randomUUID()}.zip`))
+
     }
 
     function downloadHandler(url: Blob, saveName: string) {
@@ -347,45 +381,6 @@ function InteractiveActions() {
         return [(x - x0).toFixed(2), (y - y0).toFixed(2)]
     }
 
-    async function downloadAll(str: string) {
-        const zip = new JSZip
-        const xlsxList = []
-        for (const algosTableDataKey in algosTableData) {
-            const table = algosTableData[algosTableDataKey].map(item => {
-                const up = +item.standard_value + +item.standard_deviation
-                const down = +item.standard_value - +item.standard_deviation
-                const key = +item.measure_value > up ? "up" : +item.measure_value < down ? "down" : "normal"
-                const desc = item.tips?.[key] || ""
-                return {
-                    "测量项目": item.measure_name,
-                    "标准值": item.standard_value,
-                    "标准差": item.standard_deviation,
-                    "测量值": calcAlgorithmsMap?.[item.name] ?? "-",
-                    "测量结果描述": desc,
-                }
-            })
-
-            xlsxList.push({ name: algosName[algosTableDataKey], table })
-        }
-
-        const Pn = pointList.find(p => p.name === "N")!.gps
-
-        const table = pointList.map((p, index) => {
-            return {
-                "序号": index + 1,
-                "点简写": p.name,
-                "点坐标": translate2NOriginPoint(p.gps, Pn).join(","),
-            }
-        })
-
-        const src = await dataURLtoBlob(imgUrl as string)
-        xlsxList.push({ name: "坐标版", table })
-        zip.file("分析法.xlsx", arrayToExcel(xlsxList))
-        zip.file(`xray_头颅侧位定位片.${imgType}`, src)
-        zip.file(`xray_头颅侧位定位片_Landmark.${imgType}`, str!, { base64: true })
-        zip.generateAsync({ type: "blob" }).then(content => downloadHandler(content, `头影测量_${randomUUID()}.zip`))
-    }
-
     useEffect(() => {
         return () => URL.revokeObjectURL(imgUrl as string)
     }, [])
@@ -418,12 +413,12 @@ function InteractiveActions() {
                     {/*        <span> 上传图片 </span>*/}
                     {/*    </ScHeaderNormalButton>*/}
                     {/*</div>*/}
-                    <ScHeaderNormalButton onClick={handleAnalysisFetch}>
+                    <AntdScHeaderButton onClick={() => inputRef.current?.click()}>
                         <span> 上传 </span>
-                    </ScHeaderNormalButton>
-                    <ScHeaderNormalButton onClick={downloadZip}>
+                    </AntdScHeaderButton>
+                    <AntdScHeaderButton onClick={downloadZip} loading={downloading} hasloading="true">
                         <span> 下载 </span>
-                    </ScHeaderNormalButton>
+                    </AntdScHeaderButton>
                 </ScHeaderBtnContainer>
             </ScHeaderWrapper>
 

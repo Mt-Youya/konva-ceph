@@ -1,7 +1,7 @@
-import { Divider, Modal } from "antd"
+import { Divider, Modal, Button } from "antd"
 import styled from "styled-components"
 
-import type { ModalProps } from "antd"
+import type { ModalProps, DividerProps } from "antd"
 
 const ScHeaderWrapper = styled.div`
     display: flex;
@@ -24,28 +24,6 @@ const ScHeaderWrapper = styled.div`
     }
 `
 
-
-const ScHeaderBtnContainer = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    flex: 1;
-    justify-content: flex-end;
-`
-
-const ScHeaderMeasureContainer = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 20px;
-
-    @media (max-width: 1980px) {
-        gap: 0;
-    }
-    @media (max-width: 1700px) {
-        justify-content: space-between;
-    }
-`
-
 const ScHeaderAction = styled.div<{ $active?: boolean }>`
     display: flex;
     flex-direction: column;
@@ -61,50 +39,13 @@ const ScHeaderAction = styled.div<{ $active?: boolean }>`
     min-width: 60px;
     box-sizing: border-box;
 
-
     @media (max-width: 1980px) {
         gap: 10px;
-    }
-    &::after {
-        z-index: 2;
-        background-color: #2E436EFF;
-        scale: 0;
-        transition: scale ease-in-out .3s;
-    }
-
-    &::before {
-        z-index: 3;
-        background-color: #417270;
-        opacity: 0;
-        transition: opacity ease-in-out .3s;
-    }
-
-    &::before, &::after {
-        top: 0;
-        border-radius: 10px;
-        display: block;
-        content: "";
-        position: absolute;
-        width: 100%;
-        height: 100%;;
-    }
-
-    &.active {
-        &::before {
-            opacity: 1;
-        }
-    }
-
-    &:hover {
-        &::after {
-            scale: 1;
-        }
     }
 
     img {
         width: 30px;
         aspect-ratio: 1;
-        z-index: 4;
         @media (max-width: 1700px) {
             width: 20px;
         }
@@ -114,8 +55,7 @@ const ScHeaderAction = styled.div<{ $active?: boolean }>`
         font-size: 14px;
         line-height: 14px;
         white-space: nowrap;
-        z-index: 4;
-        
+
         @media (max-width: 1700px) {
             font-size: 12px;
         }
@@ -137,7 +77,6 @@ const ScHeaderResetButton = styled.button`
     justify-content: center;
     align-items: center;
     gap: 6px;
-
     @media (max-width: 1700px) {
         width: 60px;
         height: 36px;
@@ -153,18 +92,24 @@ const ScHeaderResetButton = styled.button`
     }
 `
 
-const ScHeaderNormalButton = styled.button`
-    font-size: 14px;
-    width: 80px;
-    height: 40px;
-    background-color: #009DC7;
-    color: #fff;
-    margin: 0;
-    padding: 0;
-    @media (max-width: 1700px) {
-        width: 52.5px;
-        height: 36px;
-        font-size: 12px;
+const ScHeaderBtnContainer = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex: 1;
+    justify-content: flex-end;
+`
+
+const ScHeaderMeasureContainer = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    @media (max-width: 1980px) {
+        gap: 0px;
+    }
+    @media (max-width: 1710px) {
+        justify-content: space-between;
     }
 `
 
@@ -174,9 +119,32 @@ export {
     ScHeaderBtnContainer,
     ScHeaderMeasureContainer,
     ScHeaderResetButton,
-    ScHeaderNormalButton,
 }
 
+const AntdScHeaderButton = styled(Button)<{ hasloading?: string }>`
+    font-size: 14px;
+    width: ${prop => prop.hasloading === "true" ? 90 : 70}px;
+    height: 40px;
+    background-color: #009DC7;
+    border: unset;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+
+    &.ant-btn.ant-btn-default:hover {
+        color: inherit;
+    }
+
+    @media (max-width: 1700px) {
+        width: 52.5px;
+        height: 36px;
+        font-size: 12px;
+    }
+
+    &.upload {
+        width: 80px;
+    }
+`
 const AntdScDivider = styled(Divider)`
     margin: 10px 0;
 `
@@ -199,7 +167,7 @@ const AntdScModal = styled(Modal)<ModalProps>`
     }
 `
 
-const AntdScMask = styled(Modal)<ModalProps>`
+const AntdScMask = styled(Modal)<DividerProps>`
     .ant-modal-content {
         box-shadow: 0 0 20px #363636;
         background-color: #1f2327;
@@ -221,10 +189,10 @@ const AntdScMask = styled(Modal)<ModalProps>`
             color: #fff;
         }
     }
-
 `
 
 export {
+    AntdScHeaderButton,
     AntdScDivider,
     AntdScMask,
     AntdScModal,

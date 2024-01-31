@@ -1,30 +1,47 @@
-import { Fragment, useEffect } from "react"
+import { Fragment } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Group, Line, Text } from "react-konva"
 import { Html } from "react-konva-utils"
-import { Dropdown } from "antd"
-import { DownOutlined } from "@ant-design/icons"
+import { Select } from "antd"
 import { changePointList } from "@/stores/home/useDataPoints"
 import { setRulerScaling, setTableData, setUnitLength } from "@/stores/home/getTableData"
 import { setSelectPointKey } from "@/stores/home/userInfo"
 import { setCalcAlgorithmsMap } from "@/stores/cache/algorithms"
 import { getAllPointMethodMap, getRelativePointsGroup } from "../data"
+import { useRulerScale } from "@/hooks/useRulerScale"
 import styled from "styled-components"
 import Konva from "konva"
 import algorithmMap, { distanceRates } from "../algorithms"
 import SingleCircle from "@/components/SingleCircle"
 
+import type { ForwardedRef } from "react"
 import type { IMap } from "@/pages/home/data"
 import type { RootState } from "@/stores"
 import type { IPointItem } from "@/stores/home/useDataPoints"
 import type { ITableData } from "@/apis/getList"
 import type { TKDragEvent, TKMouseEvent } from "@/types"
 
-const AntdDrop = styled(Dropdown)`
+const AntdSelect = styled(Select)`
     background-color: #414141;
     color: #fff;
-    border-radius: 2px;
+    border-radius: 4px;
     padding: 6px;
+
+    &.ant-select > .ant-select-selector {
+        background-color: unset;
+        border: unset;
+        color: inherit;
+    }
+
+    &.ant-select-open > .ant-select-selector {
+        .ant-select-selection-item {
+            color: inherit;
+        }
+    }
+
+    &.ant-select > .ant-select-arrow {
+        color: inherit;
+    }
 `
 
 const ScRatioSpace = styled.div`
@@ -33,13 +50,13 @@ const ScRatioSpace = styled.div`
 `
 
 const items = [
-    { key: 5, label: "5mm" },
-    { key: 10, label: "10mm" },
-    { key: 15, label: "15mm" },
-    { key: 20, label: "20mm" },
+    { value: 5, label: "5mm" },
+    { value: 10, label: "10mm" },
+    { value: 15, label: "15mm" },
+    { value: 20, label: "20mm" },
 ]
 
-const BezierLine = () => {
+function BezierLine(_p: any, ref: ForwardedRef<any>) {
     const { named, major } = useSelector((state: RootState) => state.showPoint)
     const { pointList } = useSelector((state: RootState) => state.dataPoint)
     const { tableData, rulerScaling, unitLength } = useSelector((state: RootState) => state.tableData)
@@ -47,8 +64,10 @@ const BezierLine = () => {
     const { calcAlgorithmsMap } = useSelector((state: RootState) => state.algorithmsCache)
     const { scaleX } = useSelector((state: RootState) => state.transform)
     const { isReset } = useSelector((state: RootState) => state.reset)
+    const { loadCount } = useSelector((state: RootState) => state.reload)
 
-    const [menuLabel, setMenuLabel] = useState(items[1].label)
+    const [_, setTemp] = useState(0)
+    const [menu, setMenu] = useState(items[1].value)
     const [rulerPoint, setRulerPoint] = useState<IMap>()
 
     const stateRef = useRef({ stateAlgorithms: calcAlgorithmsMap, points: pointList })
@@ -78,12 +97,8 @@ const BezierLine = () => {
     function onDrop(name: string) {
         const pointList = stateRef.current.points
         if (name === "ruler1" || name === "ruler2") {
-            const [r1, r2] = pointList.filter(item => item.name === "ruler1" || item.name === "ruler2")
-            const rulerScale = r1.gps[1] - r2.gps[1]
-            const unit = unitLength * 10
-            const result = unit / rulerScale
+            const result = useRulerScale(pointList, unitLength)
             dispatch(setRulerScaling(result))
-            return
         }
 
         const targetGroup = pointList.map(({ name }) => name)
@@ -177,22 +192,16 @@ const BezierLine = () => {
         return calculatedValue
     }
 
-    function onMenuClick({ key }: any) {
-        const filteredLabel = items.filter(item => item.key === +key)[0]?.label
-        setMenuLabel(filteredLabel)
-        switch (+key) {
-            case items[0].key:
-                return dispatch(setUnitLength(0.5))
-            case items[1].key:
-                return dispatch(setUnitLength(1))
-            case items[2].key:
-                return dispatch(setUnitLength(1.5))
-            case items[3].key:
-                return dispatch(setUnitLength(2))
-            default:
-                return
-        }
+    function handleSelectChange(value: typeof items[number]["value"]) {
+        setMenu(value)
+        dispatch(setUnitLength(value / 10))
     }
+
+    useEffect(() => {
+        if (loadCount > 0) {
+            handleSelectChange(10)
+        }
+    }, [loadCount])
 
     useEffect(() => {
         if (tableData?.length !== 0) {
@@ -202,7 +211,7 @@ const BezierLine = () => {
 
     useEffect(() => {
         if (isReset) {
-            onMenuClick({ key: 10 })
+            handleSelectChange(10)
         }
     }, [isReset])
 
@@ -224,10 +233,12 @@ const BezierLine = () => {
     const scale = pointListRef.current?.getStage()?.scaleX() ?? 1
 
     const ratioStyle = {
-        left: `${rulerPoint?.ruler1?.[0]! + (scaleX === 1 ? 40 / scale : 0)}px`,
+        left: `${(rulerPoint?.ruler1?.[0] ?? 0) + 30 / scale}px`,
         top: `${Math.ceil((rulerPoint?.ruler1?.[1]! + rulerPoint?.ruler2?.[1]!) / 2) + 10 / scale}px`,
         transform: `scaleX(${scaleX / scale}) scaleY(${1 / scale})`,
     }
+
+    useImperativeHandle(ref, () => ({ setTemp }))
 
     const mode = import.meta.env.VITE_MODE
     if (mode === "qa" || mode === "development") {
@@ -274,14 +285,9 @@ const BezierLine = () => {
                 <>
                     <Html>
                         <ScRatioSpace style={ratioStyle}>
-                            <AntdDrop
-                                autoFocus
-                                menu={{ items, selectable: true, defaultSelectedKeys: ["10"], onClick: onMenuClick }}
-                            >
-                                <span>
-                                    {menuLabel} <DownOutlined />
-                                </span>
-                            </AntdDrop>
+                            <AntdSelect autoFocus value={menu} options={items}
+                                        onChange={value => handleSelectChange(value as number)}
+                            />
                         </ScRatioSpace>
                     </Html>
                     <Line points={[...rulerPoint?.ruler1, ...rulerPoint?.ruler2]} stroke="#FF005C" />
@@ -313,4 +319,4 @@ const BezierLine = () => {
     )
 }
 
-export default BezierLine
+export default forwardRef(BezierLine)
