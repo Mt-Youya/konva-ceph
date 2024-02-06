@@ -40,9 +40,9 @@ function SingleLine({ points = initialPoints, movePoint: { x: Mx, y: My }, close
 
     function getDistance(points: [IPoint, IPoint], unitSize = unitLength) {
         const [{ x: x1, y: y1 }, { x: x2, y: y2 }] = points
-        const [r1, r2] = [rulers.get("ruler1"), rulers.get("ruler2")]
+        const [{ gps: p1 }, { gps: p2 }] = [rulers.get("ruler1") ?? { gps: [0, 1] }, rulers.get("ruler2") ?? { gps: [0, 2] }]
         const distance = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2))
-        const lR = Math.abs(r1.gps[1] - r2.gps[1])
+        const lR = Math.abs(p1[1] - p2[1])
         return Math.round(distance / lR * unitSize * 10)
     }
 

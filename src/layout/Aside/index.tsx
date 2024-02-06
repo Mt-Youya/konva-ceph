@@ -43,7 +43,6 @@ const menuList = [
     { label: "Jarabak分析法", key: "Jarabak" },
     { label: "Tweed分析法", key: "Tweed" },
     { label: "九院分析法", key: "SH9Hospital" },
-    { label: "李博分析法", key: "DoctorLee" },
 ]
 
 function Aside() {
