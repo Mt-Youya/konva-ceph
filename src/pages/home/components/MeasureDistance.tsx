@@ -6,7 +6,6 @@ import Konva from "konva"
 
 import type { RootState } from "@/stores"
 import type { IPoint } from "@/types"
-import { useEffect, useState } from "react"
 
 interface IProps {
     layerWidth?: number

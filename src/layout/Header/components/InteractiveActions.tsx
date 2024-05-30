@@ -1,3 +1,5 @@
+import { useDispatch, useSelector } from "react-redux"
+import { message, Popconfirm, Progress } from "antd"
 import { actionKeys } from "../data/data"
 import { angleIcon, distanceIcon, resetIcon } from "@/assets/headers"
 import { getTableData } from "@/apis/getList"
@@ -14,9 +16,9 @@ import { changeAngle, changeDistance, changeImgUrl } from "@/stores/home/useMeas
 import { changeBrightness, changeContrast, changeRotate, changeScaleX } from "@/stores/home/useTransform"
 import { changeLateral, changeMajor, changeNamed, changeOutline, changeSupport } from "@/stores/home/useShowPoint"
 import { getAlgorithmState, getMeasureState, getShowPointState, getTransformState } from "@/stores/utils/getState"
+import { setLoadCount } from "@/stores/header/reload"
 import { setAlgorithm } from "@/stores/aside"
 import { setReset } from "@/stores/header/reset"
-import { setLoadCount } from "@/stores/header/reload"
 import {
     AntdScDivider, AntdScHeaderButton,
     AntdScMask,
@@ -27,14 +29,14 @@ import {
     ScHeaderResetButton,
     ScHeaderWrapper,
 } from "./styled"
-import useInputFileEle from "../hooks/useInputFileEle"
 import randomUUID from "@/utils/randomUUID"
 import algosTableData from "@/constants/algosTableData"
 import algorithmMap, { distanceRates } from "@/pages/home/algorithms"
 import JSZip from "jszip"
+// import useInputFileEle from "../hooks/useInputFileEle"
 
-import type { RootState } from "@/stores"
 import type { ActionType } from "../data/data"
+import type { RootState } from "@/stores"
 import type { ImageExcAll } from "@/types"
 import type { IPointItem } from "@/stores/home/useDataPoints"
 
@@ -47,15 +49,16 @@ function InteractiveActions() {
     const [downloading, setDownloading] = useState(false)
 
     const { angle, distance } = useSelector((state: RootState) => state.measure)
-    const { cachePoints, cacheTableData, cacheAlgorithmsMap } = useSelector((state: RootState) => state.cache)
     const { pointList } = useSelector((state: RootState) => state.dataPoint)
     const { algorithmWay } = useSelector((state: RootState) => state.algorithm)
-    const { unitLength, rulerScaling } = useSelector((state: RootState) => state.tableData)
     const { calcAlgorithmsMap } = useSelector((state: RootState) => state.algorithmsCache)
+    const { unitLength, rulerScaling } = useSelector((state: RootState) => state.tableData)
+    const cache = useSelector((state: RootState) => state.cache)
+    const { cachePoints, cacheTableData, cacheAlgorithmsMap } = cache
 
     const dispatch = useDispatch()
 
-    const inputRef = useInputFileEle(handleUpload)
+    // const inputRef = useInputFileEle(handleUpload)
 
     const storeState = {
         transform: getTransformState(),
@@ -84,10 +87,9 @@ function InteractiveActions() {
     function resetData() {
         dispatch(setReset(true))
         dispatch(setCalcAlgorithmsMap(cacheAlgorithmsMap))
-        dispatch(setTableData(cacheTableData))
         dispatch(changePointList(cachePoints))
-
-        const { measure, transform, showPoint } = storeState
+        dispatch(setTableData(cacheTableData))
+        const { measure, transform, showPoint, algorithms } = storeState
 
         dispatch(changeDistance(measure.distance))
         dispatch(changeAngle(measure.angle))
@@ -103,26 +105,37 @@ function InteractiveActions() {
         dispatch(changeScaleX(transform.scaleX))
         dispatch(changeBrightness(transform.brightness))
 
-        dispatch(setAlgorithm(storeState.algorithms.algorithmWay))
+        dispatch(setAlgorithm(algorithms.algorithmWay))
     }
 
-    async function handleUpload(e: Event) {
-        const target = e.target as HTMLInputElement
-        if (!target) return
+    function handleAnalysisUpload() {
+        // inputRef.current?.click()
+        const input = document.createElement("input")
+        input.type = "file"
+        input.accept = "image/*"
+        input.addEventListener("change", handleUpload)
+        input.click()
 
-        const file = target.files![0]
-        if (!file) return
+        async function handleUpload(e: Event) {
+            const target = e.target as HTMLInputElement
+            if (!target) return
 
-        const type = file.type as ImageExcAll
-        if (!ImageFileTypes.includes(type)) return
+            const [file] = target.files!
+            if (!file) return
 
-        setImgType(type.split("/")[1])
-        const url = URL.createObjectURL(file)
-        setImgUrl(url)
-        dispatch(changeImgUrl(url))
-        count++
-        await fetchFileData(file)
-        dispatch(setLoadCount(count))
+            const type = file.type as ImageExcAll
+            if (!ImageFileTypes.includes(type)) return
+
+            setImgType(type.split("/")[1])
+            // const blob = await getFileUrl(file)
+            const url = URL.createObjectURL(file)
+            setImgUrl(url)
+            dispatch(changeImgUrl(url))
+            count++
+            input.remove()
+            await fetchFileData(file)
+            dispatch(setLoadCount(count))
+        }
     }
 
     let count = 0
@@ -320,6 +333,7 @@ function InteractiveActions() {
         aLink.href = src
         aLink.download = saveName || "" // HTML5新增的属性，指定保存文件名，可以不要后缀，注意，file:///模式下不会生效
         aLink.click()
+        setDownloading(false)
     }
 
     async function getMarkImageBlob(): Promise<string> {
@@ -381,20 +395,18 @@ function InteractiveActions() {
         return [(x - x0).toFixed(2), (y - y0).toFixed(2)]
     }
 
-    useEffect(() => {
-        return () => URL.revokeObjectURL(imgUrl as string)
-    }, [])
+    useEffect(() => () => URL.revokeObjectURL(imgUrl as string), [])
 
     return (
         <>
             <ScHeaderWrapper className="interactive-wrapper">
                 <ScHeaderMeasureContainer>
                     <ScHeaderAction onClick={() => handleAction("distance")} className={distance ? "active" : ""}>
-                        <img src={distanceIcon} />
+                        <img src={distanceIcon} alt="测距" />
                         <span> 测距 </span>
                     </ScHeaderAction>
                     <ScHeaderAction onClick={() => handleAction("angle")} className={angle ? "active" : ""}>
-                        <img src={angleIcon} />
+                        <img src={angleIcon} alt="测角度" />
                         <span> 测角度 </span>
                     </ScHeaderAction>
                 </ScHeaderMeasureContainer>
@@ -404,7 +416,7 @@ function InteractiveActions() {
                         onConfirm={() => handleAction("reset")}
                     >
                         <ScHeaderResetButton>
-                            <img src={resetIcon} />
+                            <img src={resetIcon} alt="reset" />
                             <span> 重置 </span>
                         </ScHeaderResetButton>
                     </Popconfirm>
@@ -413,7 +425,7 @@ function InteractiveActions() {
                     {/*        <span> 上传图片 </span>*/}
                     {/*    </ScHeaderNormalButton>*/}
                     {/*</div>*/}
-                    <AntdScHeaderButton onClick={() => inputRef.current?.click()}>
+                    <AntdScHeaderButton onClick={handleAnalysisUpload}>
                         <span> 上传 </span>
                     </AntdScHeaderButton>
                     <AntdScHeaderButton onClick={downloadZip} loading={downloading} hasloading="true">

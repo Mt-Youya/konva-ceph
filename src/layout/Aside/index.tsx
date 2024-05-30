@@ -1,6 +1,12 @@
+import { Dropdown } from "antd"
+import { useDispatch, useSelector } from "react-redux"
+import { DownOutlined } from "@ant-design/icons"
 import { setAlgorithm } from "@/stores/aside"
+import styled from "styled-components"
 import AsideTable from "./components/AsideTable"
 import AiPicture from "./components/AiPicture"
+
+import type { RootState } from "@/stores"
 
 const ScAside = styled.aside`
     height: 100%;
@@ -43,6 +49,7 @@ const menuList = [
     { label: "Jarabak分析法", key: "Jarabak" },
     { label: "Tweed分析法", key: "Tweed" },
     { label: "九院分析法", key: "SH9Hospital" },
+    { label: "李博分析法", key: "DoctorLee" },
 ]
 
 function Aside() {

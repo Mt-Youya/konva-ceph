@@ -3,10 +3,10 @@ import { Group, Label, Rect, Tag, Text } from "react-konva"
 import { changeAngle } from "@/stores/home/useMeasure"
 import Konva from "konva"
 import SingleAngle from "@/components/SingleAngle"
+import randomUUID from "@/utils/randomUUID.ts"
 
 import type { IPoint } from "@/types/canvasCtx"
 import type { RootState } from "@/stores"
-import { useState } from "react"
 
 interface IProps {
     layerWidth?: number
@@ -98,14 +98,12 @@ const MeasureAngle = ({ layerWidth = 1200, layerHeight = 1100, setLayerDraggable
         fill: "#fff",
     }
 
-    const { random } = Math
-
     return (
         <>
             <Group ref={angleGroupRef}>
                 {angleGroup.map(([p1, p2, p3], idx) => (
                     <SingleAngle
-                        key={p1.x + p1.y + (p2 ? p2.x * p2.y : random()) + idx + (p3 ? p3?.x / (p3?.y || 1) : random())}
+                        key={p1.x + p1.y + randomUUID() + idx}
                         points={[p1, p2, p3]} movePoint={move} scale={scale}
                         closeAngle={() => closeAngle(idx)}
                     />

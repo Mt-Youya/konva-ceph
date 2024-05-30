@@ -17,6 +17,7 @@
     /* third-part styles */
     /* example: el-button */
     --card-shadow-normal: rgba(0, 0, 0, 0.05) 0px 6px 30px 5px, rgba(0, 0, 0, 0.04) 0px 16px 24px 2px, rgba(0, 0, 0, 0.08) 0px 8px 10px -5px, rgb(220, 220, 220) 0px 0.5px 0px 0px inset, rgb(220, 220, 220) 0.5px 0px 0px 0px inset, rgb(220, 220, 220) 0px -0.5px 0px 0px inset, rgb(220, 220, 220) -0.5px 0px 0px 0px inset;
+
     text-align: center;
     width: 100%;
     height: 100%;

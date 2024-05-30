@@ -1,3 +1,8 @@
+import { Avatar } from "antd"
+import { UserOutlined } from "@ant-design/icons"
+import React from "react"
+import styled from "styled-components"
+
 const ScAside = styled.aside`
     width: 140px;
     height: 100%;
@@ -5,10 +10,6 @@ const ScAside = styled.aside`
     color: #fff;
     padding: 40px 0 0;
     min-width: 120px;
-    box-shadow: 0 0 4px #363636;
-    border-top-right-radius: 12px;
-    border-bottom-right-radius: 12px;
-    text-align: center;
 `
 
 const ScUserInfo = styled.div`
@@ -32,10 +33,10 @@ interface IProps {
     sex?: string
 }
 
-const UserInfo = ({ src, username, age, sex }: IProps) => {
+const UserInfo: React.FC<IProps> = ({ src, username, age, sex }) => {
     return (
         <ScAside>
-            <Avatar size={80} src={src} icon={!src && <UserOutlined />} />
+            <Avatar size={80} src={src} icon={!src && <UserOutlined/>}/>
             <ScUserInfo>
                 <p className="username"> {username ?? "用户名"} </p>
                 <p className="info"> {sex ?? "性别"} , {age ?? "18"} 岁 </p>

@@ -29,5 +29,5 @@ ul, ol, li {
 
 img {
     object-fit: cover;
-    vertical-align: bottom;
+    vertical-align: middle;
 }

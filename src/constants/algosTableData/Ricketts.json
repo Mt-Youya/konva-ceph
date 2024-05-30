@@ -71,7 +71,7 @@
     },
     {
         "name": "U1-Apo&mm",
-        "measure_name": "U1-Apo(mm)",
+        "measure_name": "U1-APog(上中切牙突距mm)",
         "measure_value": 0,
         "standard_value": 7.6,
         "standard_deviation": 2.0,

@@ -10,6 +10,7 @@ import BezierLine from "./BezierLine"
 
 import type { RootState } from "@/stores"
 import type { TKWheelEvent } from "@/types"
+import { useState } from "react"
 
 const ScStage = styled(Stage)`
     width: 100%;
@@ -22,7 +23,6 @@ const ScStage = styled(Stage)`
 
 const StageContainer = () => {
     const { imgUrl } = useSelector((state: RootState) => state.measure)
-    // const { pointList } = useSelector((state: RootState) => state.dataPoint)
     const { lateral } = useSelector((state: RootState) => state.showPoint)
     const { rotate, scaleX, contrast, brightness } = useSelector((state: RootState) => state.transform)
     const { isReset } = useSelector((state: RootState) => state.reset)
@@ -32,13 +32,13 @@ const StageContainer = () => {
     const [width, setWidth] = useState(1000)
     const [height, setHeight] = useState(1000)
     const [image] = useImage(imgUrl, "anonymous")
-    // const [scale, setScale] = useState({ MinScale: 1, MaxScale: 4 })
 
     const ScaleRef = useRef({ MinScale: 0.001, MaxScale: Number.MAX_SAFE_INTEGER })
     const stageRef = useRef<Konva.Stage>(null)
     const layerRef = useRef<Konva.Layer>(null)
     const imageRef = useRef<Konva.Image>(null)
     const imageGroupRef = useRef<Konva.Group>(null)
+    const BezierLineRef = useRef<any>(null)
 
     const dispatch = useDispatch()
 
@@ -68,28 +68,11 @@ const StageContainer = () => {
                           ? oldScale
                           : oldScale / ScaleBy
         stage.scale({ x: newScale, y: newScale })
-
-        setChildScale()
         const newStageX = -(mousePointTo.x - pointer.x / newScale) * newScale
         const newStageY = -(mousePointTo.y - pointer.y / newScale) * newScale
         stage.x(newStageX)
         stage.y(newStageY)
-    }
-
-    function setChildScale() {
-        const stage = stageRef.current?.getStage()!
-        const scale = stage.scaleX()
-        const layer = layerRef.current!
-
-        // @ts-ignore
-        const children = layer.children[0].children[1].children[2].children
-        for (const child of children) {
-            if (child.className === "Text") {
-                child.fontSize(20 / scale)
-                continue
-            }
-            child.radius(4 / scale)
-        }
+        BezierLineRef.current?.setTemp((prev: number) => prev + 1)
     }
 
     function setAdaption() {
@@ -112,6 +95,7 @@ const StageContainer = () => {
         stage.scale({ x: newScale, y: newScale })
         stage.x(scalex)
         stage.y(scaley)
+        BezierLineRef.current?.setTemp((prev: number) => prev + 1)
     }
 
     function isImageOverContent() {
@@ -188,27 +172,25 @@ const StageContainer = () => {
     }
 
     return (
-        <>
-            <ScStage ref={stageRef} onWheel={handleWheel}>
-                <Layer draggable={layerDraggable} ref={layerRef}>
-                    <Group
-                        x={width / 2} y={height / 2} scaleX={scaleX} rotation={rotate} ref={imageGroupRef}
-                        offset={{ x: image?.width! / 2, y: image?.height! / 2 }}
-                    >
-                        <Image
-                            ref={imageRef} image={image}
-                            contrast={contrast} brightness={brightness} opacity={lateral ? 1 : 0}
-                            filters={[Konva.Filters.Brighten, Konva.Filters.Contrast]}
-                        />
-                        <BezierLine />
-                    </Group>
-                    <Group>
-                        <MeasureDistance {...measureProps} />
-                        <MeasureAngle {...measureProps} />
-                    </Group>
-                </Layer>
-            </ScStage>
-        </>
+        <ScStage ref={stageRef} onWheel={handleWheel}>
+            <Layer draggable={layerDraggable} ref={layerRef}>
+                <Group
+                    x={width / 2} y={height / 2} scaleX={scaleX} rotation={rotate} ref={imageGroupRef}
+                    offset={{ x: image?.width! / 2, y: image?.height! / 2 }}
+                >
+                    <Image
+                        ref={imageRef} image={image}
+                        contrast={contrast} brightness={brightness} opacity={lateral ? 1 : 0}
+                        filters={[Konva.Filters.Brighten, Konva.Filters.Contrast]}
+                    />
+                    <BezierLine ref={BezierLineRef} />
+                </Group>
+                <Group>
+                    <MeasureDistance {...measureProps} />
+                    <MeasureAngle {...measureProps} />
+                </Group>
+            </Layer>
+        </ScStage>
     )
 }
 

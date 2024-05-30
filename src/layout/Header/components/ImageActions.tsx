@@ -1,8 +1,12 @@
+import { useDispatch, useSelector } from "react-redux"
+import { Slider } from "antd"
 import { mirrorIcon, rotateIcon, brightnessIcon, contrastRatioIcon } from "@/assets/headers"
 import { ScHeaderAction, ScHeaderWrapper } from "./styled"
 import { actionKeys } from "../data/data"
-import { changeBrightness, changeContrast, changeRotate, changeScaleX } from "@/stores/home/useTransform"
+import { changeBrightness, changeContrast, changeRotate, changeScaleX } from "@/stores/home/useTransform.ts"
+import styled from "styled-components"
 
+import type { RootState } from "@/stores"
 import type { ActionType } from "../data/data"
 
 const AntdScSlider = styled(Slider)`
@@ -43,7 +47,7 @@ function ImageActions() {
                 dispatch(changeScaleX(scaleX * -1))
                 return
             default:
-                break
+                return
         }
     }
 
@@ -71,7 +75,6 @@ function ImageActions() {
                 <img src={rotateIcon} alt="rotate" />
                 <span> 旋转 </span>
             </ScHeaderAction>
-            {/*@ts-ignore*/}
             <ScHeaderAction $active={sliderMap.brightnessActive} onClick={() => sliderClick("brightnessActive")}>
                 <img src={brightnessIcon} alt="brightness" />
                 <span> 亮度 </span>
@@ -82,7 +85,6 @@ function ImageActions() {
                     />
                 )}
             </ScHeaderAction>
-            {/*@ts-ignore*/}
             <ScHeaderAction $active={sliderMap.contrastActive} onClick={() => sliderClick("contrastActive")}>
                 <img src={contrastRatioIcon} alt="contrast" />
                 <span> 对比度 </span>

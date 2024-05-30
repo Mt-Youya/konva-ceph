@@ -13,6 +13,8 @@ import styled from "styled-components"
 import Konva from "konva"
 import algorithmMap, { distanceRates } from "../algorithms"
 import SingleCircle from "@/components/SingleCircle"
+// import BezierCircle from "./BezierCircle"
+// import SingleText from "@/components/SingleText"
 
 import type { ForwardedRef } from "react"
 import type { IMap } from "@/pages/home/data"
@@ -68,9 +70,13 @@ function BezierLine(_p: any, ref: ForwardedRef<any>) {
 
     const [_, setTemp] = useState(0)
     const [menu, setMenu] = useState(items[1].value)
+    // const [linePos, setLinePos] = useState({ p1: 33, p2: 36, p3: 34, p4: 1 })
     const [rulerPoint, setRulerPoint] = useState<IMap>()
 
     const stateRef = useRef({ stateAlgorithms: calcAlgorithmsMap, points: pointList })
+
+    // const [intersection, setIntersection] = useState({ x: 0, y: 0 })
+    // const [intersectionKey, setIntersectionKey] = useState("")
 
     const pointListRef = useRef<Konva.Group | null>(null)
     const dispatch = useDispatch()
@@ -250,6 +256,30 @@ function BezierLine(_p: any, ref: ForwardedRef<any>) {
             console.table(points)
         }
 
+        // function nList([x, y]: [number, number]) {
+        //     return { x, y }
+        // }
+
+        // function setShowLinePosFn(p1: number, p2: number, p3: number, p4: number, keyIdx: number) {
+        //     setLinePos({ p1, p2, p3, p4 })
+        //
+        //     const pos1 = nList(pointList[p1].gps)1
+        //     const pos2 = nList(pointList[p2].gps)
+        //     const pos3 = nList(pointList[p3].gps)
+        //     const pos4 = nList(pointList[p4].gps)
+        //
+        //     const Pi = getLine2LineIntersection(pos1, pos2, pos3, pos4)!
+        //
+        //     setIntersection({ x: Pi.x, y: Pi.y })
+        //     setIntersectionKeyFn(keyIdx)
+        // }
+
+        // function setIntersectionKeyFn(idx: number) {
+        //     const measureList = JSON.parse(sessionStorage.getItem("tableData")!) as ITableData[]
+        //     const key = measureList[idx].name
+        //     setIntersectionKey(key)
+        // }
+
         function setPointFn(name: string, x: number, y: number) {
             const idx = pointList.findIndex(item => item.name === name)
             const copyPointList = JSON.parse(JSON.stringify(pointList))
@@ -276,11 +306,42 @@ function BezierLine(_p: any, ref: ForwardedRef<any>) {
             window.__ceph_getAllPoint = getAllPointInfoFn
             // @ts-ignore
             window.__ceph_setPoint = setPointFn
+            // @ts-ignore
+            // window.__ceph_setLinePosFn = setShowLinePosFn
+            // @ts-ignore
+            // window.__ceph_setIntersectionNull = () => setIntersection(null)
         }, [pointList])
     }
 
     return (
         <Group>
+            {/*#region*/}
+            {/*{lineList.map((item, index) => (*/}
+            {/*    <Fragment key={"line_" + index}>*/}
+            {/*        {outline && <Line points={item} stroke="#00b6ff" strokeWidth={2} tension={.5} bezier={true} />}*/}
+            {/*    </Fragment>*/}
+            {/*))}*/}
+
+            {/*{!!intersection.x && !!intersection.y && !!pointList.length && (*/}
+            {/*    <>*/}
+            {/*        <Line*/}
+            {/*            points={[...pointList[linePos.p1].gps, ...pointList[linePos.p2].gps]}*/}
+            {/*            stroke="rgb(100,0,255)" strokeWidth={2}*/}
+            {/*        />*/}
+            {/*        <Line points={[...pointList[linePos.p3].gps, ...pointList[linePos.p4].gps]}*/}
+            {/*              stroke="rgb(220,120,0)" strokeWidth={2}*/}
+            {/*        />*/}
+            {/*        <Line*/}
+            {/*            points={[intersection.x - 20, intersection.y, intersection.x + 20, intersection.y]}*/}
+            {/*            stroke="rgb(0,182,255)" strokeWidth={2}*/}
+            {/*        />*/}
+            {/*        <Line*/}
+            {/*            points={[intersection.x, intersection.y - 20, intersection.x, intersection.y + 20]}*/}
+            {/*            stroke="rgb(0,182,255)" strokeWidth={2}*/}
+            {/*        />*/}
+            {/*    </>*/}
+            {/*)}*/}
+            {/*#endregion*/}
             {rulerPoint?.ruler1 && rulerPoint?.ruler2 && (
                 <>
                     <Html>
@@ -298,14 +359,26 @@ function BezierLine(_p: any, ref: ForwardedRef<any>) {
                     return (
                         <Fragment key={"point_" + index}>
                             {major && (
+                                // <BezierCircle
+                                //     name={name} x={x} y={y} radius={4 / scale}
+                                //     onDragEnd={onDrop} index={index} onDragMove={onDragMove}
+                                // />
                                 <SingleCircle
                                     name={name} x={x} y={y} radius={4 / scale} stroke={null}
                                     onDragEnd={() => onDrop(name)}
                                     onDragMove={(e: TKDragEvent) => onDragMove(e, index)}
                                     onMouseOver={() => dispatch(setSelectPointKey(name))}
+
+                                    // onDragEnd={useMemoizedFn(() => onDrop(name))}
+                                    // onDragMove={useMemoizedFn((e: TKDragEvent) => onDragMove(e, index))}
+                                    // onMouseOver={useMemoizedFn(() => dispatch(setSelectPointKey(name)))}
                                 />
                             )}
                             {named && (
+                                // <SingleText
+                                //     text={name} fontSize={20 / scale} scaleX={scaleX}
+                                //     x={(scaleX === 1 ? 5 : -8) / scale + x} y={(scaleX === 1 ? 5 : 0) / scale + y}
+                                // />
                                 <Text
                                     fill="#f00" text={name} fontSize={20 / scale} scaleX={scaleX}
                                     x={(scaleX === 1 ? 5 : -8) / scale + x} y={(scaleX === 1 ? 5 : 0) / scale + y}

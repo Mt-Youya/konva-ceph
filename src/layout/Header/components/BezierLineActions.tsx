@@ -1,14 +1,10 @@
+import { useDispatch, useSelector } from "react-redux"
 import { changeLateral, changeMajor, changeNamed, changeOutline, changeSupport } from "@/stores/home/useShowPoint"
-import {
-    lateralActiveIcon, lateralIcon,
-    majorActiveIcon, majorIcon,
-    nameActiveIcon, nameIcon,
-    supportActiveIcon, supportIcon,
-    outlineActiveIcon, outlineIcon,
-} from "@/assets/headers"
+import { lateralIcon, lateralActiveIcon, majorIcon, majorActiveIcon, nameIcon, nameActiveIcon } from "@/assets/headers"
 import { actionKeys } from "../data/data"
 import { ScHeaderAction, ScHeaderWrapper } from "./styled"
 
+import type { RootState } from "@/stores"
 import type { ActionType } from "../data/data"
 
 function BezierLineActions() {
@@ -48,14 +44,14 @@ function BezierLineActions() {
                 <img src={major ? majorActiveIcon : majorIcon} />
                 <span> 主点 </span>
             </ScHeaderAction>
-            <ScHeaderAction onClick={() => handleAction("support")}>
-                <img src={support ? supportActiveIcon : supportIcon} />
-                <span> 辅助点 </span>
-            </ScHeaderAction>
-            <ScHeaderAction onClick={() => handleAction("outline")}>
-                <img src={outline ? outlineActiveIcon : outlineIcon} />
-                <span> 轮廓 </span>
-            </ScHeaderAction>
+            {/* <ScHeaderAction onClick={() => handleAction("support")}>
+             <img src={support ? supportActiveIcon : supportIcon}/>
+             <span> 辅助点 </span>
+             </ScHeaderAction>
+             <ScHeaderAction onClick={() => handleAction("outline")}>
+             <img src={outline ? outlineActiveIcon : outlineIcon}/>
+             <span> 轮廓 </span>
+             </ScHeaderAction> */}
         </ScHeaderWrapper>
     )
 }

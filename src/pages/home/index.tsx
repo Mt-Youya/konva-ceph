@@ -1,10 +1,11 @@
+import { Provider } from "react-redux"
+import styled from "styled-components"
 import store from "@/stores"
 import Header from "@/layout/Header"
-import UserInfo from "@/layout/UserInfo"
 import Aside from "@/layout/Aside"
 import Stage from "./components/Stage"
 
-const ScDiv = styled.div`
+const ScContainer = styled.div`
     display: flex;
     flex-direction: row;
     height: 100%;
@@ -20,14 +21,13 @@ const ScMain = styled.main`
 function Home() {
     return (
         <Provider store={store}>
-            <ScDiv>
-                <UserInfo />
+            <ScContainer>
                 <ScMain>
                     <Header />
                     <Stage />
                 </ScMain>
                 <Aside />
-            </ScDiv>
+            </ScContainer>
         </Provider>
     )
 }

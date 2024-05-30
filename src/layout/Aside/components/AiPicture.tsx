@@ -1,8 +1,11 @@
+import { useSelector } from "react-redux"
 import { Stage, Layer, Image, Circle, Text } from "react-konva"
 import constants from "../data/constMap.json"
+import styled from "styled-components"
 import Konva from "konva"
 import useImage from "use-image"
-import XRay from "@/assets/XRays/ai-exp.png?url"
+
+import type { RootState } from "@/stores"
 
 const ScContainer = styled.div`
     display: flex;
@@ -30,21 +33,20 @@ const ScStage = styled(Stage)`
     overflow: hidden;
 `
 
-interface PointData {
+type PointData = {
     key: string
     name: string
     text: string
     pos: number[]
 }
 
-interface PointProps {
+type PointProps = {
     [key: string]: PointData
 }
-
 const pointConstants: PointProps = { ...constants }
 
-const AiPicture = () => {
-    const [image] = useImage(XRay)
+const AiPicture = () => {//{ src = XRay, desc }
+    const [image] = useImage("http://yayan-dev.oss-cn-shanghai.aliyuncs.com/935a277347b3454fafcb46e69a3caf73.png")
     const [pointData, setPointData] = useState<PointData | null>(null)
     const [pointX, setPointX] = useState<number>(0)
     const [pointY, setPointY] = useState<number>(0)
@@ -63,6 +65,7 @@ const AiPicture = () => {
     }, [])
 
     useEffect(() => {
+        if (selectPointKey === "ruler1" || selectPointKey === "ruler2") return
         if (selectPointKey) {
             const newPointData = pointConstants[selectPointKey]
             setPointData(newPointData)

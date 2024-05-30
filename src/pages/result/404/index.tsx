@@ -1,3 +1,5 @@
+import styled from "styled-components"
+
 const ScNotFound = styled.div`
     height: 100%;
     display: flex;

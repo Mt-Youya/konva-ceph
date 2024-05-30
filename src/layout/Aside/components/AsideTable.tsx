@@ -67,15 +67,8 @@ function AsideTable() {
     useEffect(() => {
         if (!tableData.length || !algorithmMap) return
         const target = AlgosTableData[wayKey]
-        const anb = algorithmMap["SNA&deg"] - algorithmMap["SNB&deg"]
         const data = target.map(item => {
             const isMM = item.name.includes("&mm")
-            if (item.name === "ANB&deg") {
-                return {
-                    ...item,
-                    measure_value: +anb.toFixed(2),
-                }
-            }
 
             if (rulerScaling !== 0) {
                 const mv = isMM ? algorithmMap[item.name] * unit * rulerScaling : algorithmMap[item.name]
@@ -93,7 +86,7 @@ function AsideTable() {
             }
             return {
                 ...item,
-                measure_value: isMM ? "-" : algorithmMap[item.name],
+                measure_value: isMM ? "-" : +algorithmMap[item.name].toFixed(2),
             }
         })
         dispatch(setTableData(data))
@@ -105,7 +98,7 @@ function AsideTable() {
                 <ScTable>
                     <ScThead>
                         <ScTr className="thead-tr">
-                            {columns.map((item, index) => <ScSpace key={index}>{item.title}</ScSpace>)}
+                            {columns.map(item => <ScSpace key={item.key}>{item.title}</ScSpace>)}
                         </ScTr>
                     </ScThead>
                     <ScTbody>
