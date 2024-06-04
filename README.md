@@ -1,6 +1,3 @@
-# iocs-web-ceph
-牙颜科技头影测量系统
-
 - [react-konva](https://github.com/konvajs/react-konva/blob/master/README.md) uses [Konva](https://konvajs.org/) 
 
 ## Installation
